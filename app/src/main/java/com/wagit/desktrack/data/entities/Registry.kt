@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 
 @Entity(
     tableName = "registries",
+    indices = arrayOf(Index(value = ["user_id"])),
     foreignKeys = arrayOf(ForeignKey(
         entity = User::class,
         parentColumns = arrayOf("id"),
