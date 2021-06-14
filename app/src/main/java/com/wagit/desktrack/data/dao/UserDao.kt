@@ -24,6 +24,7 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE cif = :cif AND password = :pw")
     suspend fun getUserByCifAndPw(cif: String, pw: String): List<User>
 
+    @Transaction
     @Query("SELECT * FROM users WHERE id = :userId")
     suspend fun getUserAndRegistriesByUserId(userId: Long): List<UserAndRegistry>
 }
