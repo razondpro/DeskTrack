@@ -10,7 +10,7 @@ data class UserAndRegistry(
     @Embedded val user: User,
     @Relation(
         parentColumn = "id",
-        entityColumn = "userId"
+        entityColumn = "user_id"
     )
     val registries: List<Registry>
 )

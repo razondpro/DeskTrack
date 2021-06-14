@@ -25,5 +25,5 @@ interface RegistryDao {
     suspend fun getAllRegistriesdByUserId(userId: Long): List<Registry>
 
     //TODO Implement paging regsitries
-    suspend fun getPagedRegistriesByUserId(userId: Long): List<Registry>
+    //suspend fun getPagedRegistriesByUserId(userId: Long): List<Registry>
 }
