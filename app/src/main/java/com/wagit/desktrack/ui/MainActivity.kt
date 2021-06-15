@@ -1,11 +1,12 @@
-package com.wagit.desktrack
+package com.wagit.desktrack.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.wagit.desktrack.R
 
-class MainActivity : AppCompatActivity() {
+class DeskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_desk)
     }
 }
