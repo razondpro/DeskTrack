@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Desk Track</string>
+    <string name="icon_person">Person icon in login view</string>
+    <string name="welcome">Welcome</string>
+    <string name="cif">CIF</string>
+    <string name="psw">Password</string>
+    <string name="login">Login</string>
 </resources>
