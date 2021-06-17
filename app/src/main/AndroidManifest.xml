@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DeskTrack">
-        <activity android:name=".ui.LoginActivity">
+        <activity android:name=".ui.view.activites.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
