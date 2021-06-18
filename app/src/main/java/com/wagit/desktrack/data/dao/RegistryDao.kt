@@ -3,18 +3,19 @@ package com.wagit.desktrack.data.dao
 import androidx.room.*
 import com.wagit.desktrack.data.entities.Registry
 import com.wagit.desktrack.data.entities.relations.UserAndRegistry
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class RegistryDao: BaseDao<Registry> {
 
     @Query("SELECT * FROM registries WHERE id = :regId")
-    abstract suspend fun getRegistry(regId: Long): List<Registry>
+    abstract fun getRegistry(regId: Long): Flow<List<Registry>>
 
     @Query("SELECT * FROM registries")
-    abstract suspend fun getAllRegistries(): List<Registry>
+    abstract fun getAllRegistries(): Flow<List<Registry>>
 
     @Query("SELECT * FROM registries WHERE user_id = :userId")
-    abstract suspend fun getAllRegistriesdByUserId(userId: Long): List<Registry>
+    abstract fun getAllRegistriesdByUserId(userId: Long): Flow<List<Registry>>
 
     //TODO Implement paging regsitries
     //suspend fun getPagedRegistriesByUserId(userId: Long): List<Registry>

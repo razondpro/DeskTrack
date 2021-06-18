@@ -34,9 +34,13 @@ abstract class AppDatabase : RoomDatabase() {
         private var INSTANCE: AppDatabase? = null
 
         /**
-         * Get db instance
+         * Get a singleton db instance
+         * @param context Application context
+         * @return AppDatabase instance
          */
         fun getInstance(context: Context): AppDatabase{
+            /*Multiple threads can ask for the database at the same time, ensure we only initialize
+            it once by using synchronized. Only one thread may enter a synchronized block at a time.*/
             synchronized(this){
                 return INSTANCE?: Room.databaseBuilder(
                     context.applicationContext,

@@ -1,10 +1,11 @@
 package com.wagit.desktrack.data.repositories
 
-import android.content.Context
-import androidx.lifecycle.LiveData
+import com.wagit.desktrack.data.dao.UserDao
 import com.wagit.desktrack.data.entities.User
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class UserRepository(val context: Context): BaseRepository<User>() {
+class UserRepository @Inject constructor(private val userDao: UserDao): BaseRepository<User>() {
 
     /**
      * Inserts object in database
@@ -30,7 +31,7 @@ class UserRepository(val context: Context): BaseRepository<User>() {
         TODO("Not yet implemented")
     }
 
-    suspend fun getUserByCifAndPsw(cif: String, pw: String): List<User>{
-        return getDBInstance(context).userDao().getUserByCifAndPw(cif, pw)
+    suspend fun getUserByCifAndPsw(cif: String, pw: String): Flow<List<User>> {
+        return userDao.getUserByCifAndPw(cif, pw)
     }
 }
