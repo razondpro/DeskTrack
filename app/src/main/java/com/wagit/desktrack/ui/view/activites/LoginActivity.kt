@@ -5,8 +5,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.wagit.desktrack.databinding.ActivityLoginBinding
 import com.wagit.desktrack.ui.viewmodel.LoginViewModel
 import com.wagit.desktrack.utils.Validator
@@ -16,8 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginActivity: BaseActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-
-   private val loginVM: LoginViewModel by viewModels()
+    private val loginVM: LoginViewModel by viewModels()
 
     private val cifLD = MutableLiveData<String>()
     private val pwLD = MutableLiveData<String>()
@@ -46,17 +47,34 @@ class LoginActivity: BaseActivity() {
     private fun initView(){
         this.validateLoginForm()
         this.handleClick()
+        this.attemptLogin()
     }
 
+    /**
+     * Handles login button click
+     */
     private fun handleClick(){
         binding.btnLogin.setOnClickListener {
             if(isValidLD.value as Boolean){
-                Log.v("isvalid", isValidLD.value.toString())
                 loginVM.logUser(cifLD.value.toString(), pwLD.value.toString())
             }else {
-                Toast.makeText(applicationContext, "Please, insert valid data", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "Please, insert valid data", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    /**
+     * Observes user livedata
+     */
+    private fun attemptLogin() {
+        loginVM.user.observe(this, Observer {
+            if(it.isEmpty()){
+                Toast.makeText(applicationContext, "Wrong credentials", Toast.LENGTH_SHORT).show()
+            }else {
+                //go to homepage
+                Toast.makeText(applicationContext, "Welcome", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     /**
