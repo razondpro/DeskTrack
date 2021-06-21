@@ -80,6 +80,7 @@ class LoginActivity: BaseActivity() {
 
     private fun goHomePage(user: User) {
         Intent(this, HomeActivity::class.java).also {
+            it.putExtra("EXTRA_USER", user)
             startActivity(it)
             finish()
         }

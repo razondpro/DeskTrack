@@ -1,6 +1,7 @@
 package com.wagit.desktrack.data.entities
 
 import androidx.room.*
+import java.io.Serializable
 
 @Entity(tableName = "users", indices = [Index(value = ["cif"], unique = true)])
 data class User(
@@ -11,4 +12,4 @@ data class User(
     val password: String,
     @ColumnInfo(name = "is_admin") val isAdmin: Boolean,
     @ColumnInfo(name = "is_deleted") val isDeleted: Boolean
-)
+): Serializable

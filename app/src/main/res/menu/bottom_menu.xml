@@ -5,9 +5,11 @@
     <item android:title="Home"
         android:icon="@drawable/ic_home"
         android:id="@+id/fHome"/>
+
     <item android:title="Calendar"
         android:icon="@drawable/ic_calendar"
         android:id="@+id/fCalendar"/>
+
     <item android:title="Profile"
         android:icon="@drawable/ic_person"
         android:id="@+id/fProfile"/>
