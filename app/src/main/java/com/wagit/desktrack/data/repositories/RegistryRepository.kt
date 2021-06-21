@@ -1,18 +1,18 @@
 package com.wagit.desktrack.data.repositories
 
 import com.wagit.desktrack.data.dao.RegistryDao
-import com.wagit.desktrack.data.entities.User
+import com.wagit.desktrack.data.entities.Registry
 import javax.inject.Inject
 
 class RegistryRepository @Inject constructor(
     private val registryDao: RegistryDao
-    ): BaseRepository<User>() {
+    ): BaseRepository<Registry>() {
 
     /**
      * Inserts object in database
      * @param obj object to insert in database
      */
-    override suspend fun insert(obj: User) {
+    override suspend fun insert(obj: Registry) {
         TODO("Not yet implemented")
     }
 
@@ -20,7 +20,7 @@ class RegistryRepository @Inject constructor(
      * Updates object in database
      * @param obj object to update in database
      */
-    override suspend fun update(obj: User) {
+    override suspend fun update(obj: Registry) {
         TODO("Not yet implemented")
     }
 
@@ -28,7 +28,7 @@ class RegistryRepository @Inject constructor(
      * Deletes object in database
      * @param obj object to delete in database
      */
-    override suspend fun delete(obj: User) {
+    override suspend fun delete(obj: Registry) {
         TODO("Not yet implemented")
     }
 
