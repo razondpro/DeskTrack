@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.wagit.desktrack.HomeFragment"
+        android:name="com.wagit.desktrack.ui.view.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="com.wagit.desktrack.CalendarFragment"
+        android:name="com.wagit.desktrack.ui.view.fragments.CalendarFragment"
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.wagit.desktrack.ProfileFragment"
+        android:name="com.wagit.desktrack.ui.view.fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

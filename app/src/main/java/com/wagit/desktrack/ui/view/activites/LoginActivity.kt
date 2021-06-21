@@ -1,14 +1,15 @@
 package com.wagit.desktrack.ui.view.activites
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.wagit.desktrack.data.entities.User
 import com.wagit.desktrack.databinding.ActivityLoginBinding
 import com.wagit.desktrack.ui.viewmodel.LoginViewModel
 import com.wagit.desktrack.utils.Validator
@@ -69,12 +70,24 @@ class LoginActivity: BaseActivity() {
     private fun attemptLogin() {
         loginVM.user.observe(this, Observer {
             if(it.isEmpty()){
-                Toast.makeText(applicationContext, "Wrong credentials", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Wrong credentials", Toast.LENGTH_LONG).show()
             }else {
-                //go to homepage
-                Toast.makeText(applicationContext, "Welcome", Toast.LENGTH_SHORT).show()
+                val user: User = loginVM.user.value!!.first() as User
+                goHomePage(user)
             }
         })
+    }
+
+    private fun goHomePage(user: User) {
+        Intent(this, HomeActivity::class.java).also {
+            startActivity(it)
+            finish()
+        }
+        if(user.isAdmin){
+            //go admin home activiy
+        }else {
+            //go user activity
+        }
     }
 
     /**
