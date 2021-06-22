@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.view.fragments.HomeFragment"
-        android:id="@+id/fHome"
+        android:id="@+id/homeFragment"
         android:background="@color/cardview_light_background">
 
         <!-- TODO: Update blank fragment layout -->

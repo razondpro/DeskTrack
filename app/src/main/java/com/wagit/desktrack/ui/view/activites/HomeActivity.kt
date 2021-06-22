@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeActivity : BaseActivity() {
 
     private lateinit var binding: ActivityHomeBinding
-/*
+
     val bottomNav by lazy {
         binding.bottomNavigationView
     }
@@ -28,7 +28,7 @@ class HomeActivity : BaseActivity() {
         ) as NavHostFragment
         navHost.navController
     }
-*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -37,31 +37,10 @@ class HomeActivity : BaseActivity() {
 
         val user = intent.getSerializableExtra("EXTRA_USER") as User
         println(user)
-/*
-        val topBarConfig = AppBarConfiguration(setOf(R.id.fHome, R.id.fCalendar, R.id.fProfile))
+
+        val topBarConfig = AppBarConfiguration(setOf(R.id.homeFragment, R.id.calendarFragment, R.id.profileFragment))
 
         setupActionBarWithNavController(navController, topBarConfig)
         bottomNav.setupWithNavController(navController)
-*/
-
-        val navView: BottomNavigationView = binding.bottomNavigationView
-
-        //val navController = findNavController(R.id.fragmentContainerView)
-         val navController: NavController by lazy {
-             val navHost = supportFragmentManager.findFragmentById(
-                 R.id.fragmentContainerView
-             ) as NavHostFragment
-             navHost.navController
-         }
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.fHome, R.id.fCalendar, R.id.fProfile
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-
     }
 }

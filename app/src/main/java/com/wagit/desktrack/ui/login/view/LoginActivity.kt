@@ -1,4 +1,4 @@
-package com.wagit.desktrack.ui.view.activites
+package com.wagit.desktrack.ui.login.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +11,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.wagit.desktrack.data.entities.User
 import com.wagit.desktrack.databinding.ActivityLoginBinding
-import com.wagit.desktrack.ui.viewmodel.LoginViewModel
+import com.wagit.desktrack.ui.view.activites.BaseActivity
+import com.wagit.desktrack.ui.view.activites.HomeActivity
+import com.wagit.desktrack.ui.login.viewmodel.LoginViewModel
 import com.wagit.desktrack.utils.Validator
 import dagger.hilt.android.AndroidEntryPoint
 
