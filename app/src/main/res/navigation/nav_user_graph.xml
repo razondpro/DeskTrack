@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_user_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.wagit.desktrack.ui.user.home.fragment.HomeFragment"
+        android:label="HomeFragment"
+        android:layout="@layout/fragment_home"/>
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.wagit.desktrack.ui.user.calendar.fragment.CalendarFragment"
+        android:label="CalendarFragment"
+        android:layout="@layout/fragment_calendar"/>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.wagit.desktrack.ui.user.profile.fragment.ProfileFragment"
+        android:label="ProfileFragment"
+        android:layout="@layout/fragment_profile"/>
+</navigation>
