@@ -1,6 +1,7 @@
 package com.wagit.desktrack.ui.user.view
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -10,10 +11,13 @@ import com.wagit.desktrack.R
 import com.wagit.desktrack.data.entities.User
 import com.wagit.desktrack.databinding.ActivityHomeBinding
 import com.wagit.desktrack.ui.BaseActivity
+import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity() {
+
+    private val sharedViewModel: SharedHomeViewModel by viewModels()
 
     private lateinit var binding: ActivityHomeBinding
 
@@ -33,12 +37,15 @@ class HomeActivity : BaseActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        this.setupNavigation()
 
+        //set User in sharedVM for fragments
         val user = intent.getSerializableExtra("EXTRA_USER") as User
-        println(user)
+        sharedViewModel.user.value = user
+    }
 
+    fun setupNavigation(){
         val topBarConfig = AppBarConfiguration(setOf(R.id.homeFragment, R.id.calendarFragment, R.id.profileFragment))
-
         setupActionBarWithNavController(navController, topBarConfig)
         bottomNav.setupWithNavController(navController)
     }

@@ -15,7 +15,7 @@ class SharedHomeViewModel @Inject constructor(
     ) : ViewModel() {
 
     private val _user: MutableLiveData<User> = MutableLiveData()
-    val user: LiveData<User> get() = _user
+    val user: MutableLiveData<User> get() = _user
 
     private val _registries: MutableLiveData<List<Registry>> = MutableLiveData()
     val registries: LiveData<List<Registry>> get() = _registries
