@@ -1,6 +1,5 @@
 package com.wagit.desktrack.data.repositories
 
-import androidx.lifecycle.LiveData
 import com.wagit.desktrack.data.dao.UserDao
 import com.wagit.desktrack.data.entities.User
 import javax.inject.Inject

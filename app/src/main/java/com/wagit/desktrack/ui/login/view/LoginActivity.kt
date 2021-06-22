@@ -1,4 +1,4 @@
-package com.wagit.desktrack.ui.view.activites
+package com.wagit.desktrack.ui.login.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.wagit.desktrack.data.entities.User
 import com.wagit.desktrack.databinding.ActivityLoginBinding
-import com.wagit.desktrack.ui.viewmodel.LoginViewModel
+import com.wagit.desktrack.ui.login.viewmodel.LoginViewModel
+import com.wagit.desktrack.ui.user.view.HomeActivity
 import com.wagit.desktrack.utils.Validator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -80,11 +81,11 @@ class LoginActivity: AppCompatActivity() {
     }
 
     private fun goHomePage(user: User) {
-        /*Intent(this, HomeActivity::class.java).also {
-            it.putExtra("EXTRA_USER", user)
+        Intent(this, HomeActivity::class.java).also {
+            //it.putExtra("EXTRA_USER", user)
             startActivity(it)
-            finish()
-        }*/
+           // finish()
+        }
         if(user.isAdmin){
             //go admin home activiy
             println("HOLA ADMIN")

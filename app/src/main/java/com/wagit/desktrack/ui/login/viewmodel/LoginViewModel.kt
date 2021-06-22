@@ -1,4 +1,4 @@
-package com.wagit.desktrack.ui.viewmodel
+package com.wagit.desktrack.ui.login.viewmodel
 
 import androidx.lifecycle.*
 import com.wagit.desktrack.data.entities.User
