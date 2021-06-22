@@ -9,10 +9,6 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
-    dataBinding {
-        enabled = true
-    }
-
     defaultConfig {
         applicationId "com.wagit.desktrack"
         minSdkVersion 21
@@ -46,6 +42,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    buildFeatures {
+
+        dataBinding true
+        // for view binding:
+        // viewBinding true
     }
 }
 

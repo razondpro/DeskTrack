@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +17,7 @@ import com.wagit.desktrack.utils.Validator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginActivity: BaseActivity() {
+class LoginActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private val loginVM: LoginViewModel by viewModels()
@@ -72,22 +73,24 @@ class LoginActivity: BaseActivity() {
             if(it.isEmpty()){
                 Toast.makeText(applicationContext, "Wrong credentials", Toast.LENGTH_LONG).show()
             }else {
-                val user: User = loginVM.user.value!!.first() as User
+                val user: User = loginVM.user.value!!.first()
                 goHomePage(user)
             }
         })
     }
 
     private fun goHomePage(user: User) {
-        Intent(this, HomeActivity::class.java).also {
+        /*Intent(this, HomeActivity::class.java).also {
             it.putExtra("EXTRA_USER", user)
             startActivity(it)
             finish()
-        }
+        }*/
         if(user.isAdmin){
             //go admin home activiy
+            println("HOLA ADMIN")
         }else {
             //go user activity
+            println("HOLA USER")
         }
     }
 
