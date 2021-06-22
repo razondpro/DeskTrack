@@ -9,8 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 
-//
-
 /**
  * Base fragment class to reduce boilerplate code
  * @see https://manavtamboli.medium.com/reusability-in-android-fragment-with-data-binding-60fdc1721da

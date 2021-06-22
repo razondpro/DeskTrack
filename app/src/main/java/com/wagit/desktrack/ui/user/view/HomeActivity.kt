@@ -44,6 +44,10 @@ class HomeActivity : BaseActivity() {
         sharedViewModel.user.value = user
     }
 
+    /**
+     * Set configuration for top bar and
+     * bottom navigation
+     */
     fun setupNavigation(){
         val topBarConfig = AppBarConfiguration(setOf(R.id.homeFragment, R.id.calendarFragment, R.id.profileFragment))
         setupActionBarWithNavController(navController, topBarConfig)
