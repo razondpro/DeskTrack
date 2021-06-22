@@ -1,4 +1,4 @@
-package com.wagit.desktrack.ui.view.activites
+package com.wagit.desktrack.ui
 
 import androidx.appcompat.app.AppCompatActivity
 

@@ -1,4 +1,4 @@
-package com.wagit.desktrack.ui.viewmodel
+package com.wagit.desktrack.ui.user.viewmodel
 
 import androidx.lifecycle.*
 import com.wagit.desktrack.data.entities.Registry
@@ -6,7 +6,6 @@ import com.wagit.desktrack.data.entities.User
 import com.wagit.desktrack.data.repositories.RegistryRepository
 import com.wagit.desktrack.data.repositories.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

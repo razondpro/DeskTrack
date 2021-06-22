@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.view.fragments.ProfileFragment"
+        tools:context=".ui.user.profile.view.ProfileFragment"
         android:id="@+id/profileFragment"
         android:background="@color/design_default_color_secondary_variant">
 

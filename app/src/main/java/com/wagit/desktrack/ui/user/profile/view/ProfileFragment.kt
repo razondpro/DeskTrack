@@ -1,4 +1,4 @@
-package com.wagit.desktrack.ui.view.fragments
+package com.wagit.desktrack.ui.user.profile.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.wagit.desktrack.R
 import com.wagit.desktrack.databinding.FragmentProfileBinding
-import com.wagit.desktrack.ui.viewmodel.SharedHomeViewModel
+import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 

@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.view.fragments.CalendarFragment"
+        tools:context=".ui.user.calendar.view.CalendarFragment"
         android:id="@+id/calendarFragment"
         android:background="@color/design_default_color_primary_variant">
 

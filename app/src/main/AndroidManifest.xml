@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.view.activites.HomeActivity">
+        <activity android:name=".ui.user.view.HomeActivity">
 
         </activity>
     </application>
