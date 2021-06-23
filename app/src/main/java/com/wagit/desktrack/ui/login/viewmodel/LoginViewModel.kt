@@ -1,21 +1,21 @@
 package com.wagit.desktrack.ui.login.viewmodel
 
 import androidx.lifecycle.*
-import com.wagit.desktrack.data.entities.User
-import com.wagit.desktrack.data.repositories.UserRepository
+import com.wagit.desktrack.data.entities.Account
+import com.wagit.desktrack.data.repositories.AccountRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val accountRepository: AccountRepository) : ViewModel() {
 
-    private val _user: MutableLiveData<List<User>> = MutableLiveData()
-    val user: LiveData<List<User>> get() = _user
+    private val _account: MutableLiveData<List<Account>> = MutableLiveData()
+    val account: LiveData<List<Account>> get() = _account
 
-    fun logUser(cif: String, pw: String){
+    fun logUser(email: String, pw: String){
         viewModelScope.launch {
-            _user.value = userRepository.getUserByCifAndPsw(cif,pw)
+            _account.value = accountRepository.getAccoundByEmailAndPw(email,pw)
         }
     }
 }

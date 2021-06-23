@@ -8,7 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.wagit.desktrack.R
-import com.wagit.desktrack.data.entities.User
+import com.wagit.desktrack.data.entities.Account
 import com.wagit.desktrack.databinding.ActivityHomeBinding
 import com.wagit.desktrack.ui.BaseActivity
 import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
@@ -39,9 +39,9 @@ class HomeActivity : BaseActivity() {
 
         this.setupNavigation()
 
-        //set User in sharedVM for fragments
-        val user = intent.getSerializableExtra("EXTRA_USER") as User
-        sharedViewModel.user.value = user
+        //set Account in sharedVM for fragments
+        val account = intent.getSerializableExtra("EXTRA_ACCOUNT") as Account
+        sharedViewModel.account.value = account
     }
 
     /**

@@ -1,8 +1,6 @@
 package com.wagit.desktrack.ui.user.home.view
 
-import android.widget.TextView
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.wagit.desktrack.R
 import com.wagit.desktrack.databinding.FragmentHomeBinding
 import com.wagit.desktrack.ui.BaseFragment
@@ -16,7 +14,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     override fun FragmentHomeBinding.initialize() {
         println("HHOLA FROM HOME")
-        println(viewModel.user.value)
+        println(viewModel.account.value)
         this.sharedVM = viewModel
     }
 

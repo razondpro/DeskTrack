@@ -14,7 +14,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(R.layout.fragment
 
     override fun FragmentCalendarBinding.initialize() {
         println("HHOLA FROM CALENDAR")
-        println(viewModel.user.value)
+        println(viewModel.account.value)
 
         val textView: TextView = this.textDashboard
         viewModel.text.observe(viewLifecycleOwner, Observer {
