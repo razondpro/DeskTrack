@@ -1,17 +1,17 @@
 package com.wagit.desktrack.data.repositories
 
-import androidx.lifecycle.LiveData
-import com.wagit.desktrack.data.dao.UserDao
-import com.wagit.desktrack.data.entities.User
+import com.wagit.desktrack.data.dao.CompanyDao
+import com.wagit.desktrack.data.entities.Company
 import javax.inject.Inject
 
-class UserRepository @Inject constructor(private val userDao: UserDao): BaseRepository<User>() {
-
+class CompanyRepository @Inject constructor(
+    val companyDao: CompanyDao
+    ) :BaseRepository<Company>(){
     /**
      * Inserts object in database
      * @param obj object to insert in database
      */
-    override suspend fun insert(obj: User) {
+    override suspend fun insert(obj: Company) {
         TODO("Not yet implemented")
     }
 
@@ -19,7 +19,7 @@ class UserRepository @Inject constructor(private val userDao: UserDao): BaseRepo
      * Updates object in database
      * @param obj object to update in database
      */
-    override suspend fun update(obj: User) {
+    override suspend fun update(obj: Company) {
         TODO("Not yet implemented")
     }
 
@@ -27,11 +27,7 @@ class UserRepository @Inject constructor(private val userDao: UserDao): BaseRepo
      * Deletes object in database
      * @param obj object to delete in database
      */
-    override suspend fun delete(obj: User) {
+    override suspend fun delete(obj: Company) {
         TODO("Not yet implemented")
-    }
-
-    suspend fun getUserByCifAndPsw(cif: String, pw: String): List<User> {
-        return userDao.getUserByCifAndPw(cif, pw)
     }
 }

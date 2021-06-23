@@ -35,8 +35,8 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun accountDao(): AccountDao
     abstract fun registryDao(): RegistryDao
-    abstract fun employeeDao(): CompanyDao
-    abstract fun companyDao(): EmployeeDao
+    abstract fun employeeDao(): EmployeeDao
+    abstract fun companyDao(): CompanyDao
 
     companion object {
         const val DB_VERSION = 1
