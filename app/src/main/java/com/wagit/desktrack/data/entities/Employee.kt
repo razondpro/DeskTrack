@@ -3,7 +3,7 @@ package com.wagit.desktrack.data.entities
 import androidx.room.*
 
 @Entity(
-    tableName = "employee",
+    tableName = "employees",
     indices = [Index(value = ["cif"], unique = true),
         Index(value = ["nss"], unique = true)],
     foreignKeys = arrayOf(

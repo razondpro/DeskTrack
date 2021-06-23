@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 
 @Entity(
-    tableName = "company",
+    tableName = "companies",
     indices = [Index(value = ["nif"], unique = true)],
 )
 data class Company(
