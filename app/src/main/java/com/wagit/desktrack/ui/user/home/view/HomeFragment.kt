@@ -17,12 +17,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     override fun FragmentHomeBinding.initialize() {
         println("HHOLA FROM HOME")
         println(viewModel.user.value)
-
-        val textView: TextView = this.textDashboard
-        viewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-
+        this.sharedVM = viewModel
     }
 
 }

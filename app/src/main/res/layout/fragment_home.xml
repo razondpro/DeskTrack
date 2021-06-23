@@ -1,24 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="sharedVM"
+            type="com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/homeFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.user.home.view.HomeFragment"
-        android:id="@+id/homeFragment"
-        android:background="@color/cardview_light_background">
+        android:background="@color/cardview_light_background"
+        tools:context=".ui.user.home.view.HomeFragment">
 
-        <!-- TODO: Update blank fragment layout -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/topGL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
         <TextView
-            android:id="@+id/textDashboard"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:id="@+id/tvWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome,"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/topNextGL"
+            app:layout_constraintEnd_toEndOf="@id/tvName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/topGL" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{sharedVM.user.name}"
+            android:textSize="25sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvWelcome"
+            app:layout_constraintTop_toTopOf="@id/topGL" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/topNextGL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.10" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
