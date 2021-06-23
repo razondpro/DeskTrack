@@ -9,11 +9,11 @@ import java.io.Serializable
 
 @Entity(
     tableName = "accounts",
-    indices = [Index(value = ["mail"], unique = true)]
+    indices = [Index(value = ["email"], unique = true)]
 )
 data class Account(
     @PrimaryKey(autoGenerate = true) val id: Long,
-    val mail: String,
+    val email: String,
     val password: String,
     @ColumnInfo(name = "is_admin") val isAdmin: Boolean,
     @ColumnInfo(name = "is_deleted") val isDeleted: Boolean

@@ -3,14 +3,14 @@ package com.wagit.desktrack.data.entities.relations
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.wagit.desktrack.data.entities.Registry
-import com.wagit.desktrack.data.entities.User
+import com.wagit.desktrack.data.entities.Account
 
 
-data class UserAndRegistry(
-    @Embedded val user: User,
+data class EmployeeWithRegistries(
+    @Embedded val account: Account,
     @Relation(
         parentColumn = "id",
-        entityColumn = "user_id"
+        entityColumn = "account_id"
     )
     val registries: List<Registry>
 )
