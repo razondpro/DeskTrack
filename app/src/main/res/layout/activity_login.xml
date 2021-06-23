@@ -57,13 +57,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/etInputCif"
+            android:id="@+id/etInputEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="70dp"
             android:ems="15"
-            android:inputType="text"
-            android:hint="@string/cif"
+            android:inputType="textEmailAddress"
+            android:hint="@string/email"
             android:drawableStart="@drawable/ic_person_yellow"
             android:drawablePadding="16dp"
             android:importantForAutofill="no"
@@ -84,7 +84,7 @@
             android:importantForAutofill="no"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etInputCif" />
+            app:layout_constraintTop_toBottomOf="@+id/etInputEmail" />
 
         <Button
             android:id="@+id/btnLogin"

@@ -4,6 +4,7 @@
     <string name="welcome">Welcome</string>
     <string name="cif">CIF</string>
     <string name="psw">Password</string>
+    <string name="email">Email</string>
     <string name="login">Login</string>
     <string name="space">\u0020</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -38,7 +38,7 @@
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{sharedVM.user.name}"
+            android:text=""
             android:textSize="25sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
