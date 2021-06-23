@@ -6,7 +6,7 @@ import com.wagit.desktrack.data.entities.Company
 import com.wagit.desktrack.data.entities.Employee
 
 data class CompanyWithEmployees (
-    @Embedded val user: Company,
+    @Embedded val company: Company,
     @Relation(
         parentColumn = "id",
         entityColumn = "company_id"

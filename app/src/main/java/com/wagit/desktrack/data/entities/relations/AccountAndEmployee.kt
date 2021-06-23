@@ -8,8 +8,8 @@ import com.wagit.desktrack.data.entities.Employee
 data class AccountAndEmployee(
     @Embedded val account: Account,
     @Relation(
-        parentColumn = "userId",
-        entityColumn = "userOwnerId"
+        parentColumn = "id",
+        entityColumn = "account_id"
     )
     val employee: Employee
 )
