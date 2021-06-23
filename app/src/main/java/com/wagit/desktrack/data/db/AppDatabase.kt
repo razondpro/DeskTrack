@@ -7,16 +7,25 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.wagit.desktrack.data.dao.RegistryDao
-import com.wagit.desktrack.data.dao.UserDao
+import com.wagit.desktrack.data.dao.AccountDao
+import com.wagit.desktrack.data.dao.CompanyDao
+import com.wagit.desktrack.data.dao.EmployeeDao
 import com.wagit.desktrack.data.entities.Registry
-import com.wagit.desktrack.data.entities.User
+import com.wagit.desktrack.data.entities.Account
+import com.wagit.desktrack.data.entities.Company
+import com.wagit.desktrack.data.entities.Employee
 import com.wagit.desktrack.data.helpers.DateTimeTypeConverter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import com.wagit.desktrack.data.helpers.PrepopulateData
 
 @Database(
-    entities = [User::class, Registry::class],
+    entities = [
+        Account::class,
+        Registry::class,
+        Employee::class,
+        Company::class
+    ],
     version = AppDatabase.DB_VERSION
 )
 @TypeConverters(
@@ -24,8 +33,10 @@ import com.wagit.desktrack.data.helpers.PrepopulateData
 )
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun userDao(): UserDao
+    abstract fun accountDao(): AccountDao
     abstract fun registryDao(): RegistryDao
+    abstract fun employeeDao(): CompanyDao
+    abstract fun companyDao(): EmployeeDao
 
     companion object {
         const val DB_VERSION = 1
@@ -62,8 +73,8 @@ abstract class AppDatabase : RoomDatabase() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
                 GlobalScope.launch {
-                    getInstance(context).userDao()
-                        .insert(PrepopulateData.user)
+                    getInstance(context).accountDao()
+                        .insert(PrepopulateData.account)
                 }
             }
         }
