@@ -4,8 +4,7 @@ import androidx.room.*
 
 @Entity(
     tableName = "employees",
-    indices = [Index(value = ["cif"], unique = true),
-        Index(value = ["nss"], unique = true)],
+    indices = [Index(value = ["cif","nss"], unique = true)],
     foreignKeys = arrayOf(
         ForeignKey(
         entity = Account::class,
@@ -27,7 +26,7 @@ class Employee(
     val nss: String,
     @ColumnInfo(name = "first_name")val firstName: String,
     @ColumnInfo(name = "last_name")val lasName: String,
-    @ColumnInfo(name = "account_id") val userId: Long,
-    @ColumnInfo(name = "company_id") val companyId: Long,
+    @ColumnInfo(name = "account_id", index = true) val accountId: Long,
+    @ColumnInfo(name = "company_id", index = true) val companyId: Long,
     @ColumnInfo(name = "is_deleted") val isDeleted: Boolean
 )
