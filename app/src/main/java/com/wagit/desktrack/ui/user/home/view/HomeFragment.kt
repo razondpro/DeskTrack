@@ -14,7 +14,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     override fun FragmentHomeBinding.initialize() {
         println("HHOLA FROM HOME")
-        println(viewModel.account.value)
+        println(viewModel.employee.value)
         this.sharedVM = viewModel
     }
 

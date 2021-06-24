@@ -1,6 +1,7 @@
 package com.wagit.desktrack.ui.user.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -41,7 +42,9 @@ class HomeActivity : BaseActivity() {
 
         //set Account in sharedVM for fragments
         val account = intent.getSerializableExtra("EXTRA_ACCOUNT") as Account
-        sharedViewModel.account.value = account
+        //set employee associated to the account from database
+        Log.v("SHARED_VIEWM", "${account.id}")
+        sharedViewModel.setEmployee(account.id)
     }
 
     /**

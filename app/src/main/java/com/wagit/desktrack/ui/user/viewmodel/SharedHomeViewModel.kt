@@ -1,29 +1,34 @@
 package com.wagit.desktrack.ui.user.viewmodel
 
 import androidx.lifecycle.*
-import com.wagit.desktrack.data.entities.Registry
-import com.wagit.desktrack.data.entities.Account
-import com.wagit.desktrack.data.repositories.RegistryRepository
-import com.wagit.desktrack.data.repositories.AccountRepository
+import com.wagit.desktrack.data.entities.Employee
+import com.wagit.desktrack.data.repositories.EmployeeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class SharedHomeViewModel @Inject constructor(
-    private val accountRepository: AccountRepository,
-    private val registry: RegistryRepository
+    private val employeeRepository: EmployeeRepository
     ) : ViewModel() {
 
-    private val _account: MutableLiveData<Account> = MutableLiveData()
-    val account: MutableLiveData<Account> get() = _account
+    private var _employee: MutableLiveData<Employee> = MutableLiveData()
+    val employee: LiveData<Employee> get() = _employee
 
-    private val _registries: MutableLiveData<List<Registry>> = MutableLiveData()
-    val registries: LiveData<List<Registry>> get() = _registries
+    /**
+     * This function is called only once from oncreate HomeActivity
+     * to set the employee (user) in the application
+     */
+    fun setEmployee(accountId: Long){
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+        /*viewModelScope.launch {
+            _employee.value = employeeRepository.getEmployeeByAccountId(accountId).first()
+        }*/
+
+        //should block the main thread because we can't continue without getting employee
+        runBlocking {
+            _employee.value = employeeRepository.getEmployeeByAccountId(accountId).first()
+        }
     }
-
-    val text: LiveData<String> = _text
 
 }
