@@ -73,8 +73,11 @@ abstract class AppDatabase : RoomDatabase() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
                 GlobalScope.launch {
-                    getInstance(context).accountDao()
-                        .insert(PrepopulateData.account)
+                    val instance = getInstance(context)
+                    instance.accountDao().insert(PrepopulateData.account)
+                    instance.accountDao().insert(PrepopulateData.user)
+                    instance.companyDao().insert(PrepopulateData.company)
+                    instance.employeeDao().insert(PrepopulateData.employee)
                 }
             }
         }
