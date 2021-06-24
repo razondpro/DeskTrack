@@ -5,7 +5,7 @@ import com.wagit.desktrack.data.entities.Employee
 import javax.inject.Inject
 
 class EmployeeRepository @Inject constructor(
-    val employeeDao: EmployeeDao
+    private val employeeDao: EmployeeDao
     ) :BaseRepository<Employee>(){
     /**
      * Inserts object in database
