@@ -43,6 +43,7 @@ object DBModule {
     /**
      * @return returns the Dao object to be used as dependency in Repository class.
      */
+    @Provides
     fun provideCompanyDao(
         @ApplicationContext context: Context
     ): CompanyDao {
@@ -52,6 +53,7 @@ object DBModule {
     /**
      * @return returns the Dao object to be used as dependency in Repository class.
      */
+    @Provides
     fun provideEmployeeDao(
         @ApplicationContext context: Context
     ): EmployeeDao {
@@ -87,7 +89,7 @@ object DBModule {
      */
     @Provides
     fun provideEmployeeRepository(employeeDao: EmployeeDao): EmployeeRepository {
-        return provideEmployeeRepository(employeeDao)
+        return EmployeeRepository(employeeDao)
     }
 
 }
