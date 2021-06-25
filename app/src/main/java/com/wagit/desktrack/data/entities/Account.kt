@@ -12,9 +12,12 @@ import java.io.Serializable
     indices = [Index(value = ["email"], unique = true)]
 )
 data class Account(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
     val email: String,
     val password: String,
-    @ColumnInfo(name = "is_admin") val isAdmin: Boolean,
-    @ColumnInfo(name = "is_deleted") val isDeleted: Boolean
+    @ColumnInfo(name = "is_admin")
+    val isAdmin: Boolean,
+    @ColumnInfo(name = "is_deleted")
+    val isDeleted: Boolean
 ): Serializable

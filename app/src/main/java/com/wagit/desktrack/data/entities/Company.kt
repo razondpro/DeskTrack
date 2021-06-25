@@ -11,7 +11,8 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["nif"], unique = true)],
 )
 data class Company(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true
+    ) val id: Long = 0L,
     val name: String,
     val nif: String,
     val ccc: Int,

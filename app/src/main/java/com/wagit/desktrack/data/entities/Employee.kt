@@ -21,12 +21,17 @@ import androidx.room.*
 )
 class Employee(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Long = 0L,
     val cif: String,
     val nss: String,
-    @ColumnInfo(name = "first_name")val firstName: String,
-    @ColumnInfo(name = "last_name")val lasName: String,
-    @ColumnInfo(name = "account_id", index = true) val accountId: Long,
-    @ColumnInfo(name = "company_id", index = true) val companyId: Long,
-    @ColumnInfo(name = "is_deleted") val isDeleted: Boolean
+    @ColumnInfo(name = "first_name")
+    val firstName: String,
+    @ColumnInfo(name = "last_name")
+    val lasName: String,
+    @ColumnInfo(name = "account_id", index = true)
+    val accountId: Long,
+    @ColumnInfo(name = "company_id", index = true)
+    val companyId: Long,
+    @ColumnInfo(name = "is_deleted")
+    val isDeleted: Boolean
 )

@@ -14,8 +14,12 @@ import java.time.LocalDateTime
     ))
 )
 data class Registry(
-    @PrimaryKey(autoGenerate = true) val id: Long,
-    @ColumnInfo(name = "employee_id") val employeeId: Long,
-    @ColumnInfo(name = "started_at") val startedAt: LocalDateTime,
-    @ColumnInfo(name = "ended_at") val endedAt: LocalDateTime?,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
+    @ColumnInfo(name = "employee_id")
+    val employeeId: Long,
+    @ColumnInfo(name = "started_at",defaultValue = "CURRENT_TIMESTAMP")
+    val startedAt: LocalDateTime,
+    @ColumnInfo(name = "ended_at")
+    val endedAt: LocalDateTime?,
 )
