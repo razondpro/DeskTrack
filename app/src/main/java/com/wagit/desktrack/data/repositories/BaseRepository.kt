@@ -5,7 +5,7 @@ abstract class BaseRepository<T>{
      * Inserts object in database
      * @param obj object to insert in database
      */
-    abstract suspend fun insert(obj: T)
+    abstract suspend fun insert(obj: T): Long
 
     /**
      * Updates object in database

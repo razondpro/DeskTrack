@@ -12,8 +12,8 @@ class RegistryRepository @Inject constructor(
      * Inserts object in database
      * @param obj object to insert in database
      */
-    override suspend fun insert(obj: Registry) {
-        TODO("Not yet implemented")
+    override suspend fun insert(obj: Registry): Long {
+        return registryDao.insert(obj)
     }
 
     /**

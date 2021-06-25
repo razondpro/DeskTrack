@@ -12,7 +12,7 @@ class AccountRepository @Inject constructor(
      * Inserts object in database
      * @param obj object to insert in database
      */
-    override suspend fun insert(obj: Account) {
+    override suspend fun insert(obj: Account): Long {
         TODO("Not yet implemented")
     }
 
