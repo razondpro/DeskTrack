@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="sharedVM"
             type="com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel" />
@@ -17,7 +18,7 @@
         tools:context=".ui.user.home.view.HomeFragment">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/topGL"
+            android:id="@+id/glTopWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -27,31 +28,74 @@
             android:id="@+id/tvWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome,"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/topNextGL"
-            app:layout_constraintEnd_toEndOf="@id/tvName"
+            android:text="Welcome, "
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/glBottomWelcome"
+            app:layout_constraintEnd_toStartOf="@+id/tvName"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/topGL" />
+            app:layout_constraintTop_toTopOf="@+id/glTopWelcome" />
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{sharedVM.employee.firstName}"
-            android:textSize="25sp"
+            android:text='@{sharedVM.employee.firstName+" "+sharedVM.employee.lasName}'
+            android:textSize="18sp"
             android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@+id/glBottomWelcome"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tvWelcome"
-            app:layout_constraintTop_toTopOf="@id/topGL" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/tvWelcome"
+            app:layout_constraintTop_toTopOf="@+id/glTopWelcome" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/topNextGL"
+            android:id="@+id/glBottomWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.10" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glTopDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="December 25"
+            android:textSize="32sp"
+            android:gravity="right"
+            app:layout_constraintEnd_toStartOf="@id/textView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/glTopDate" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2021"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/glTopDate" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Friday"
+            android:layout_marginTop="3dp"
+            android:textSize="18sp"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintEnd_toEndOf="@+id/textView"
+            app:layout_constraintStart_toStartOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
