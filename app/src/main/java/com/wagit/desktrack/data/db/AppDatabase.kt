@@ -1,6 +1,7 @@
 package com.wagit.desktrack.data.db
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -75,9 +76,10 @@ abstract class AppDatabase : RoomDatabase() {
                 GlobalScope.launch {
                     val instance = getInstance(context)
                     instance.accountDao().insert(PrepopulateData.account)
-                    instance.accountDao().insert(PrepopulateData.user)
-                    instance.companyDao().insert(PrepopulateData.company)
-                    instance.employeeDao().insert(PrepopulateData.employee)
+                    val accId = instance.accountDao().insert(PrepopulateData.user)
+                    val comId = instance.companyDao().insert(PrepopulateData.company)
+                    val employee = Employee(cif = "12345678z",nss = "222222",firstName = "Johnny",lasName = "Doey",accountId = accId, companyId = comId,isDeleted = false)
+                    instance.employeeDao().insert(employee)
                 }
             }
         }

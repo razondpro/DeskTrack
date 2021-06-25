@@ -6,8 +6,7 @@ import com.wagit.desktrack.data.entities.Employee
 import com.wagit.desktrack.data.entities.Registry
 
 object PrepopulateData {
-    var account = Account(1, "admin@admin.com","admin123",true,false)
-    var user = Account(2, "user@user.com","user123",false,false)
-    val company = Company(1,"Tesla","0000000",111111,false)
-    val employee = Employee(1,"12345678z","222222","Johnny","Doey",user.id,company.id,false)
+    var account = Account(email ="admin@admin.com",password = "admin123",isAdmin = true,isDeleted = false)
+    var user = Account(email = "user@user.com", password = "user123", isAdmin = false, isDeleted = false)
+    val company = Company(name = "Tesla", nif = "0000000", ccc = 111111, isDeleted = false)
 }
