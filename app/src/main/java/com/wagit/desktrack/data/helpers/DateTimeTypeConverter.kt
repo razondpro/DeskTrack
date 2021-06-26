@@ -1,5 +1,6 @@
 package com.wagit.desktrack.data.helpers
 
+import android.util.Log
 import androidx.room.TypeConverter
 import java.time.LocalDateTime
 
@@ -10,7 +11,10 @@ class DateTimeTypeConverter {
      */
     @TypeConverter
     fun fromTimestamp(value: String?): LocalDateTime? {
-        return value?.let {  LocalDateTime.parse(it) }
+        Log.v("dates", "$value")
+        //null comes as string from database
+        //TODO research about this bug
+        return if (value != null && !value.equals("null")) LocalDateTime.parse(value) else null
     }
 
     /**
