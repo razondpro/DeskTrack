@@ -32,4 +32,8 @@ class RegistryRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    suspend fun getTodaysRegByEmployee(empId: Long): List<Registry> {
+        return registryDao.getTodaysRegByEmployee(empId)
+    }
+
 }
