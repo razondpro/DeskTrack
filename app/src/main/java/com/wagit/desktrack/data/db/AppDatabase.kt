@@ -19,6 +19,7 @@ import com.wagit.desktrack.data.helpers.DateTimeTypeConverter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import com.wagit.desktrack.data.helpers.PrepopulateData
+import java.time.LocalDateTime
 
 @Database(
     entities = [
@@ -78,8 +79,22 @@ abstract class AppDatabase : RoomDatabase() {
                     instance.accountDao().insert(PrepopulateData.account)
                     val accId = instance.accountDao().insert(PrepopulateData.user)
                     val comId = instance.companyDao().insert(PrepopulateData.company)
-                    val employee = Employee(cif = "12345678z",nss = "222222",firstName = "Johnny",lasName = "Doey",accountId = accId, companyId = comId,isDeleted = false)
-                    instance.employeeDao().insert(employee)
+                    val employee = Employee(
+                        cif = "12345678z",
+                        nss = "222222",
+                        firstName = "Johnny",
+                        lasName = "Doey",
+                        accountId = accId,
+                        companyId = comId,
+                        isDeleted = false
+                    )
+                    val empId = instance.employeeDao().insert(employee)
+                    instance.registryDao().insert(
+                        Registry(
+                            employeeId = empId,
+                            startedAt = LocalDateTime.now(),
+                            endedAt = null)
+                    )
                 }
             }
         }
