@@ -30,11 +30,4 @@ class EmployeeRepository @Inject constructor(
     override suspend fun delete(obj: Employee) {
         TODO("Not yet implemented")
     }
-
-    /**
-     * Get employee by account id
-     */
-    suspend fun getEmployeeByAccountId(accId: Long): List<Employee>{
-        return employeeDao.getEmployeeByAccId(accId)
-    }
 }

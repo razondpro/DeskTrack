@@ -2,12 +2,10 @@ package com.wagit.desktrack.DI
 
 import android.content.Context
 import com.wagit.desktrack.data.dao.RegistryDao
-import com.wagit.desktrack.data.dao.AccountDao
 import com.wagit.desktrack.data.dao.CompanyDao
 import com.wagit.desktrack.data.dao.EmployeeDao
 import com.wagit.desktrack.data.db.AppDatabase
 import com.wagit.desktrack.data.repositories.RegistryRepository
-import com.wagit.desktrack.data.repositories.AccountRepository
 import com.wagit.desktrack.data.repositories.CompanyRepository
 import com.wagit.desktrack.data.repositories.EmployeeRepository
 import dagger.Module
@@ -19,16 +17,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object DBModule {
-
-    /**
-     * @return returns the Dao object to be used as dependency in Repository class.
-     */
-    @Provides
-    fun provideAccountDao (
-        @ApplicationContext context: Context
-    ): AccountDao {
-        return AppDatabase.getInstance(context).accountDao()
-    }
 
     /**
      * @return returns the Dao object to be used as dependency in Repository class.
@@ -58,14 +46,6 @@ object DBModule {
         @ApplicationContext context: Context
     ): EmployeeDao {
         return AppDatabase.getInstance(context).employeeDao()
-    }
-
-    /**
-     * Provides account repository
-     */
-    @Provides
-    fun provideAccountRepository(accountDao: AccountDao): AccountRepository {
-        return AccountRepository(accountDao)
     }
 
     /**
