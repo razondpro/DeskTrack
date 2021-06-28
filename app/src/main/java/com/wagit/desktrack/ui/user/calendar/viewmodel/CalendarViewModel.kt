@@ -19,12 +19,7 @@ class HomeViewModel @Inject constructor(
     private val _tRegistry: MutableLiveData<List<Registry>> = MutableLiveData()
     val tRegistry: LiveData<List<Registry>> get() = _tRegistry
 
-
-    /**
-     * Get today's registry from database.
-     * //TODO _tRegistry should be update in init{} passing empId to VM constructor
-     */
-    fun getTodaysRegistry(empId: Long): LiveData<List<Registry>> {
+    fun getTRegistryUpdatedFromDB(empId: Long): LiveData<List<Registry>> {
         viewModelScope.launch(Dispatchers.IO) {
             _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(empId))
         }
@@ -32,7 +27,7 @@ class HomeViewModel @Inject constructor(
     }
 
     /**
-     * Creates a registry in db,then set new value to today's registry
+     * Creates a registry in db
      */
     fun checkIn(registry: Registry) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -42,7 +37,7 @@ class HomeViewModel @Inject constructor(
     }
 
     /**
-     * Updates a registry in db, then set new value to today's registry
+     * Updates a registry in db
      */
     fun checkOut(registry: Registry) {
         viewModelScope.launch(Dispatchers.IO) {
