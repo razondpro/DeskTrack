@@ -8,11 +8,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.wagit.desktrack.data.dao.RegistryDao
-import com.wagit.desktrack.data.dao.AccountDao
 import com.wagit.desktrack.data.dao.CompanyDao
 import com.wagit.desktrack.data.dao.EmployeeDao
 import com.wagit.desktrack.data.entities.Registry
-import com.wagit.desktrack.data.entities.Account
 import com.wagit.desktrack.data.entities.Company
 import com.wagit.desktrack.data.entities.Employee
 import com.wagit.desktrack.data.helpers.DateTimeTypeConverter
@@ -23,7 +21,6 @@ import java.time.LocalDateTime
 
 @Database(
     entities = [
-        Account::class,
         Registry::class,
         Employee::class,
         Company::class
@@ -35,7 +32,6 @@ import java.time.LocalDateTime
 )
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun accountDao(): AccountDao
     abstract fun registryDao(): RegistryDao
     abstract fun employeeDao(): EmployeeDao
     abstract fun companyDao(): CompanyDao
@@ -76,17 +72,17 @@ abstract class AppDatabase : RoomDatabase() {
                 super.onCreate(db)
                 GlobalScope.launch {
                     val instance = getInstance(context)
-                    instance.accountDao().insert(PrepopulateData.account)
-                    val accId = instance.accountDao().insert(PrepopulateData.user)
                     val comId = instance.companyDao().insert(PrepopulateData.company)
                     val employee = Employee(
+                        email = "user@user.com",
+                        password = "user123",
                         cif = "12345678z",
                         nss = "222222",
                         firstName = "Johnny",
-                        lasName = "Doey",
-                        accountId = accId,
+                        lastName = "Doey",
                         companyId = comId,
-                        isDeleted = false
+                        isDeleted = false,
+                        isAdmin = false
                     )
                     val empId = instance.employeeDao().insert(employee)
                     instance.registryDao().insert(
