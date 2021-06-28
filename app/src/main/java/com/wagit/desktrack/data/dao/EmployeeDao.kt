@@ -14,9 +14,6 @@ abstract class EmployeeDao: BaseDao<Employee> {
     @Query("SELECT * FROM employees")
     abstract suspend fun getAllEmployees(): List<Employee>
 
-    @Query("SELECT * FROM employees WHERE account_id = :accountId")
-    abstract suspend fun getEmployeeByAccId(accountId: Long): List<Employee>
-
     @Transaction
     @Query("SELECT * FROM employees WHERE id = :employeeId")
     abstract suspend fun getAllRegistriesdByEmployeeId(employeeId: Long): List<EmployeeWithRegistries>
