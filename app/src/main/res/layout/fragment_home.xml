@@ -41,7 +41,7 @@
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{sharedVM.employee.firstName+" "+sharedVM.employee.lasName}'
+            android:text='@{sharedVM.employee.firstName+" "+sharedVM.employee.lastName}'
             android:textSize="18sp"
             android:textStyle="italic"
             app:layout_constraintBottom_toTopOf="@+id/glBottomWelcome"

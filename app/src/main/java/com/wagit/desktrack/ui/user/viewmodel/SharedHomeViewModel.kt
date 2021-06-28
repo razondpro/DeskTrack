@@ -19,16 +19,8 @@ class SharedHomeViewModel @Inject constructor(
      * This function is called only once from oncreate HomeActivity
      * to set the employee (user) in the application
      */
-    fun setEmployee(accountId: Long){
-
-        /*viewModelScope.launch {
-            _employee.value = employeeRepository.getEmployeeByAccountId(accountId).first()
-        }*/
-
-        //should block the main thread because we can't continue without getting employee
-        runBlocking {
-            _employee.value = employeeRepository.getEmployeeByAccountId(accountId).first()
-        }
+    fun setUser(user: Employee){
+        _employee.value = user
     }
 
 }

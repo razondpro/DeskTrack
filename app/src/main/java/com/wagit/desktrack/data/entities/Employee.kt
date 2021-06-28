@@ -1,6 +1,7 @@
 package com.wagit.desktrack.data.entities
 
 import androidx.room.*
+import java.io.Serializable
 
 @Entity(
     tableName = "employees",
@@ -31,4 +32,4 @@ class Employee(
     val isAdmin: Boolean?,
     @ColumnInfo(name = "is_deleted", defaultValue = "false")
     val isDeleted: Boolean?
-)
+): Serializable

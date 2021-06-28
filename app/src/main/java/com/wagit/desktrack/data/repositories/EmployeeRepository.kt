@@ -30,4 +30,11 @@ class EmployeeRepository @Inject constructor(
     override suspend fun delete(obj: Employee) {
         TODO("Not yet implemented")
     }
+
+    /**
+     * Get user by email and password
+     */
+    suspend fun getUserByEmailAndPw(email: String, pw: String): List<Employee> {
+        return employeeDao.getUserByEmailAndPw(email, pw)
+    }
 }

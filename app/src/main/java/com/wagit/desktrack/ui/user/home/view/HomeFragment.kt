@@ -18,17 +18,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     override fun FragmentHomeBinding.initialize() {
         println("HHOLA FROM HOME")
-        println(sharedViewModel.employee.value)
         this.sharedVM = sharedViewModel
         val treg = homeViewModel.getTodaysRegistry(sharedViewModel.employee.value!!.id)
-
+        println(treg)
         homeViewModel.tRegistry.observe(viewLifecycleOwner, Observer {
             println("--------")
             println(it.first())
+            println(treg)
             println("--------")
         })
-
-
 
     }
 

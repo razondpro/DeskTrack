@@ -17,4 +17,7 @@ abstract class EmployeeDao: BaseDao<Employee> {
     @Transaction
     @Query("SELECT * FROM employees WHERE id = :employeeId")
     abstract suspend fun getAllRegistriesdByEmployeeId(employeeId: Long): List<EmployeeWithRegistries>
+
+    @Query("SELECT * FROM employees WHERE email = :email AND password = :pw")
+    abstract suspend fun getUserByEmailAndPw(email: String, pw: String): List<Employee>
 }

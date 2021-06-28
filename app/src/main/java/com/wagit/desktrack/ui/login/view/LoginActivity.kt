@@ -9,7 +9,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.wagit.desktrack.data.entities.Account
+import com.wagit.desktrack.data.entities.Employee
 import com.wagit.desktrack.databinding.ActivityLoginBinding
 import com.wagit.desktrack.ui.BaseActivity
 import com.wagit.desktrack.ui.user.view.HomeActivity
@@ -68,23 +68,23 @@ class LoginActivity: BaseActivity() {
      * Observes user livedata
      */
     private fun attemptLogin() {
-        loginVM.account.observe(this, Observer {
+        loginVM.user.observe(this, Observer {
             if(it.isEmpty()){
                 Toast.makeText(applicationContext, "Wrong credentials", Toast.LENGTH_LONG).show()
             }else {
-                val account: Account = loginVM.account.value!!.first()
-                goHomePage(account)
+                val user: Employee = loginVM.user.value!!.first()
+                goHomePage(user)
             }
         })
     }
 
-    private fun goHomePage(account: Account) {
+    private fun goHomePage(user: Employee) {
         Intent(this, HomeActivity::class.java).also {
-            it.putExtra("EXTRA_ACCOUNT", account)
+            it.putExtra("EXTRA_USER", user)
             startActivity(it)
             finish()
         }
-        if(account.isAdmin){
+        if(user.isAdmin!!){
             //go admin home activiy
         }else {
             //go user activity
