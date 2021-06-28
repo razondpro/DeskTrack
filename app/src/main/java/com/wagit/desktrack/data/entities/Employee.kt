@@ -7,11 +7,6 @@ import androidx.room.*
     indices = [Index(value = ["cif","nss"], unique = true)],
     foreignKeys = arrayOf(
         ForeignKey(
-        entity = Account::class,
-        parentColumns = arrayOf("id"),
-        childColumns = arrayOf("account_id"),
-        onDelete = ForeignKey.CASCADE),
-        ForeignKey(
             entity = Company::class,
             parentColumns = arrayOf("id"),
             childColumns = arrayOf("company_id"),
@@ -22,16 +17,18 @@ import androidx.room.*
 class Employee(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
-    val cif: String,
-    val nss: String,
+    val email: String,
+    val password: String,
+    val cif: String?,
+    val nss: String?,
     @ColumnInfo(name = "first_name")
-    val firstName: String,
+    val firstName: String?,
     @ColumnInfo(name = "last_name")
-    val lasName: String,
-    @ColumnInfo(name = "account_id", index = true)
-    val accountId: Long,
+    val lastName: String?,
     @ColumnInfo(name = "company_id", index = true)
-    val companyId: Long,
-    @ColumnInfo(name = "is_deleted")
-    val isDeleted: Boolean
+    val companyId: Long?,
+    @ColumnInfo(name = "is_admin", defaultValue = "false")
+    val isAdmin: Boolean?,
+    @ColumnInfo(name = "is_deleted", defaultValue = "false")
+    val isDeleted: Boolean?
 )
