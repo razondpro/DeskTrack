@@ -10,7 +10,7 @@ Another important principle is that you should drive your UI from a model, prefe
 
 ## Recommended app architecture by GOOGLE
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/84e1454b-009c-4f5a-a569-2976d7087d2c/final-architecture.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/84e1454b-009c-4f5a-a569-2976d7087d2c/final-architecture.png)
+![Link to architecture example](https://developer.android.com/topic/libraries/architecture/images/final-architecture.png)
 
 Each component depends only on the component one level below it. For example, activities and fragments depend only on a view model. The repository is the only class that depends on multiple other classes; in this example, the repository depends on a persistent data model and a remote backend data source
 
@@ -24,11 +24,11 @@ Our ViewModel delegates the data-fetching process to a new module, a *repository
 
 > //TODO improve this page explanations
 
-### @[https://developer.android.com/jetpack/guide](https://developer.android.com/jetpack/guide)
+### @[Link to Google jetpack guide](https://developer.android.com/jetpack/guide)
 
 
 ## Schema (data model)
 
 An abstract design that represents the storage of our data in the database. 
+![database schema](https://user-images.githubusercontent.com/26594010/123917937-a3fad500-d983-11eb-8dc2-0b6fd78726e0.png)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/354cd7e0-d5c4-4df0-a974-78c377a6ab7a/database_schema.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/354cd7e0-d5c4-4df0-a974-78c377a6ab7a/database_schema.png)
