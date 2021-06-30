@@ -1,5 +1,29 @@
 # DeskTrack
 
+*This project is for personal use*
+
+
+## Summary
+
+Since 2019, the Spanish government obliges all Spanish companies, both small and / or large, to submit a monthly report on the control of workers' schedules. Since then, many tech companies have created solutions to help companies keep track of their employees work hours.
+
+However, many solutions lack something simple, such as an administrator changing already logged schedule by an employee.
+
+### Solutions and approach
+
+We plan to create a simple but stylish mobile application to suit the needs of **small** Spanish companies.
+
+**The app will have the following components:**
+
+- **Normal user** panel
+    - A home page where the user can check-in/out (to track arrival and leaving times)
+    - A calendar view page where users can check the schedules already registered previously
+    - A profile editor page
+- **Admin** panel
+    - A home page where the admin can create companies, employees associated to those companies, export the data into an Excel file by month/year, connect to google drive to upload the data periodically.
+    - A calendar view page where admin can select any of his employees(users) to see its calendar assoaciated. Admin can edit employees calendar.
+    - A profile editor page
+
 ## Separation of concerns
 
 The most important principle to follow is separation of concerns. It's a common mistake to write all your code in an **Activity** or a **Fragment**. These UI-based classes should only contain logic that handles UI and operating system interactions. By keeping these classes as lean as possible, you can avoid many lifecycle-related problems.
