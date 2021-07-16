@@ -68,9 +68,9 @@
             android:id="@+id/textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:text="December 25"
             android:textSize="32sp"
-            android:gravity="right"
             app:layout_constraintEnd_toStartOf="@id/textView2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/glTopDate" />
@@ -80,8 +80,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2021"
-            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/glTopDate" />
 
@@ -89,13 +89,56 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Friday"
             android:layout_marginTop="3dp"
+            android:text="Friday"
             android:textSize="18sp"
-            app:layout_constraintHorizontal_bias="0.8"
             app:layout_constraintEnd_toEndOf="@+id/textView"
+            app:layout_constraintHorizontal_bias="0.8"
             app:layout_constraintStart_toStartOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <Button
+            android:id="@+id/buttonCheckIn"
+            android:layout_width="160dp"
+            android:layout_height="110dp"
+            android:backgroundTint="@color/button_background_color"
+            android:text="IN"
+            android:textColor="@color/button_text_color"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonCheckOut"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonCheckOut"
+            android:layout_width="160dp"
+            android:layout_height="110dp"
+            android:backgroundTint="@color/button_background_color"
+            android:enabled="false"
+            android:text="OUT"
+            android:textColor="@color/button_text_color"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/buttonCheckIn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="313dp"
+            android:layout_height="79dp"
+            android:text=""
+            android:textAppearance="@android:style/TextAppearance.Material.Headline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.851" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
