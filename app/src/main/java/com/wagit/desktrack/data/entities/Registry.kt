@@ -21,5 +21,5 @@ data class Registry(
     @ColumnInfo(name = "started_at",defaultValue = "CURRENT_TIMESTAMP")
     val startedAt: LocalDateTime,
     @ColumnInfo(name = "ended_at")
-    val endedAt: LocalDateTime?,
+    var endedAt: LocalDateTime?,
 )
