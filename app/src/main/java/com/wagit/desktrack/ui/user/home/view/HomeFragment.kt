@@ -13,6 +13,7 @@ import com.wagit.desktrack.R
 import com.wagit.desktrack.data.entities.Registry
 import com.wagit.desktrack.databinding.FragmentHomeBinding
 import com.wagit.desktrack.ui.BaseFragment
+import com.wagit.desktrack.ui.helpers.TimeHelper
 import com.wagit.desktrack.ui.user.home.viewmodel.HomeViewModel
 import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,12 +27,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val sharedViewModel: SharedHomeViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by viewModels()
+
     //To call the updateTime() method every second, we’re going to use the Handler() class and repeat the handler every second (1000 milliseconds)
     //TODO: buscar alternativa del Handler() porque es deprecated
     private var handler: Handler? = Handler()
     private var tvDhour: TextView? = null
     private var tvDhoursWorked: TextView? = null
     private var startedTime: LocalDateTime? = null
+
+    val runnable = Runnable { doJob() }
+
+    fun doJob() {
+        //EventManager.post(BoutiqueRefreshTimerEvent())
+        handler!!.postDelayed(runnable, 1000)
+    }
+
 
     private fun startCountingHours(tvDAuxil: TextView) {
         tvDhour = tvDAuxil
@@ -100,27 +110,42 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         //Detectar si hay cambio en los registros del livedata, si hay un elemento en el it.first activar el boton checkIn y no en caso contrario
         homeViewModel.tRegistry.observe(viewLifecycleOwner, Observer {
             //HABILITAR/DESHABILITAR -> LOS DOS BOTONES = ESTO SE EJECUTA AL CAMBIAR EL REGISTRO
+            // Añadir que se ponga el startedAt y endedAt en los 2 textView
             if (it.isEmpty()){
                 println("Llega al IF: it.isEmpty()")
                 Log.d("IFS","Llega al IF")
                 this.buttonCheckOut.isEnabled = false
                 this.buttonCheckIn.isEnabled = true
+                this.tvRegister.setText("You haven't started working yet.")
+                this.tvHoursWorked.setText("")
             }else{
                 println("Llega al ELSE")
                 if ((it.first().startedAt==null) and (it.first().endedAt==null)){
                     Log.d("IFS","Llega al primer IF dentro del ELSE")
                     this.buttonCheckOut.isEnabled = false
                     this.buttonCheckIn.isEnabled = true
+                    this.tvRegister.setText("You haven't started working yet.")
+                    this.tvHoursWorked.setText("")
                 }else if ((it.first().startedAt!=null) and (it.first().endedAt!=null)){
                     Log.d("IFS","Llega al segundo IF dentro del ELSE")
                     this.buttonCheckOut.isEnabled = false
                     this.buttonCheckIn.isEnabled = false
+
+                    //Stop counting the hours worked and set the total hours worked
+                    startedTime = it.first().startedAt!!
+                    setCheckInTime(this.tvRegister)
+                    stopCountingHoursWorked()
+                    setTotalHoursWorked(this.tvHoursWorked, it.first().endedAt!!)
                 }
                 else if ((it.first().startedAt!=null) and (it.first().endedAt==null)){
                     println("Llega al ELSE IF ULTIMO")
                     Log.d("IFS","Llega al cuarto IF dentro del ELSE")
                     this.buttonCheckOut.isEnabled = true
                     this.buttonCheckIn.isEnabled = false
+
+                    //Set the check in time and start counting the hours worked
+                    startCountingHoursWorked(it.first().startedAt!!)
+                    setCheckInTime(this.tvRegister)
                 }
 
             }
@@ -138,8 +163,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         homeViewModel.checkIn(reg)
 
         //Set the check in time and start counting the hours worked
-        startCountingHoursWorked(reg.startedAt!!)
-        setCheckInTime(tvD)
+        //startCountingHoursWorked(reg.startedAt!!)
+        //setCheckInTime(tvD)
 
     }
 
@@ -152,9 +177,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         //homeViewModel.checkOut(reg)
         homeViewModel.tRegistry.value!!.first().endedAt=LocalDateTime.now()
         homeViewModel.checkOut(homeViewModel.tRegistry.value!!.first())
+
         //Stop counting the hours worked and set the total hours worked
-        stopCountingHoursWorked()
-        setTotalHoursWorked(tvD, homeViewModel.tRegistry.value!!.first().endedAt!!)
+        //stopCountingHoursWorked()
+        //setTotalHoursWorked(tvD, homeViewModel.tRegistry.value!!.first().endedAt!!)
 
         println("buttonCheckOut has been clicked and endedAt is ${homeViewModel.tRegistry.value!!.first().endedAt}")
         println("buttonCheckOut has been clicked and tRegistry is ${homeViewModel.tRegistry.value!!.first()}")
@@ -187,49 +213,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setCheckInTime(tvD: TextView){
         Log.d("TVD","Llega a la función setHoursWorked el ${tvD.id}")
-        tvD.setText("You have started working at ${startedTime!!.hour.toString()} hours ${startedTime!!.minute.toString()} minutes and ${startedTime!!.second.toString()} seconds.")
+        tvD.setText("You have started working at ${startedTime!!.hour.toString()}:${startedTime!!.minute.toString()}:${startedTime!!.second.toString()} hours.")
     }
 
-    private fun timeDifference(initialTime: LocalDateTime, finalTime: LocalDateTime): LocalTime {
-        Log.d("DFS","Entra en la función timeDifference(initialTime: LocalDateTime, finalTime: LocalDateTime): LocalTime")
-        var start = LocalDateTime.of(1971,1,1,initialTime.hour, initialTime.minute, initialTime.second)
-        var stop = LocalDateTime.of(1971,1,1,finalTime.hour,finalTime.minute,finalTime.second)
-
-        var fromTemp = LocalDateTime.from(start)
-        val years = fromTemp.until(stop, ChronoUnit.YEARS)
-        fromTemp = fromTemp.plusYears(years)
-
-        val months = fromTemp.until(stop, ChronoUnit.MONTHS)
-        fromTemp = fromTemp.plusMonths(months)
-
-        val days = fromTemp.until(stop, ChronoUnit.DAYS)
-        fromTemp = fromTemp.plusDays(days)
-
-        val hours = fromTemp.until(stop, ChronoUnit.HOURS)
-        fromTemp = fromTemp.plusHours(hours)
-
-        val minutes = fromTemp.until(stop, ChronoUnit.MINUTES)
-        fromTemp = fromTemp.plusMinutes(minutes)
-
-        val seconds = fromTemp.until(stop, ChronoUnit.SECONDS)
-        fromTemp = fromTemp.plusSeconds(seconds)
-
-        val millis = fromTemp.until(stop, ChronoUnit.MILLIS)
-
-        return LocalTime.of(hours.toInt(),minutes.toInt(),seconds.toInt())
-    }
 
     private fun setHoursWorked(tvD: TextView){
         Log.d("TVD","Llega a la función setHoursWorked el ${tvD.id}")
         // startedTime -> contains the started time; TODO: udate with the hours worked
-        var differenceTime = timeDifference(startedTime!!,LocalDateTime.now())
+        Log.d("Time","Started time in setHoursWorked is ${startedTime!!}")
+        var differenceTime = TimeHelper.timeDifference(startedTime!!,LocalDateTime.now())
         tvD.setText("You have worked ${differenceTime.hour.toString()} hour ${differenceTime.minute.toString()} minutes and ${differenceTime.second.toString()} seconds so far.")
     }
 
     private fun setTotalHoursWorked(tvD: TextView, checkOutTime: LocalDateTime){
         Log.d("TVD","Llega a la función setTotalHoursWorked el ${tvD.id}")
+        Log.d("Time","Started time in setTotalHoursWorked is ${startedTime!!}")
         // startedTime -> contains the started time; TODO: udate with the hours worked
-        var differenceTime = timeDifference(startedTime!!,checkOutTime!!)
+        var differenceTime = TimeHelper.timeDifference(startedTime!!,checkOutTime!!)
         // You have worked today a total of 1 hour 8 minutes and 0 seconds.
         tvD.setText("You have worked today a total of ${differenceTime.hour.toString()} hour ${differenceTime.minute.toString()} minutes and ${differenceTime.second.toString()} seconds.")
     }
