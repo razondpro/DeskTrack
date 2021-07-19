@@ -14,7 +14,7 @@
         android:id="@+id/homeFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/cardview_light_background"
+        android:background="@color/cardview_grey_color"
         tools:context=".ui.user.home.view.HomeFragment">
 
         <androidx.constraintlayout.widget.Guideline
@@ -41,7 +41,7 @@
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{sharedVM.employee.firstName+" "+sharedVM.employee.lastName}'
+            android:text=""
             android:textSize="18sp"
             android:textStyle="italic"
             app:layout_constraintBottom_toTopOf="@+id/glBottomWelcome"
@@ -65,37 +65,142 @@
             app:layout_constraintGuide_percent="0.15" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tvMonthDay"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:text="December 25"
             android:textSize="32sp"
-            android:gravity="right"
-            app:layout_constraintEnd_toStartOf="@id/textView2"
+            app:layout_constraintEnd_toStartOf="@id/tvYear"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/glTopDate" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tvYear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2021"
-            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/tvMonthDay"
             app:layout_constraintTop_toBottomOf="@+id/glTopDate" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tvWeekDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Friday"
             android:layout_marginTop="3dp"
+            android:text="Friday"
             android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/tvMonthDay"
             app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintEnd_toEndOf="@+id/textView"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintStart_toStartOf="@+id/tvMonthDay"
+            app:layout_constraintTop_toBottomOf="@+id/tvMonthDay" />
+
+        <Button
+            android:id="@+id/buttonCheckIn"
+            android:layout_width="160dp"
+            android:layout_height="110dp"
+            android:backgroundTint="@color/button_background_color"
+            android:text="IN"
+            android:textColor="@color/button_text_color"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonCheckOut"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.892" />
+
+        <Button
+            android:id="@+id/buttonCheckOut"
+            android:layout_width="160dp"
+            android:layout_height="110dp"
+            android:backgroundTint="@color/button_background_color"
+            android:enabled="false"
+            android:text="OUT"
+            android:textColor="@color/button_text_color"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/buttonCheckIn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.892" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctCtime"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonCheckIn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.513"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMonthDay"
+            app:layout_constraintVertical_bias="0.208"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
+
+            <TextView
+                android:id="@+id/tvHour"
+                android:layout_width="109dp"
+                android:layout_height="43dp"
+                android:text="08:00:00"
+                android:textSize="18sp"
+                android:typeface="sans"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctChoursWorked"
+            android:layout_width="401dp"
+            android:layout_height="139dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/buttonCheckIn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ctCtime"
+            app:layout_constraintVertical_bias="0.481">
+
+            <TextView
+                android:id="@+id/tvRegister"
+                android:layout_width="359dp"
+                android:layout_height="60dp"
+                android:text="REGISTER"
+                android:textAppearance="@android:style/TextAppearance.Material.Headline"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/tvHoursWorked"
+                android:layout_width="356dp"
+                android:layout_height="63dp"
+                android:text="HOURS WORKED"
+                android:textAppearance="@android:style/TextAppearance.Material.Headline"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,5 +1,6 @@
 package com.wagit.desktrack.ui.user.home.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,10 +26,19 @@ class HomeViewModel @Inject constructor(
      * //TODO _tRegistry should be update in init{} passing empId to VM constructor
      */
     fun getTodaysRegistry(empId: Long): LiveData<List<Registry>> {
+        Log.d("HomeViewModel","Esto es el employer ID ${empId}")
         viewModelScope.launch(Dispatchers.IO) {
             _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(empId))
+            //Log.d("HomeViewModel","Esto es el employer ID, startedAt y endedAt despues del postValue ${_tRegistry.value?.first()?.employeeId} ${_tRegistry.value?.first()?.startedAt} ${_tRegistry.value?.first()?.endedAt}")
         }
         return tRegistry
+    }
+    fun setTodaysRegistry(empId: Long) {
+        Log.d("HomeViewModel","Esto es el employer ID ${empId}")
+        viewModelScope.launch(Dispatchers.IO) {
+            _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(empId))
+            Log.d("HomeViewModel","Esto es el employer ID, startedAt y endedAt despues del postValue ${_tRegistry.value?.first()?.employeeId} ${_tRegistry.value?.first()?.startedAt} ${_tRegistry.value?.first()?.endedAt}")
+        }
     }
 
     /**
@@ -37,7 +47,7 @@ class HomeViewModel @Inject constructor(
     fun checkIn(registry: Registry) {
         viewModelScope.launch(Dispatchers.IO) {
             registryRepository.insert(registry)
-            _tRegistry.postValue(listOf(registry))
+            _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(registry.employeeId))
         }
     }
 
@@ -47,7 +57,8 @@ class HomeViewModel @Inject constructor(
     fun checkOut(registry: Registry) {
         viewModelScope.launch(Dispatchers.IO) {
             registryRepository.update(registry)
-            _tRegistry.postValue(listOf(registry))
+            _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(registry.employeeId))
         }
     }
+
 }

@@ -21,7 +21,7 @@ class RegistryRepository @Inject constructor(
      * @param obj object to update in database
      */
     override suspend fun update(obj: Registry) {
-        TODO("Not yet implemented")
+        registryDao.update(obj)
     }
 
     /**
@@ -29,7 +29,7 @@ class RegistryRepository @Inject constructor(
      * @param obj object to delete in database
      */
     override suspend fun delete(obj: Registry) {
-        TODO("Not yet implemented")
+        registryDao.delete(obj)
     }
 
     suspend fun getTodaysRegByEmployee(empId: Long): List<Registry> {
