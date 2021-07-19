@@ -85,12 +85,15 @@ abstract class AppDatabase : RoomDatabase() {
                         isAdmin = false
                     )
                     val empId = instance.employeeDao().insert(employee)
+                    /*
                     instance.registryDao().insert(
                         Registry(
                             employeeId = empId,
                             startedAt = LocalDateTime.now(),
                             endedAt = null)
                     )
+
+                     */
                 }
             }
         }
