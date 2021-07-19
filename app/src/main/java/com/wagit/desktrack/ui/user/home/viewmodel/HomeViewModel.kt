@@ -29,9 +29,16 @@ class HomeViewModel @Inject constructor(
         Log.d("HomeViewModel","Esto es el employer ID ${empId}")
         viewModelScope.launch(Dispatchers.IO) {
             _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(empId))
-            Log.d("HomeViewModel","Esto es el employer ID despues del postValue ${_tRegistry.value}")
+            //Log.d("HomeViewModel","Esto es el employer ID, startedAt y endedAt despues del postValue ${_tRegistry.value?.first()?.employeeId} ${_tRegistry.value?.first()?.startedAt} ${_tRegistry.value?.first()?.endedAt}")
         }
         return tRegistry
+    }
+    fun setTodaysRegistry(empId: Long) {
+        Log.d("HomeViewModel","Esto es el employer ID ${empId}")
+        viewModelScope.launch(Dispatchers.IO) {
+            _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(empId))
+            Log.d("HomeViewModel","Esto es el employer ID, startedAt y endedAt despues del postValue ${_tRegistry.value?.first()?.employeeId} ${_tRegistry.value?.first()?.startedAt} ${_tRegistry.value?.first()?.endedAt}")
+        }
     }
 
     /**
@@ -40,7 +47,7 @@ class HomeViewModel @Inject constructor(
     fun checkIn(registry: Registry) {
         viewModelScope.launch(Dispatchers.IO) {
             registryRepository.insert(registry)
-            _tRegistry.postValue(listOf(registry))
+            _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(registry.employeeId))
         }
     }
 
@@ -50,7 +57,7 @@ class HomeViewModel @Inject constructor(
     fun checkOut(registry: Registry) {
         viewModelScope.launch(Dispatchers.IO) {
             registryRepository.update(registry)
-            _tRegistry.postValue(listOf(registry))
+            _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(registry.employeeId))
         }
     }
 

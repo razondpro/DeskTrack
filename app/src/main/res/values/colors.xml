@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="desk_orange_light">#ff9800</color>
     <color name="desk_orange_bold">#ff5500</color>
+    <color name="cardview_grey_color">#efe8e8</color>
 </resources>
