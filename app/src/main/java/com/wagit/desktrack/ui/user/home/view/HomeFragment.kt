@@ -1,6 +1,7 @@
 package com.wagit.desktrack.ui.user.home.view
 
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -29,8 +30,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val homeViewModel: HomeViewModel by viewModels()
 
     //To call the updateTime() method every second, we’re going to use the Handler() class and repeat the handler every second (1000 milliseconds)
-    //TODO: buscar alternativa del Handler() porque es deprecated
-    private var handler: Handler? = Handler()
+    //private var handler: Handler? = Handler()
+    private var handler: Handler? = Looper.myLooper()?.let { Handler(it) }
     private var tvDhour: TextView? = null
     private var tvDhoursWorked: TextView? = null
     private var startedTime: LocalDateTime? = null
@@ -54,12 +55,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             println("llega al val run: Runnable = object : Runnable del primer Handler")
             handler!!.postDelayed(this, 1000)
             //Call the updateTime()
+            sharedViewModel
             tvDhour?.let { updateTime(it) }
         }
     }
 
     //To set the current hours worked every 2 seconds, we’re going to use the Handler() class and repeat the handler every  2 seconds (2000 milliseconds)
-    private var handler2: Handler? = Handler()
+    //private var handler2: Handler? = Handler()
+    private var handler2: Handler?  = Looper.myLooper()?.let { Handler(it) }
 
     private fun startCountingHoursWorked(startedTimeAux: LocalDateTime) {
         startedTime = startedTimeAux
