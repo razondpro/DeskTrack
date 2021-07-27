@@ -23,6 +23,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        // Required ONLY when setting minSdkVersion to 20 or lower -> Added because of the calendar fragment
+        multiDexEnabled true
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -97,4 +100,15 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    // other dependencies for the recycler view
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+
+    //Open JDK library -> Added because of the calendar fragment
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+
+
+    //Added CalendarView to our app build.gradle -> Added because of the calendar fragment
+    implementation 'com.github.kizitonwose:CalendarView:1.0.4'
+
 }
