@@ -1,9 +1,12 @@
 package com.wagit.desktrack.ui.helpers
 
 import android.util.Log
+import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
+import java.time.temporal.WeekFields
+import java.util.*
 
 class TimeHelper {
     companion object {
@@ -34,6 +37,19 @@ class TimeHelper {
             val millis = fromTemp.until(stop, ChronoUnit.MILLIS)
 
             return LocalTime.of(hours.toInt(),minutes.toInt(),seconds.toInt())
+        }
+
+        fun daysOfWeekFromLocale(): Array<DayOfWeek> {
+            val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+            val daysOfWeek = DayOfWeek.values()
+            // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
+            // Only necessary if firstDayOfWeek is not DayOfWeek.MONDAY which has ordinal 0.
+            if (firstDayOfWeek != DayOfWeek.MONDAY) {
+                val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
+                val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)
+                return rhs + lhs
+            }
+            return daysOfWeek
         }
     }
 

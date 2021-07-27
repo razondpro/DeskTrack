@@ -25,7 +25,6 @@ import java.time.temporal.ChronoUnit
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
-
     private val sharedViewModel: SharedHomeViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by viewModels()
 
@@ -224,7 +223,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         Log.d("TVD","Llega a la función setHoursWorked el ${tvD.id}")
         // startedTime -> contains the started time; TODO: udate with the hours worked
         Log.d("Time","Started time in setHoursWorked is ${startedTime!!}")
-        var differenceTime = TimeHelper.timeDifference(startedTime!!,LocalDateTime.now())
+        var differenceTime = TimeHelper.timeDifference(startedTime!!,LocalDateTime.now()!!)
         tvD.setText("You have worked ${differenceTime.hour.toString()} hour ${differenceTime.minute.toString()} minutes and ${differenceTime.second.toString()} seconds so far.")
     }
 
