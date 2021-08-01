@@ -19,9 +19,6 @@ import com.wagit.desktrack.ui.user.home.viewmodel.HomeViewModel
 import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.temporal.ChronoUnit
-
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -46,12 +43,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun startCountingHours(tvDAuxil: TextView) {
         tvDhour = tvDAuxil
         handler!!.post(run)
-        println("llega al startCountingHours(tvDAuxil: TextView)")
+        //println("llega al startCountingHours(tvDAuxil: TextView)")
     }
 
     private val run: Runnable = object : Runnable {
         override fun run() {
-            println("llega al val run: Runnable = object : Runnable del primer Handler")
+            //println("llega al val run: Runnable = object : Runnable del primer Handler")
             handler!!.postDelayed(this, 1000)
             //Call the updateTime()
             sharedViewModel
@@ -76,7 +73,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val r: Runnable = object : Runnable {
         override fun run() {
-            println("llega al val r: Runnable = object : Runnable del segundo Handler")
+            //println("llega al val r: Runnable = object : Runnable del segundo Handler")
             handler2!!.postDelayed(this, 1000);
             //Call to setHoursWorked
             tvDhoursWorked?.let { setHoursWorked(it) }
@@ -209,7 +206,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun updateTime(tvD: TextView){
-        Log.d("TVD","Llega a la función updateTime el ${tvD.id}")
+        //Log.d("TVD","Llega a la función updateTime el ${tvD.id}")
         tvD.setText("Current time: ${LocalDateTime.now().hour.toString()}:${LocalDateTime.now().minute.toString()}:${LocalDateTime.now().second.toString()}")
     }
 

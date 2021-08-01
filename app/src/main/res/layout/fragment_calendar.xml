@@ -6,7 +6,7 @@
     <data>
         <variable
             name="sharedCalendarVM"
-            type="com.wagit.desktrack.ui.user.calendar.view.CalendarFragment" />
+            type="com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel" />
 
     </data>
 
@@ -15,7 +15,9 @@
         android:layout_height="match_parent"
         tools:context=".ui.user.calendar.view.CalendarFragment"
         android:id="@+id/calendarFragment"
-        android:background="@color/white">
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
 
         <com.kizitonwose.calendarview.CalendarView
             android:id="@+id/calendarView"
@@ -28,6 +30,36 @@
             app:cv_inDateStyle="allMonths"
             app:cv_scrollMode="paged" />
 
+
+        <TextView
+            android:id="@+id/tvDayRegistries"
+            android:layout_width="404dp"
+            android:layout_height="146dp"
+            android:text="TextView"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.902" />
+
+        <Button
+            android:id="@+id/buttonPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Previous"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/buttonNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+        <!-- dd -->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

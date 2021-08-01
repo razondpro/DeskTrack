@@ -10,25 +10,29 @@ import com.wagit.desktrack.data.repositories.RegistryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class CalendarViewModel @Inject constructor(
     private val registryRepository: RegistryRepository,
 ) : ViewModel() {
-    private val _tRegistry: MutableLiveData<List<Registry>> = MutableLiveData()
-    val tRegistry: LiveData<List<Registry>> get() = _tRegistry
 
-    /**
-     * Get today's registry from database.
-     * //TODO _tRegistry should be update in init{} passing empId to VM constructor
-     */
-    fun getTodaysRegistry(empId: Long): LiveData<List<Registry>> {
-        Log.d("HomeViewModel","Esto es el employer ID ${empId}")
-        viewModelScope.launch(Dispatchers.IO) {
-            _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(empId))
+    private val _monthRegistry: MutableLiveData<List<Registry>> = MutableLiveData()
+    val monthRegistry: LiveData<List<Registry>> get() = _monthRegistry
+
+
+    //Esta función obtiene todos los registros del mes actual dado el usuario
+
+    fun getAllRegistriesByEmployeeAndMonthAndYear(empId: Long, month: String, year: String): LiveData<List<Registry>> {
+        println("PARAMETROS ******************** ${empId} y ${month} y ${year} ")
+        viewModelScope.launch(Dispatchers.Main) {
+            _monthRegistry.postValue(registryRepository.getAllRegistriesByEmployeeAndMonthAndYear(empId,month,year))
             //Log.d("HomeViewModel","Esto es el employer ID, startedAt y endedAt despues del postValue ${_tRegistry.value?.first()?.employeeId} ${_tRegistry.value?.first()?.startedAt} ${_tRegistry.value?.first()?.endedAt}")
         }
-        return tRegistry
+        println("RESULTADO -------------------- ${monthRegistry.value}")
+        return monthRegistry
     }
+
+
 }
