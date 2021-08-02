@@ -18,7 +18,6 @@ import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
 import androidx.lifecycle.Observer
 import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.previous
-import com.kizitonwose.calendarview.utils.yearMonth
 import com.wagit.desktrack.data.entities.Registry
 
 @AndroidEntryPoint
@@ -40,10 +39,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(R.layout.fragment
         dayMonthBinder(calendarView,calendar,this.tvDayRegistries)
         //calendar.monthFooterBinder(calendarView)
         setCurrentMonth(calendarView)
-
-        //TODO: Pasar a la clase Calendar
-        // Calendar -> recibe: month, year, datosMonthRegistries
-        // Cambiar de MES -> Calendar recibe el mes, year y se reasignara la variable monthRegistry con los datos actuales
 
         calendarViewModel.monthRegistry.observe(viewLifecycleOwner, Observer {
             println("Llega al Observer para el livedata monthRegistry")
@@ -89,9 +84,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(R.layout.fragment
     private fun setPreviousMonth(calendarView: CalendarView, calendarViewModel: CalendarViewModel) {
         val currentMonth = cMonth!!.previous
         cMonth=currentMonth
-        //println("{!!} Month y MONTHSCROLLLISTENER: $currentMonth Y ${calendarView.monthScrollListener}")
-        //udpateCalendar(currentMonth,calendarView)
-
     }
 
     private fun setNextMonth(calendarView: CalendarView, calendarViewModel: CalendarViewModel) {
@@ -112,16 +104,15 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(R.layout.fragment
     private fun udpateCalendar(calendarView: CalendarView){
         val firstMonth = cMonth!!.minusMonths(10)
         val lastMonth = cMonth!!.plusMonths(10)
-        //val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
 
-        //calendarView.setup(firstMonth!!, lastMonth!!, firstDayOfWeek)
         calendarView.updateMonthRange(firstMonth!!, lastMonth!!)
         calendarView.scrollToMonth(cMonth!!)
         calendarView.notifyMonthChanged(cMonth!!)
         calendarView.notifyCalendarChanged()
     }
 
-    private fun dayMonthBinder(calendarView: CalendarView, calendar: Calendar, textViewDayRegistry: TextView){
+    private fun dayMonthBinder(calendarView: CalendarView, calendar: Calendar,
+                               textViewDayRegistry: TextView){
         var aux = listOf<Registry>()
 
         if (calendarViewModel.monthRegistry.value != null){

@@ -47,9 +47,11 @@ class RegistryRepository @Inject constructor(
         return registryDao.getRegistryByEmployeeAndDay(date,empId)
     }
 
-    suspend fun getAllRegistriesByEmployeeAndMonthAndYear(empId: Long, month: String, year: String): List<Registry> {
+    suspend fun getAllRegistriesByEmployeeAndMonthAndYear(empId: Long, month: String,
+                                                          year: String): List<Registry> {
 
-        val aux: List<Registry> = registryDao.getAllRegistriesByEmployeeAndMonthAndYear(empId, month, year)
+        val aux: List<Registry> = registryDao.getAllRegistriesByEmployeeAndMonthAndYear(empId,
+            month, year)
         println("REGISTRY REPO.: $aux")
         return aux
     }

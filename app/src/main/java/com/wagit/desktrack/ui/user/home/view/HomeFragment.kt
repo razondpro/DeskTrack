@@ -25,7 +25,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val sharedViewModel: SharedHomeViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by viewModels()
 
-    //To call the updateTime() method every second, we’re going to use the Handler() class and repeat the handler every second (1000 milliseconds)
     //private var handler: Handler? = Handler()
     private var handler: Handler? = Looper.myLooper()?.let { Handler(it) }
     private var tvDhour: TextView? = null
@@ -56,7 +55,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    //To set the current hours worked every 2 seconds, we’re going to use the Handler() class and repeat the handler every  2 seconds (2000 milliseconds)
     //private var handler2: Handler? = Handler()
     private var handler2: Handler?  = Looper.myLooper()?.let { Handler(it) }
 
@@ -158,7 +156,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         v.isSelected != v.isSelected
 
         //Create a new registry for today calling the checkIn method
-        val reg= Registry(employeeId = sharedViewModel.employee.value!!.id, startedAt = LocalDateTime.now(), endedAt = null)
+        val reg= Registry(employeeId = sharedViewModel.employee.value!!.id,
+            startedAt = LocalDateTime.now(), endedAt = null)
         homeViewModel.checkIn(reg)
 
         //Set the check in time and start counting the hours worked
@@ -171,9 +170,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         println("buttonCheckOut has been clicked")
         Toast.makeText(v.context, "buttonCheckOut has been clicked", Toast.LENGTH_SHORT).show()
         v.isSelected != v.isSelected
-        //Update todays register calling homeViewModel.checkOut method
-        //val reg= Registry(id= homeViewModel.tRegistry.value!!.first().id, employeeId = sharedViewModel.employee.value!!.id, startedAt = homeViewModel.tRegistry.value!!.first().startedAt, endedAt = LocalDateTime.now())
-        //homeViewModel.checkOut(reg)
         homeViewModel.tRegistry.value!!.first().endedAt=LocalDateTime.now()
         homeViewModel.checkOut(homeViewModel.tRegistry.value!!.first())
 
@@ -181,18 +177,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         //stopCountingHoursWorked()
         //setTotalHoursWorked(tvD, homeViewModel.tRegistry.value!!.first().endedAt!!)
 
-        println("buttonCheckOut has been clicked and endedAt is ${homeViewModel.tRegistry.value!!.first().endedAt}")
-        println("buttonCheckOut has been clicked and tRegistry is ${homeViewModel.tRegistry.value!!.first()}")
+        println("buttonCheckOut has been clicked and endedAt is " +
+                "${homeViewModel.tRegistry.value!!.first().endedAt}")
+        println("buttonCheckOut has been clicked and tRegistry is " +
+                "${homeViewModel.tRegistry.value!!.first()}")
     }
 
     private fun setUserWelcomeMessage(tvN: TextView){
         Log.d("TVN","Llega a la función setUserWelcomeMessage el ${tvN.id}")
-        tvN.setText("${sharedViewModel.employee.value!!.firstName} ${sharedViewModel.employee.value!!.lastName}, at your workplace")
+        tvN.setText("${sharedViewModel.employee.value!!.firstName}" +
+                " ${sharedViewModel.employee.value!!.lastName}, at your workplace")
     }
 
     private fun setMonthDay(tvD: TextView){
         Log.d("TVD","Llega a la función setMonthDay el ${tvD.id}")
-        tvD.setText("${LocalDateTime.now().month.toString()} ${LocalDateTime.now().dayOfMonth.toString()}")
+        tvD.setText("${LocalDateTime.now().month.toString()} " +
+                "${LocalDateTime.now().dayOfMonth.toString()}")
     }
 
     private fun setYear(tvD: TextView){
@@ -207,12 +207,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun updateTime(tvD: TextView){
         //Log.d("TVD","Llega a la función updateTime el ${tvD.id}")
-        tvD.setText("Current time: ${LocalDateTime.now().hour.toString()}:${LocalDateTime.now().minute.toString()}:${LocalDateTime.now().second.toString()}")
+        tvD.setText("Current time: ${LocalDateTime.now().hour.toString()}:" +
+                "${LocalDateTime.now().minute.toString()}:${LocalDateTime.now().second.toString()}")
     }
 
     private fun setCheckInTime(tvD: TextView){
         Log.d("TVD","Llega a la función setHoursWorked el ${tvD.id}")
-        tvD.setText("You have started working at ${startedTime!!.hour.toString()}:${startedTime!!.minute.toString()}:${startedTime!!.second.toString()} hours.")
+        tvD.setText("You have started working at " +
+                "${startedTime!!.hour.toString()}:${startedTime!!.minute.toString()}:" +
+                "${startedTime!!.second.toString()} hours.")
     }
 
 
@@ -221,7 +224,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         // startedTime -> contains the started time; TODO: udate with the hours worked
         Log.d("Time","Started time in setHoursWorked is ${startedTime!!}")
         var differenceTime = TimeHelper.timeDifference(startedTime!!,LocalDateTime.now()!!)
-        tvD.setText("You have worked ${differenceTime.hour.toString()} hour ${differenceTime.minute.toString()} minutes and ${differenceTime.second.toString()} seconds so far.")
+        tvD.setText("You have worked " +
+                "${differenceTime.hour.toString()} hour ${differenceTime.minute.toString()} " +
+                "minutes and ${differenceTime.second.toString()} seconds so far.")
     }
 
     private fun setTotalHoursWorked(tvD: TextView, checkOutTime: LocalDateTime){
@@ -230,7 +235,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         // startedTime -> contains the started time; TODO: udate with the hours worked
         var differenceTime = TimeHelper.timeDifference(startedTime!!,checkOutTime!!)
         // You have worked today a total of 1 hour 8 minutes and 0 seconds.
-        tvD.setText("You have worked today a total of ${differenceTime.hour.toString()} hour ${differenceTime.minute.toString()} minutes and ${differenceTime.second.toString()} seconds.")
+        tvD.setText("You have worked today a total of ${differenceTime.hour.toString()} " +
+                "hour ${differenceTime.minute.toString()} " +
+                "minutes and ${differenceTime.second.toString()} seconds.")
     }
 
 }

@@ -3,7 +3,6 @@ package com.wagit.desktrack.ui.calendar
 import android.graphics.Color
 import android.view.View
 import android.widget.TextView
-import androidx.lifecycle.LiveData
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
@@ -29,49 +28,11 @@ class Calendar () {
                 container.day = day
                 val textView = container.textView
                 textView.text = day.date.dayOfMonth.toString()
-                //Esto es para dar estilo a los dias del mas anterior y posterior (estan en un color mas claro)
-                if (day.owner == DayOwner.THIS_MONTH) {
-                    //Set the alpha value
-                    textView.alpha = 1f
-                    // Show the month dates. Remember that views are recycled!
-                    container.textView.visibility = View.VISIBLE
-                    container.textView.setTextColor(Color.WHITE)
-                    if (day.date == selectedDate) {
-                        // If this is the selected date, show a round background and change the text color.
-                        container.textView.setTextColor(Color.WHITE)
-                        container.textView.setBackgroundResource(R.drawable.ic_launcher_background)
-
-                    } else {
-                        // If this is NOT the selected date, remove the background and reset the text color.
-                        container.textView.setTextColor(Color.BLACK)
-                        container.textView.background = null
-                    }
-
-                } else {
-                    //Set the alpha value
-                    textView.alpha = 0.3f
-                    // Hide in and out dates
-                    container.textView.visibility = View.INVISIBLE
-                    container.textView.setTextColor(Color.GRAY)
-                }
-
                 container.textView.setTextColor(Color.BLACK)
 
                 //Set the text color of the days worked as CYAN
                 //println("LEGA * ANTES")
-                mreg.forEach {
-                    println("LEGA *")
-                    if (day.date.month === it.startedAt.month && day.date.dayOfWeek === it.startedAt.dayOfWeek && day.date.dayOfYear === it.startedAt.dayOfYear){
-                        println("HOUR: ${it.endedAt!!.hour.toString()} ++++++++++++++++++++++++++++++++++++++++++++")
-                        if (it.endedAt!!.hour === 0){
-                            container.textView.setBackgroundColor(Color.YELLOW)
-                        }else{
-                            container.textView.setBackgroundColor(Color.CYAN)
-                        }
-                    }
-                }
-
-
+                setSelectedDayColor(mreg,day,container)
             }
         }
     }
@@ -81,7 +42,8 @@ class Calendar () {
             override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 //Setting the months
-                container.textViewHeaderMonth.text = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
+                container.textViewHeaderMonth.text = "${month.yearMonth.month.name.lowercase().uppercase()} " +
+                        "${month.year}"
 
                 //Setting the days of the week
                 val daysOfWeek = arrayOf(
@@ -101,22 +63,17 @@ class Calendar () {
         }
     }
 
-    fun monthFooterBinder(calendarView: CalendarView){
-        calendarView.monthFooterBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
-            override fun create(view: View) = MonthViewContainer(view)
-            override fun bind(container: MonthViewContainer, month: CalendarMonth) {
-                //TODO: añadir las funcionalidades de rellenar el textview del Footer con datos de los registros
-                val daysOfWeek = arrayOf(
-                    DayOfWeek.SUNDAY,
-                    DayOfWeek.MONDAY,
-                    DayOfWeek.TUESDAY,
-                    DayOfWeek.WEDNESDAY,
-                    DayOfWeek.THURSDAY,
-                    DayOfWeek.FRIDAY,
-                    DayOfWeek.SATURDAY
-                )
-                var days: String = " "
-                daysOfWeek.forEach { days = days + it.value.toString() }
+    private fun setSelectedDayColor(mreg: List<Registry>,day: CalendarDay,container: DayViewContainer){
+        mreg.forEach {
+            println("LEGA *")
+            if (day.date.month === it.startedAt.month &&
+                day.date.dayOfWeek === it.startedAt.dayOfWeek &&
+                day.date.dayOfYear === it.startedAt.dayOfYear){
+                if (it.endedAt!!.hour === 0){
+                    container.textView.setBackgroundColor(Color.YELLOW)
+                }else{
+                    container.textView.setBackgroundColor(Color.CYAN)
+                }
             }
         }
     }

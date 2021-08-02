@@ -2,9 +2,7 @@ package com.wagit.desktrack.data.dao
 
 import androidx.room.*
 import com.wagit.desktrack.data.entities.Registry
-import java.sql.Timestamp
 import java.time.LocalDateTime
-import java.time.Month
 
 @Dao
 abstract class RegistryDao: BaseDao<Registry> {
