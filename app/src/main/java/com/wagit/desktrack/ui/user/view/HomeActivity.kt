@@ -9,7 +9,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.wagit.desktrack.R
+import com.wagit.desktrack.data.entities.Company
 import com.wagit.desktrack.data.entities.Employee
+import com.wagit.desktrack.data.helpers.PrepopulateData
 import com.wagit.desktrack.databinding.ActivityHomeBinding
 import com.wagit.desktrack.ui.BaseActivity
 import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
@@ -42,8 +44,11 @@ class HomeActivity : BaseActivity() {
 
         //set User in sharedVM for fragments
         val user = intent.getSerializableExtra("EXTRA_USER") as Employee
+        val company = PrepopulateData.company
         Log.v("SHARED_VIEW_USER", "${user.id}")
+        Log.v("SHARED_VIEW_COMPANY", "${company.id}")
         sharedViewModel.setUser(user)
+        sharedViewModel.setCompany(company)
     }
 
     /**
