@@ -29,7 +29,6 @@ class HomeViewModel @Inject constructor(
         Log.d("HomeViewModel","Esto es el employer ID ${empId}")
         viewModelScope.launch(Dispatchers.IO) {
             _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(empId))
-            //Log.d("HomeViewModel","Esto es el employer ID, startedAt y endedAt despues del postValue ${_tRegistry.value?.first()?.employeeId} ${_tRegistry.value?.first()?.startedAt} ${_tRegistry.value?.first()?.endedAt}")
         }
         return tRegistry
     }
@@ -37,7 +36,6 @@ class HomeViewModel @Inject constructor(
         Log.d("HomeViewModel","Esto es el employer ID ${empId}")
         viewModelScope.launch(Dispatchers.IO) {
             _tRegistry.postValue(registryRepository.getTodaysRegByEmployee(empId))
-            Log.d("HomeViewModel","Esto es el employer ID, startedAt y endedAt despues del postValue ${_tRegistry.value?.first()?.employeeId} ${_tRegistry.value?.first()?.startedAt} ${_tRegistry.value?.first()?.endedAt}")
         }
     }
 

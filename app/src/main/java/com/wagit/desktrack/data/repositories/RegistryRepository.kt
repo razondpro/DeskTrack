@@ -2,6 +2,7 @@ package com.wagit.desktrack.data.repositories
 
 import com.wagit.desktrack.data.dao.RegistryDao
 import com.wagit.desktrack.data.entities.Registry
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class RegistryRepository @Inject constructor(
@@ -35,5 +36,30 @@ class RegistryRepository @Inject constructor(
     suspend fun getTodaysRegByEmployee(empId: Long): List<Registry> {
         return registryDao.getTodaysRegByEmployee(empId)
     }
+
+
+    //Esta función obtiene todos los registros del mes actual dado el usuario
+    suspend fun getAllRegistriesByEmployeeAndCurrentMonth(empId: Long): List<Registry> {
+        return registryDao.getAllRegistriesByEmployeeAndCurrentMonth(empId)
+    }
+
+    suspend fun getRegistryByEmployeeAndDay(date: LocalDateTime, empId: Long): List<Registry> {
+        return registryDao.getRegistryByEmployeeAndDay(date,empId)
+    }
+
+    suspend fun getAllRegistriesByEmployeeAndMonthAndYear(empId: Long, month: String,
+                                                          year: String): List<Registry> {
+
+        val aux: List<Registry> = registryDao.getAllRegistriesByEmployeeAndMonthAndYear(empId,
+            month, year)
+        println("REGISTRY REPO.: $aux")
+        return aux
+    }
+
+
+    suspend fun getAllRegistries(): List<Registry> {
+        return registryDao.getAllRegistries()
+    }
+
 
 }
