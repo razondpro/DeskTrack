@@ -18,4 +18,4 @@ data class Company(
     val nif: String,
     val ccc: Int,
     @ColumnInfo(name = "is_deleted") val isDeleted: Boolean
-): Serializable
+)

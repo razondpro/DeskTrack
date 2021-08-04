@@ -14,7 +14,6 @@ class SharedHomeViewModel @Inject constructor(
 
     private var _employee: MutableLiveData<Employee> = MutableLiveData()
     val employee: LiveData<Employee> get() = _employee
-
     /**
      * This function is called only once from oncreate HomeActivity
      * to set the employee (user) in the application
@@ -22,5 +21,4 @@ class SharedHomeViewModel @Inject constructor(
     fun setUser(user: Employee){
         _employee.value = user
     }
-
 }
