@@ -30,4 +30,12 @@ class CompanyRepository @Inject constructor(
     override suspend fun delete(obj: Company) {
         TODO("Not yet implemented")
     }
+
+    suspend fun getCompany(companyId: Long): List<Company>{
+        return companyDao.getCompany(companyId)
+    }
+
+    suspend fun getAllCompanies(): List<Company>{
+        return companyDao.getAllCompanies()
+    }
 }
