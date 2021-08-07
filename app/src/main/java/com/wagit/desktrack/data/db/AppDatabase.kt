@@ -88,7 +88,6 @@ abstract class AppDatabase : RoomDatabase() {
                     println("Insert employee $empId")
 
                     val admin = Employee(
-                        id=2L,
                         email = "admin@admin.com",
                         password = "admin123",
                         cif = "11111111z",
