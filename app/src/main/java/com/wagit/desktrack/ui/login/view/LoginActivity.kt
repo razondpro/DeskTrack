@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.wagit.desktrack.data.entities.Employee
 import com.wagit.desktrack.databinding.ActivityLoginBinding
 import com.wagit.desktrack.ui.BaseActivity
+import com.wagit.desktrack.ui.admin.view.AdminActivity
 import com.wagit.desktrack.ui.user.view.HomeActivity
 import com.wagit.desktrack.ui.login.viewmodel.LoginViewModel
 import com.wagit.desktrack.utils.Validator
@@ -79,15 +80,21 @@ class LoginActivity: BaseActivity() {
     }
 
     private fun goHomePage(user: Employee) {
-        Intent(this, HomeActivity::class.java).also {
-            it.putExtra("EXTRA_USER", user)
-            startActivity(it)
-            finish()
-        }
+
         if(user.isAdmin!!){
             //go admin home activiy
+            Intent(this, AdminActivity::class.java).also {
+                it.putExtra("EXTRA_USER", user)
+                startActivity(it)
+                finish()
+            }
         }else {
             //go user activity
+            Intent(this, HomeActivity::class.java).also {
+                it.putExtra("EXTRA_USER", user)
+                startActivity(it)
+                finish()
+            }
         }
     }
 
