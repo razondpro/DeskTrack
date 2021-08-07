@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.22447916666666667" />
+        <entry key="app/src/main/res/drawable/ic_android.xml" value="0.371875" />
+        <entry key="app/src/main/res/drawable/ic_apps.xml" value="0.371875" />
+        <entry key="app/src/main/res/drawable/ic_calendar.xml" value="0.371875" />
+        <entry key="app/src/main/res/drawable/ic_comment.xml" value="0.371875" />
+        <entry key="app/src/main/res/drawable/ic_home.xml" value="0.371875" />
+        <entry key="app/src/main/res/drawable/ic_person.xml" value="0.371875" />
+        <entry key="app/src/main/res/drawable/ic_question_answer.xml" value="0.371875" />
+        <entry key="app/src/main/res/drawable/ic_twitter.xml" value="0.371875" />
+        <entry key="app/src/main/res/drawable/profile_bg.xml" value="0.371875" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.30434782608695654" />
+        <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.19895833333333332" />
+        <entry key="app/src/main/res/layout/calendar_month_footer_layout.xml" value="0.17572463768115942" />
+        <entry key="app/src/main/res/layout/calendar_registry_text.xml" value="0.19895833333333332" />
+        <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.17572463768115942" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.359375" />
+        <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.35572916666666665" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>
