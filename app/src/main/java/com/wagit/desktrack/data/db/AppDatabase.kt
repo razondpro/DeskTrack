@@ -85,6 +85,22 @@ abstract class AppDatabase : RoomDatabase() {
                         isAdmin = false
                     )
                     val empId = instance.employeeDao().insert(employee)
+                    println("Insert employee $empId")
+
+                    val admin = Employee(
+                        id=2L,
+                        email = "admin@admin.com",
+                        password = "admin123",
+                        cif = "11111111z",
+                        nss = "333333",
+                        firstName = "Skipper",
+                        lastName = "Admin",
+                        companyId = null,
+                        isDeleted = false,
+                        isAdmin = true
+                    )
+                    val admId = instance.employeeDao().insert(admin)
+                    println("Insert admin $admId")
                     /*
                     instance.registryDao().insert(
                         Registry(
