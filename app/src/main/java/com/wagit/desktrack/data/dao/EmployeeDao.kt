@@ -23,4 +23,7 @@ abstract class EmployeeDao: BaseDao<Employee> {
 
     @Query("UPDATE employees SET email = :email, password = :pw, first_name = :firstName, last_name = :lastName, company_id = :companyId, cif = :cif, nss = :nss WHERE id = :employeeId")
     abstract suspend fun updateEmployee(employeeId: Long, email: String, pw: String, firstName: String, lastName: String, companyId: Long, cif: String, nss: String)
+
+    @Query("DELETE from employees WHERE id = :employeeId")
+    abstract suspend fun deleteEmployee(employeeId: Long)
 }

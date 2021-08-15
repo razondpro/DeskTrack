@@ -71,12 +71,6 @@ class AddEditEmployeeFragment :
         }
 
         //No vuelve atrás al clicar sobre save?!
-        btnSave.setOnClickListener {
-            goBack()
-        }
-
-        //Initialize the edit validation
-
 
     }
 
@@ -104,6 +98,7 @@ class AddEditEmployeeFragment :
     private fun goBack(){
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
         fragmentManager.popBackStackImmediate()
+        println("LLEGA AL GOBACK() !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     }
 
     private fun handleSaveClick(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
@@ -119,6 +114,8 @@ class AddEditEmployeeFragment :
                         fragmentAddEditEmployeeBinding.tvEmployeeCompanyId.text.toString().toLong(),
                         fragmentAddEditEmployeeBinding.tvEmployeeCIF.text.toString(),
                         fragmentAddEditEmployeeBinding.tvEmployeeNss.text.toString())
+
+                    goBack()
                 }
 
                 //updateEmployee(employeeId: Long, email: String, pw: String,
@@ -138,9 +135,6 @@ class AddEditEmployeeFragment :
             if(it.isEmpty()){
                 Toast.makeText(this.context, "Wrong credentials", Toast.LENGTH_LONG).show()
             }
-            //else {
-                //goBack()
-            //}
         })
 
     }
@@ -149,6 +143,16 @@ class AddEditEmployeeFragment :
         validateEditForm(fragmentAddEditEmployeeBinding)
         handleSaveClick(fragmentAddEditEmployeeBinding)
         attemptEditEmployee()
+    }
+
+    private fun handleDeleteClick(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
+        fragmentAddEditEmployeeBinding.btnDelete.setOnClickListener {
+            if (emplPosition != -1){
+                shareViewModel.deleteEmployee(emplPosition.toLong())
+
+                goBack()
+            }
+        }
     }
 
     private fun updateSnipperEmployee(spin: Spinner,
@@ -221,6 +225,7 @@ class AddEditEmployeeFragment :
                     var employee = shareViewModel.getEmployee(emplPosition).value
                     updateEmployeePosition(fragmentAddEditEmployeeBinding)
                     editViewInit(fragmentAddEditEmployeeBinding)
+                    handleDeleteClick(fragmentAddEditEmployeeBinding)
                 } else{
                     emplPosition = -1
                     updateEmployeePosition(fragmentAddEditEmployeeBinding)

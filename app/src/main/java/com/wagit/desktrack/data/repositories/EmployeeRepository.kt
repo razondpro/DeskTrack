@@ -52,4 +52,8 @@ class EmployeeRepository @Inject constructor(
         employeeDao.updateEmployee(employeeId, email, pw, firstName, lastName, companyId,
             cif, nss)
     }
+
+    suspend fun deleteEmployee(employeeId: Long) {
+        employeeDao.deleteEmployee(employeeId)
+    }
 }

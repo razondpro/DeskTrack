@@ -63,6 +63,16 @@ class SharedViewModel  @Inject constructor(
         println("Llega al SHVM del updateEmployee con ${employee.value}")
     }
 
+    fun deleteEmployee(employeeId: Long){
+        viewModelScope.launch(Dispatchers.IO) {
+            employeeRepository.deleteEmployee(employeeId)
+            _employee.postValue(employeeRepository.getEmployee(employeeId.toInt()))
+        }
+        Log.d("AdminHomeViewModel","Llega al viewmodel para deleteEmployee con " +
+                "${employee.value}")
+        println("Llega al SHVM del deleteEmployee con ${employee.value}")
+    }
+
     fun getAllCompanies(): LiveData<List<Company>>{
         Log.d("AdminHomeViewModel","Llega al viewmodel para getAllCompanies")
         viewModelScope.launch(Dispatchers.IO) {
