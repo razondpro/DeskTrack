@@ -23,8 +23,7 @@ class ProfileViewModel @Inject constructor(
     fun getCompany(companyId: Long): LiveData<List<Company>>{
         Log.d("ProfileViewModel","Esto es el company ID ${companyId}")
         viewModelScope.launch(Dispatchers.IO) {
-            //_company.postValue(companyRepository.getCompany(companyId))
-            _company.postValue(companyRepository.getAllCompanies())
+            _company.postValue(companyRepository.getCompany(companyId))
         }
         Log.d("ProfileViewModel","Esto es el company ${company.value?.first()?.name}")
         return company

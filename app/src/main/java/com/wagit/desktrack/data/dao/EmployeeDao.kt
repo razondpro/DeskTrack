@@ -9,7 +9,7 @@ import com.wagit.desktrack.data.entities.relations.EmployeeWithRegistries
 abstract class EmployeeDao: BaseDao<Employee> {
 
     @Query("SELECT * FROM employees WHERE id = :employeeId")
-    abstract suspend fun getEmployee(employeeId: Long): List<Employee>
+    abstract suspend fun getEmployee(employeeId: Int): List<Employee>
 
     @Query("SELECT * FROM employees")
     abstract suspend fun getAllEmployees(): List<Employee>
@@ -20,4 +20,7 @@ abstract class EmployeeDao: BaseDao<Employee> {
 
     @Query("SELECT * FROM employees WHERE email = :email AND password = :pw")
     abstract suspend fun getUserByEmailAndPw(email: String, pw: String): List<Employee>
+
+    @Query("UPDATE employees SET email = :email, password = :pw, first_name = :firstName, last_name = :lastName, company_id = :companyId, cif = :cif, nss = :nss WHERE id = :employeeId")
+    abstract suspend fun updateEmployee(employeeId: Long, email: String, pw: String, firstName: String, lastName: String, companyId: Long, cif: String, nss: String)
 }
