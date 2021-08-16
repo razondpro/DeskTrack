@@ -18,7 +18,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.wagit.desktrack.data.dao.EmployeeDao
+import com.wagit.desktrack.data.db.AppDatabase
 import com.wagit.desktrack.utils.Validator
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class AddEditEmployeeFragment :
     BaseFragment<FragmentAddEditEmployeeBinding>(R.layout.fragment_add_edit_employee){
@@ -55,7 +59,7 @@ class AddEditEmployeeFragment :
     override fun FragmentAddEditEmployeeBinding.initialize() {
         println("Hello from employee fragment!!!")
         var spin = this.spinnerEmployee
-        this@AddEditEmployeeFragment.view
+
         var employees = shareViewModel.getAllEmployees().value
         updateSnipperEmployee(spin,this)
 
@@ -70,8 +74,6 @@ class AddEditEmployeeFragment :
         btnGoBack.setOnClickListener {
             goBack()
         }
-
-        //No vuelve atrás al clicar sobre save?!
 
     }
 
@@ -107,7 +109,7 @@ class AddEditEmployeeFragment :
             if(isValidLD.value as Boolean){
                 //TODO: implementar que se edite el empleado en la DB
                 if (emplPosition != -1){
-                    val userP = shareViewModel.updateEmployee(emplPosition.toLong(),
+                    shareViewModel.updateEmployee(emplPosition.toLong(),
                         fragmentAddEditEmployeeBinding.tvEmployeeEmail.text.toString(),
                         fragmentAddEditEmployeeBinding.tvEmployeePasswd.text.toString(),
                         fragmentAddEditEmployeeBinding.tvEmployeeFirstName.text.toString(),
@@ -143,6 +145,12 @@ class AddEditEmployeeFragment :
     private fun editViewInit(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
         validateEditForm(fragmentAddEditEmployeeBinding)
         handleSaveClick(fragmentAddEditEmployeeBinding)
+        attemptEditEmployee()
+    }
+
+    private fun addViewInit(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
+        validateEditForm(fragmentAddEditEmployeeBinding)
+        handleAddClick(fragmentAddEditEmployeeBinding)
         attemptEditEmployee()
     }
 
@@ -190,6 +198,50 @@ class AddEditEmployeeFragment :
                 onEmployeeDeleteAlertDialog(fragmentAddEditEmployeeBinding)
             }
         }
+    }
+
+    private fun handleAddClick(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
+        fragmentAddEditEmployeeBinding.btnSave.setOnClickListener {
+            if(isValidLD.value as Boolean){
+                if (emplPosition == -1){
+                    //TODO: hacer el insert del employee con los datos del form. y comprobar con
+                    //el getEmployee que se haya hecho correctamente
+
+
+                    GlobalScope.launch {
+                        val instance = this@AddEditEmployeeFragment.context?.
+                        let { AppDatabase.getInstance(it) }
+
+                        val employee = Employee(
+                            email = fragmentAddEditEmployeeBinding.tvEmployeeEmail.text.
+                            toString(),
+                            password = fragmentAddEditEmployeeBinding.tvEmployeePasswd.text.
+                            toString(),
+                            cif = fragmentAddEditEmployeeBinding.tvEmployeeCIF.text.toString(),
+                            nss = fragmentAddEditEmployeeBinding.tvEmployeeNss.text.toString(),
+                            firstName = fragmentAddEditEmployeeBinding.tvEmployeeFirstName.text.
+                            toString(),
+                            lastName = fragmentAddEditEmployeeBinding.tvEmployeeLastName.text.
+                            toString(),
+                            companyId = fragmentAddEditEmployeeBinding.tvEmployeeCompanyId.text.
+                            toString().toLong(),
+                            isDeleted = false,
+                            isAdmin = false
+                        )
+
+                        val empId = instance!!.employeeDao().insert(employee)
+                        println("Insert employee $empId")
+                        var empAux = shareViewModel.getEmployee(empId.toInt()).value
+                    }
+                    goBack()
+
+                }
+            }else{
+                Toast.makeText(it.context, "Please, insert valid data",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 
     private fun updateSnipperEmployee(spin: Spinner,
@@ -256,6 +308,8 @@ class AddEditEmployeeFragment :
                     Toast.LENGTH_SHORT
                 ).show()
                 if (position != 0){
+                    //TODO: cambiar el text del boton save (a save)
+                    fragmentAddEditEmployeeBinding.btnSave.setText("Save")
                     //Set the employees data
                     emplPosition = spinnerEmplId.get(position-1)
                     println("Selected Employees Id is: " + spinnerEmplId.get(position-1))
@@ -266,6 +320,11 @@ class AddEditEmployeeFragment :
                 } else{
                     emplPosition = -1
                     updateEmployeePosition(fragmentAddEditEmployeeBinding)
+
+                    //TODO: añadir que se vea el boton de añadir empleado, cambiar el text del
+                    //boton save (a delete) y añadirle el listener para que añada
+                    fragmentAddEditEmployeeBinding.btnSave.setText("Add Employee")
+                    addViewInit(fragmentAddEditEmployeeBinding)
                 }
                 println("ARRAY FOR SELECTED SIZE: "+ spinnerEmployees.size)
             }
