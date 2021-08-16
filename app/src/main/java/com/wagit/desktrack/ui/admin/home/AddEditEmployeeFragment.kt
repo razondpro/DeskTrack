@@ -1,5 +1,6 @@
 package com.wagit.desktrack.ui.admin.home
 
+import android.app.AlertDialog
 import android.util.Log
 import androidx.fragment.app.activityViewModels
 import com.wagit.desktrack.R
@@ -54,7 +55,7 @@ class AddEditEmployeeFragment :
     override fun FragmentAddEditEmployeeBinding.initialize() {
         println("Hello from employee fragment!!!")
         var spin = this.spinnerEmployee
-
+        this@AddEditEmployeeFragment.view
         var employees = shareViewModel.getAllEmployees().value
         updateSnipperEmployee(spin,this)
 
@@ -145,12 +146,48 @@ class AddEditEmployeeFragment :
         attemptEditEmployee()
     }
 
+    // When User cilcks on dialog button, call this method
+    private fun onEmployeeDeleteAlertDialog(fragmentAddEditEmployeeBinding:
+    FragmentAddEditEmployeeBinding) {
+        //Instantiate builder variable
+        val builder = AlertDialog.Builder(this@AddEditEmployeeFragment.view?.context)
+
+        // set title
+        builder.setTitle("Delete Employee")
+
+        //set content area
+        builder.setMessage("Do you want to delete the employee ${fragmentAddEditEmployeeBinding.
+        tvEmployeeFirstName.text}  ${fragmentAddEditEmployeeBinding.tvEmployeeLastName.text}?")
+
+        //set negative button
+        builder.setPositiveButton(
+            "Yes") { dialog, id ->
+            // User clicked Update Now button
+            Toast.makeText(this.context, "Deleting the employee",Toast.LENGTH_SHORT).show()
+            shareViewModel.deleteEmployee(emplPosition.toLong())
+            goBack()
+        }
+
+        //set positive button
+
+        builder.setNegativeButton(
+            "No") { dialog, id ->
+            // User cancelled the dialog
+        }
+
+        //set neutral button
+        /*
+        builder.setNeutralButton("Reminder me latter") {dialog, id->
+            // User Click on reminder me latter
+        }
+         */
+        builder.show()
+    }
+
     private fun handleDeleteClick(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
         fragmentAddEditEmployeeBinding.btnDelete.setOnClickListener {
             if (emplPosition != -1){
-                shareViewModel.deleteEmployee(emplPosition.toLong())
-
-                goBack()
+                onEmployeeDeleteAlertDialog(fragmentAddEditEmployeeBinding)
             }
         }
     }
