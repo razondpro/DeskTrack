@@ -53,6 +53,10 @@ class EmployeeRepository @Inject constructor(
             cif, nss)
     }
 
+    suspend fun updateEmployeesCompId(employeeId: Long, companyId: Long){
+        employeeDao.updateEmployeesCompId(employeeId,companyId)
+    }
+
     suspend fun deleteEmployee(employeeId: Long) {
         employeeDao.deleteEmployee(employeeId)
     }

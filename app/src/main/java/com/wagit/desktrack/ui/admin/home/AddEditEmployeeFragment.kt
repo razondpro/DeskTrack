@@ -18,8 +18,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.wagit.desktrack.data.dao.EmployeeDao
 import com.wagit.desktrack.data.db.AppDatabase
+import com.wagit.desktrack.data.entities.Company
 import com.wagit.desktrack.utils.Validator
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,6 +30,10 @@ class AddEditEmployeeFragment :
     var spinnerEmployees = mutableListOf<String>("")
     var spinnerEmplId = mutableListOf<Int>()
     var emplPosition = -1
+
+    var spinnerCompanies = mutableListOf<String>("")
+    var spinnerCompId = mutableListOf<Int>()
+    var compPosition = -1
 
     private val emailLD = MutableLiveData<String>()
     private val pwLD = MutableLiveData<String>()
@@ -55,20 +59,30 @@ class AddEditEmployeeFragment :
         }
     }
 
-
     override fun FragmentAddEditEmployeeBinding.initialize() {
-        println("Hello from employee fragment!!!")
         var spin = this.spinnerEmployee
+        var spinEmployeeCompany = this.spinEmployeeCompany
 
+        var companies = shareViewModel.getAllCompanies().value
         var employees = shareViewModel.getAllEmployees().value
+
+        updateSnipperCompany(spinEmployeeCompany,this)
         updateSnipperEmployee(spin,this)
+
+        shareViewModel.companies.observe(viewLifecycleOwner, Observer {
+            updateSnipperCompany(spinEmployeeCompany,this)
+        })
 
         shareViewModel.employees.observe(viewLifecycleOwner, Observer {
             updateSnipperEmployee(spin,this)
         })
 
+        shareViewModel.company.observe(viewLifecycleOwner, Observer {
+            updateEmployeeCompanyPosition(this)
+        })
+
         shareViewModel.employee.observe(viewLifecycleOwner, Observer {
-            updateEmployeePosition(this)
+            updateEmployeeCompanyPosition(this)
         })
 
         btnGoBack.setOnClickListener {
@@ -88,7 +102,6 @@ class AddEditEmployeeFragment :
             emailLD.value = text?.toString()
         }
         isValidLD.observe(this){ isValid ->
-            //TODO Implement behaviors after form validation
             Log.v("EditIsValid", isValid.toString())
         }
     }
@@ -107,23 +120,21 @@ class AddEditEmployeeFragment :
     private fun handleSaveClick(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
         fragmentAddEditEmployeeBinding.btnSave.setOnClickListener {
             if(isValidLD.value as Boolean){
-                //TODO: implementar que se edite el empleado en la DB
-                if (emplPosition != -1){
+                if (emplPosition != -1 && compPosition != -1){
                     shareViewModel.updateEmployee(emplPosition.toLong(),
                         fragmentAddEditEmployeeBinding.tvEmployeeEmail.text.toString(),
                         fragmentAddEditEmployeeBinding.tvEmployeePasswd.text.toString(),
                         fragmentAddEditEmployeeBinding.tvEmployeeFirstName.text.toString(),
                         fragmentAddEditEmployeeBinding.tvEmployeeLastName.text.toString(),
-                        fragmentAddEditEmployeeBinding.tvEmployeeCompanyId.text.toString().toLong(),
+                        compPosition.toLong(),
                         fragmentAddEditEmployeeBinding.tvEmployeeCIF.text.toString(),
                         fragmentAddEditEmployeeBinding.tvEmployeeNss.text.toString())
 
+                    compPosition = -1
+                    emplPosition = -1
                     goBack()
-                }
 
-                //updateEmployee(employeeId: Long, email: String, pw: String,
-                //                               firstName: String, lastName: String, companyId: Long,
-                //                               cif: String, nss: String)
+                }
             }else {
                 Toast.makeText(it.context, "Please, insert valid data",
                     Toast.LENGTH_SHORT).show()
@@ -132,8 +143,6 @@ class AddEditEmployeeFragment :
     }
 
     private fun attemptEditEmployee(){
-        //TODO: implementar un observer para que vaya comprobando si los datos son correctos o no,
-        // si es correcto irá atras goBack()
         shareViewModel.employee.observe(this,{
             if(it.isEmpty()){
                 Toast.makeText(this.context, "Wrong credentials", Toast.LENGTH_LONG).show()
@@ -167,16 +176,18 @@ class AddEditEmployeeFragment :
         builder.setMessage("Do you want to delete the employee ${fragmentAddEditEmployeeBinding.
         tvEmployeeFirstName.text}  ${fragmentAddEditEmployeeBinding.tvEmployeeLastName.text}?")
 
-        //set negative button
+        //set positive button
         builder.setPositiveButton(
             "Yes") { dialog, id ->
             // User clicked Update Now button
             Toast.makeText(this.context, "Deleting the employee",Toast.LENGTH_SHORT).show()
             shareViewModel.deleteEmployee(emplPosition.toLong())
+            compPosition = -1
+            emplPosition = -1
             goBack()
         }
 
-        //set positive button
+        //set negative button
 
         builder.setNegativeButton(
             "No") { dialog, id ->
@@ -194,7 +205,7 @@ class AddEditEmployeeFragment :
 
     private fun handleDeleteClick(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
         fragmentAddEditEmployeeBinding.btnDelete.setOnClickListener {
-            if (emplPosition != -1){
+            if (emplPosition != -1 && compPosition!=-1){
                 onEmployeeDeleteAlertDialog(fragmentAddEditEmployeeBinding)
             }
         }
@@ -203,10 +214,10 @@ class AddEditEmployeeFragment :
     private fun handleAddClick(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
         fragmentAddEditEmployeeBinding.btnSave.setOnClickListener {
             if(isValidLD.value as Boolean){
-                if (emplPosition == -1){
-                    //TODO: hacer el insert del employee con los datos del form. y comprobar con
-                    //el getEmployee que se haya hecho correctamente
-
+                //if (emplPosition == -1 && compPosition != -1){
+                if (compPosition != -1){
+                    println("Llega handleAddClick con emplPosition: $emplPosition " +
+                            "y compPosition: $compPosition <----------------->")
 
                     GlobalScope.launch {
                         val instance = this@AddEditEmployeeFragment.context?.
@@ -223,16 +234,20 @@ class AddEditEmployeeFragment :
                             toString(),
                             lastName = fragmentAddEditEmployeeBinding.tvEmployeeLastName.text.
                             toString(),
-                            companyId = fragmentAddEditEmployeeBinding.tvEmployeeCompanyId.text.
-                            toString().toLong(),
+                            companyId = compPosition.toLong(),
                             isDeleted = false,
                             isAdmin = false
                         )
 
                         val empId = instance!!.employeeDao().insert(employee)
-                        println("Insert employee $empId")
-                        var empAux = shareViewModel.getEmployee(empId.toInt()).value
+                        shareViewModel.getEmployee(empId.toInt()).value
+                        if (shareViewModel.employee.value != null){
+                            println("shareViewModel.employee.value es ${shareViewModel.employee
+                                .value}")
+                        }
                     }
+                    //compPosition = -1
+                    //emplPosition = -1
                     goBack()
 
                 }
@@ -255,18 +270,31 @@ class AddEditEmployeeFragment :
         setSnipperEmployees(employeesAux, spin,fragmentAddEditEmployeeBinding)
     }
 
-    private fun updateEmployeePosition(fragmentAddEditEmployeeBinding:
+    private fun updateEmployeeCompanyPosition(fragmentAddEditEmployeeBinding:
                                        FragmentAddEditEmployeeBinding){
         var employeeAux = listOf<Employee>()
+        var companyAux = listOf<Company>()
         if (shareViewModel.employee.value != null){
+
+            println("Entra en updateEmployeeCompanyPosition antes del error con " +
+                    "${shareViewModel.employee.value!!}, " +
+                    "emplPosition: $emplPosition y compPosition: $compPosition")
             employeeAux = shareViewModel.employee.value!!
-            println("Entra en updateEmployeePosition con ${shareViewModel.employee.value!!} y " +
-                    "position: $emplPosition")
+            compPosition = employeeAux.first().companyId!!.toInt()
+            println("Entra en updateEmployeeCompanyPosition con " +
+                    "${shareViewModel.employee.value!!}, " +
+                    "emplPosition: $emplPosition y compPosition: $compPosition")
         }
-        if (emplPosition != -1){
-            setEmployeesData(emplPosition,fragmentAddEditEmployeeBinding,employeeAux)
+        if (shareViewModel.company.value != null){
+
+            companyAux = shareViewModel.company.value!!
+            println("Entra en updateCompanyPosition con ${shareViewModel.company.value!!} y " +
+                    "position: ${compPosition}")
+        }
+        if (emplPosition != -1 && compPosition != -1){
+            setEmployeesData(fragmentAddEditEmployeeBinding,employeeAux,companyAux)
         }else{
-            resetEmployeesData(fragmentAddEditEmployeeBinding,employeeAux)
+            resetEmployeesData(fragmentAddEditEmployeeBinding)
         }
     }
 
@@ -308,25 +336,20 @@ class AddEditEmployeeFragment :
                     Toast.LENGTH_SHORT
                 ).show()
                 if (position != 0){
-                    //TODO: cambiar el text del boton save (a save)
                     fragmentAddEditEmployeeBinding.btnSave.setText("Save")
                     //Set the employees data
                     emplPosition = spinnerEmplId.get(position-1)
                     println("Selected Employees Id is: " + spinnerEmplId.get(position-1))
-                    var employee = shareViewModel.getEmployee(emplPosition).value
-                    updateEmployeePosition(fragmentAddEditEmployeeBinding)
+                    getEmployeesCompany(fragmentAddEditEmployeeBinding)
                     editViewInit(fragmentAddEditEmployeeBinding)
                     handleDeleteClick(fragmentAddEditEmployeeBinding)
                 } else{
                     emplPosition = -1
-                    updateEmployeePosition(fragmentAddEditEmployeeBinding)
-
-                    //TODO: añadir que se vea el boton de añadir empleado, cambiar el text del
+                    updateEmployeeCompanyPosition(fragmentAddEditEmployeeBinding)
                     //boton save (a delete) y añadirle el listener para que añada
                     fragmentAddEditEmployeeBinding.btnSave.setText("Add Employee")
                     addViewInit(fragmentAddEditEmployeeBinding)
                 }
-                println("ARRAY FOR SELECTED SIZE: "+ spinnerEmployees.size)
             }
 
             override fun onNothingSelected(arg0: AdapterView<*>?) {
@@ -335,11 +358,106 @@ class AddEditEmployeeFragment :
         }
     }
 
-    private fun setEmployeesData(position: Int, fragmentAddEditEmployeeBinding:
-    FragmentAddEditEmployeeBinding, employeeData: List<Employee>){
-        println("Hello from setEmployeesData with ${employeeData}")
+    private fun getEmployeesCompany(fragmentAddEditEmployeeBinding:
+                                    FragmentAddEditEmployeeBinding){
+        println("emplPosition ----------------------------------------> ${emplPosition}")
+        println("compPosition ----------------------------------------> ${compPosition}")
+
+        var employeesAux = listOf<Employee>()
+        if (emplPosition != -1 && shareViewModel.getEmployee(emplPosition).value != null){
+            println("ENTRA EN EL IF: --------------------> emplPosition != -1 && " +
+                    "shareViewModel.getEmployee(emplPosition).value != null")
+            employeesAux = shareViewModel.getEmployee(emplPosition).value!!
+            var empl: Employee
+            if (employeesAux.isNotEmpty() && employeesAux.first() != null){
+                empl = employeesAux.first()
+                println("empl ----------------------------------------> ${empl}")
+                var empIdAux = empl.companyId
+                println("empIdAux ----------------------------------------> ${empIdAux}")
+                var company = empIdAux?.let { shareViewModel.getCompany(it).value?.first() }
+                println("company ----------------------------------------> ${company}")
+            }
+        }
+    }
+
+    private fun setSnipperCompanyItemSelector(spin: Spinner,
+                                       fragmentAddEditEmployeeBinding:
+                                       FragmentAddEditEmployeeBinding){
+        // Creating adapter for spinner
+        val adapter = ArrayAdapter<String>(spin.context,
+            R.layout.support_simple_spinner_dropdown_item,spinnerCompanies,)
+        spin.adapter = adapter
+
+        //Setting the item selected listener
+        spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                /*
+                Toast.makeText(
+                    spin?.context,
+                    "Selected Company: " + spinnerCompanies.get(position),
+                    Toast.LENGTH_SHORT
+                ).show()
+                 */
+                if (position != 0){
+                    //Set the employees data
+                    println("Selected Companie's Id is: " + spinnerCompId.get(position-1) +
+                            " and emplPosition: $emplPosition")
+                    compPosition = spinnerCompId.get(position-1)
+                    if (emplPosition != -1){
+                        shareViewModel.updateEmployeesCompId(emplPosition.toLong(),
+                            compPosition.toLong())
+                        updateEmployeeCompanyPosition(fragmentAddEditEmployeeBinding)
+
+                    }
+                } else{
+                    compPosition = -1
+                    updateEmployeeCompanyPosition(fragmentAddEditEmployeeBinding)
+
+                }
+                println("ARRAY FOR SELECTED SIZE: "+ spinnerCompanies.size)
+            }
+
+            override fun onNothingSelected(arg0: AdapterView<*>?) {
+                // TODO - Custom Code
+            }
+        }
+    }
+
+    private fun updateSnipperCompany(spin: Spinner,
+                                      fragmentAddEditEmployeeBinding:
+                                      FragmentAddEditEmployeeBinding){
+        var companyAux = listOf<Company>()
+        if (shareViewModel.companies.value != null){
+            companyAux = shareViewModel.companies.value!!
+            println("Entra en updateSnipperCompany con ${shareViewModel.companies.value!!}")
+        }
+        setSnipperCompanies(companyAux, spin,fragmentAddEditEmployeeBinding)
+    }
+
+    private fun setSnipperCompanies(companies: List<Company>, spin: Spinner,
+                                    fragmentAddEditEmployeeBinding:
+                                    FragmentAddEditEmployeeBinding){
+        spinnerCompanies = mutableListOf<String>("")
+        spinnerCompId = mutableListOf<Int>()
+
+        // Spinner Drop down elements
+        companies?.forEach {
+            if (it.id.toInt() >= 1){
+                spinnerCompanies.add(it.name)
+                spinnerCompId.add(it.id.toInt())
+            }
+        }
+        setSnipperCompanyItemSelector(spin,fragmentAddEditEmployeeBinding)
+    }
+
+    private fun setEmployeesData(fragmentAddEditEmployeeBinding:
+    FragmentAddEditEmployeeBinding, employeeData: List<Employee>, companyData: List<Company>){
         employeeData.forEach {
-            println("Name & Email is: "+ it.firstName + " " + it.email)
             if (it.isAdmin == false){
                 fragmentAddEditEmployeeBinding.tvEmployeeCIF.setText("${it.cif.toString()}")
 
@@ -359,93 +477,30 @@ class AddEditEmployeeFragment :
                 tvEmployeePasswd.setText("${it.password.toString()}")
 
                 fragmentAddEditEmployeeBinding.
-                tvEmployeeCompanyId.setText("${it.companyId.toString()}")
+                spinEmployeeCompany.setSelection(compPosition)
+
+                println("Entra en setEmployeesData ------------------------------->" +
+                        "compPosition: $compPosition")
 
             }else{
-                resetEmployeesData(fragmentAddEditEmployeeBinding,employeeData)
+                resetEmployeesData(fragmentAddEditEmployeeBinding)
             }
         }
 
     }
 
     private fun resetEmployeesData(fragmentAddEditEmployeeBinding:
-    FragmentAddEditEmployeeBinding, employeeData: List<Employee>){
-        println("Hello from resetEmployeesData with position: ${emplPosition}")
-        employeeData.forEach {
-            println("Name & Email is: "+ it.firstName + " " + it.email)
-            fragmentAddEditEmployeeBinding.tvEmployeeCIF.setText("")
-            fragmentAddEditEmployeeBinding.tvEmployeeFirstName.setText("")
-            fragmentAddEditEmployeeBinding.tvEmployeeLastName.setText("")
-            fragmentAddEditEmployeeBinding.tvEmployeeNss.setText("")
-            fragmentAddEditEmployeeBinding.tvEmployeeEmail.setText("")
-            fragmentAddEditEmployeeBinding.tvEmployeePasswd.setText("")
-            fragmentAddEditEmployeeBinding.tvEmployeeCompanyId.setText("")
-        }
+                                   FragmentAddEditEmployeeBinding){
+        fragmentAddEditEmployeeBinding.tvEmployeeCIF.setText("")
+        fragmentAddEditEmployeeBinding.tvEmployeeFirstName.setText("")
+        fragmentAddEditEmployeeBinding.tvEmployeeLastName.setText("")
+        fragmentAddEditEmployeeBinding.tvEmployeeNss.setText("")
+        fragmentAddEditEmployeeBinding.tvEmployeeEmail.setText("")
+        fragmentAddEditEmployeeBinding.tvEmployeePasswd.setText("")
+        fragmentAddEditEmployeeBinding.spinEmployeeCompany.setSelection(0)
+
+        emplPosition=-1
+        compPosition=-1
 
     }
 }
-
-
-
-
-
-
-
-
-/*
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AddEditEmployeeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-
-class AddEditEmployeeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        println("Hello from employee fragment!!!")
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_edit_employee, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddEditEmployeeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddEditEmployeeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-}
-
- */

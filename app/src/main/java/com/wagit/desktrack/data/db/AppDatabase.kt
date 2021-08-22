@@ -73,6 +73,8 @@ abstract class AppDatabase : RoomDatabase() {
                 GlobalScope.launch {
                     val instance = getInstance(context)
                     val comId = instance.companyDao().insert(PrepopulateData.company)
+                    val comTwoId = instance.companyDao().insert(PrepopulateData.companyTwo)
+
                     val employee = Employee(
                         email = "user@user.com",
                         password = "user123",
@@ -108,7 +110,7 @@ abstract class AppDatabase : RoomDatabase() {
                         nss = "888888",
                         firstName = "Prova",
                         lastName = "User",
-                        companyId = comId,
+                        companyId = comTwoId,
                         isDeleted = false,
                         isAdmin = false
                     )
