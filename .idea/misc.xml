@@ -20,7 +20,7 @@
         <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.19895833333333332" />
         <entry key="app/src/main/res/layout/calendar_month_footer_layout.xml" value="0.17572463768115942" />
         <entry key="app/src/main/res/layout/calendar_registry_text.xml" value="0.19895833333333332" />
-        <entry key="app/src/main/res/layout/fragment_add_edit_company.xml" value="0.23505434782608695" />
+        <entry key="app/src/main/res/layout/fragment_add_edit_company.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_add_edit_employee.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_admin.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_admin_calendar.xml" value="0.24909420289855072" />

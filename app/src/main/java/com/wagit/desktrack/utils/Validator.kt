@@ -20,6 +20,9 @@ class Validator {
              */
         }
 
+        fun isValidNIF(nif: String?): Boolean {
+            return !nif.isNullOrBlank() && (nif.contains(Regex("^(\\d{7})\$")))
+        }
         /**
          * basic email validation
          */

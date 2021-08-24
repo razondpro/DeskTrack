@@ -38,4 +38,12 @@ class CompanyRepository @Inject constructor(
     suspend fun getAllCompanies(): List<Company>{
         return companyDao.getAllCompanies()
     }
+
+    suspend fun updateCompany(companyId: Long, nif: String, ccc: Int, name: String){
+        companyDao.updateCompany(companyId,nif,ccc,name)
+    }
+
+    suspend fun deleteCompany(companyId: Long){
+        companyDao.deleteCompany(companyId)
+    }
 }

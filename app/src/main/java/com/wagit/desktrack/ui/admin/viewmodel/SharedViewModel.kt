@@ -107,4 +107,22 @@ class SharedViewModel  @Inject constructor(
         _user.value = user
     }
 
+    fun updateCompany(companyId: Long, nif: String, ccc: Int, name: String){
+        Log.d("AdminHomeViewModel","Llega al viewmodel para updateCompany")
+        viewModelScope.launch(Dispatchers.IO) {
+            companyRepository.updateCompany(companyId,nif,ccc,name)
+            _company.postValue(companyRepository.getCompany(companyId))
+        }
+        println("Llega al SHVM del updateCompany con ${company.value}")
+    }
+
+    fun deleteCompany(companyId: Long){
+        Log.d("AdminHomeViewModel","Llega al viewmodel para deleteCompany")
+        viewModelScope.launch(Dispatchers.IO) {
+            companyRepository.deleteCompany(companyId)
+        }
+        println("Llega al SHVM del deleteCompany con ${company.value}")
+
+    }
+
 }
