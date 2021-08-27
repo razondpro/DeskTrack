@@ -30,6 +30,8 @@ class AddEditEmployeeFragment :
     var spinnerEmployees = mutableListOf<String>("")
     var spinnerEmplId = mutableListOf<Int>()
     var emplPosition = -1
+    var employeesCIF = mutableListOf<String>("")
+    var employeesNSS = mutableListOf<String>("")
 
     var spinnerCompanies = mutableListOf<String>("")
     var spinnerCompId = mutableListOf<Int>()
@@ -119,7 +121,91 @@ class AddEditEmployeeFragment :
 
     private fun handleSaveClick(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
         fragmentAddEditEmployeeBinding.btnSave.setOnClickListener {
-            if(isValidLD.value as Boolean){
+            var empNSS = mutableListOf<String>("")
+            var empCIF = mutableListOf<String>("")
+            var isUniqueCIF = true
+            var isUniqueNSS = true
+
+            if (employeesCIF.isNotEmpty() && employeesNSS.isNotEmpty()){
+                println("employeesCIF.size ------------------------------------------- " +
+                        "${employeesCIF.size}")
+                println("employeesNSS.size ------------------------------------------- " +
+                        "${employeesNSS.size}")
+                var fg=0
+                employeesCIF.forEach {
+                    println("Employees CIF: ${it} and index: $fg ---------------------------")
+                    //compNif.add(it)
+                    if (fg < employeesCIF.size){
+                        println("Employees CIF: employeesCIF.get(index) ---------- " +
+                                "${employeesCIF.get(fg)}")
+                    }
+                    fg+=1
+                }
+
+                fg=0
+                employeesNSS.forEach {
+                    println("Employees NSS: ${it} and index: $fg ---------------------------")
+                    //compNif.add(it)
+                    if (fg < employeesNSS.size){
+                        println("Employees NSS: employeesCIF.get(index) ---------- " +
+                                "${employeesNSS.get(fg)}")
+                    }
+                    fg+=1
+                }
+
+                empCIF = copyMutableList(employeesCIF)
+                empNSS = copyMutableList(employeesNSS)
+            }
+
+            if (empCIF.isNotEmpty()){
+                println("empCIF.size ------------------------------------------- " +
+                        "${empCIF.size}")
+
+                println("emplPosition: " +
+                        "$emplPosition ----------------------------------------------")
+                println("empCIF.get(emplPosition) ---------- ${empCIF.get(emplPosition)}")
+                println("Removed: ${empCIF.removeAt(emplPosition)} ------------------------")
+                println("Employee CIF TV: " +
+                        "${fragmentAddEditEmployeeBinding.tvEmployeeCIF.text.toString()}")
+                empCIF.forEach{
+                    println("Employee CIF (empCIF): ${it} ---------------------------")
+                }
+                isUniqueCIF = isUniqueElement(empCIF,
+                    fragmentAddEditEmployeeBinding.tvEmployeeCIF.text.toString())
+                println("isUniqueNIF is $isUniqueCIF ---------")
+
+            }
+
+            if (empNSS.isNotEmpty()){
+                println("empNSS.size ------------------------------------------- " +
+                        "${empNSS.size}")
+
+                println("emplPosition: " +
+                        "$emplPosition ----------------------------------------------")
+                println("empNSS.get(emplPosition) ---------- ${empNSS.get(emplPosition)}")
+                println("Removed: ${empNSS.removeAt(emplPosition)} ------------------------")
+                println("Employee NSS TV: " +
+                        "${fragmentAddEditEmployeeBinding.tvEmployeeNss.text.toString()}")
+                empNSS.forEach{
+                    println("Employee NSS (empNSS): ${it} ---------------------------")
+                }
+                isUniqueNSS = isUniqueElement(empNSS,
+                    fragmentAddEditEmployeeBinding.tvEmployeeNss.text.toString())
+                println("isUniqueNSS is $isUniqueNSS ---------")
+
+            }
+
+            if (employeesCIF.isNotEmpty() && employeesNSS.isNotEmpty()){
+                employeesCIF.forEach {
+                    println("Employees CIF after remove: ${it} ---------------------------")
+                }
+                employeesNSS.forEach {
+                    println("Employees NSS after remove: ${it} ---------------------------")
+                }
+
+            }
+
+            if(isValidLD.value as Boolean && isUniqueCIF && isUniqueNSS){
                 if (emplPosition != -1 && compPosition != -1){
                     shareViewModel.updateEmployee(emplPosition.toLong(),
                         fragmentAddEditEmployeeBinding.tvEmployeeEmail.text.toString(),
@@ -213,7 +299,12 @@ class AddEditEmployeeFragment :
 
     private fun handleAddClick(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
         fragmentAddEditEmployeeBinding.btnSave.setOnClickListener {
-            if(isValidLD.value as Boolean){
+            val isUniqueNSS = isUniqueElement(employeesNSS,
+                fragmentAddEditEmployeeBinding.tvEmployeeNss.text.toString())
+            var isUniqueCIF = isUniqueElement(employeesCIF,
+                fragmentAddEditEmployeeBinding.tvEmployeeCIF.text.toString())
+
+            if(isValidLD.value as Boolean && isUniqueCIF && isUniqueNSS){
                 //if (emplPosition == -1 && compPosition != -1){
                 if (compPosition != -1){
                     println("Llega handleAddClick con emplPosition: $emplPosition " +
@@ -265,6 +356,30 @@ class AddEditEmployeeFragment :
         var employeesAux = listOf<Employee>()
         if (shareViewModel.employees.value != null){
             employeesAux = shareViewModel.employees.value!!
+
+            employeesCIF = mutableListOf<String>("")
+            employeesNSS = mutableListOf<String>("")
+
+            employeesAux.forEach {
+                employeesCIF.add(it.cif.toString())
+                employeesNSS.add(it.nss.toString())
+            }
+
+            if (employeesCIF.isNotEmpty()){
+                employeesCIF.forEach {
+                    println("Employees CIF in updateSnipperEmployee:" +
+                            " ${it} ---------------------------")
+                }
+            }
+
+            if (employeesNSS.isNotEmpty()){
+                employeesNSS.forEach {
+                    println("Employees NSS in updateSnipperEmployee:" +
+                            " ${it} ---------------------------")
+                }
+            }
+
+
             println("Entra en updateSnipperEmployee con ${shareViewModel.employees.value!!}")
         }
         setSnipperEmployees(employeesAux, spin,fragmentAddEditEmployeeBinding)
@@ -303,6 +418,8 @@ class AddEditEmployeeFragment :
                                     FragmentAddEditEmployeeBinding){
         spinnerEmployees = mutableListOf<String>("")
         spinnerEmplId = mutableListOf<Int>()
+        employeesCIF = mutableListOf<String>("")
+        employeesNSS = mutableListOf<String>("")
 
         // Spinner Drop down elements
         employees?.forEach {
@@ -310,6 +427,8 @@ class AddEditEmployeeFragment :
                 spinnerEmployees.add(it.firstName + " " + it.lastName)
                 spinnerEmplId.add(it.id.toInt())
             }
+            employeesNSS.add(it.nss.toString())
+            employeesCIF.add(it.cif.toString())
         }
         setSnipperItemSelector(spin,fragmentAddEditEmployeeBinding)
     }
@@ -502,5 +621,22 @@ class AddEditEmployeeFragment :
         emplPosition=-1
         compPosition=-1
 
+    }
+
+    private fun isUniqueElement(source: List<String>,element: String): Boolean{
+        var result=true
+
+        if (source.isNotEmpty()){
+            if (source.contains(element)){
+                result=false
+            }
+        }
+        return result
+    }
+
+    private fun copyMutableList(source: MutableList<String>): MutableList<String>{
+        val mutableCopy = source.toMutableList()
+
+        return mutableCopy
     }
 }
