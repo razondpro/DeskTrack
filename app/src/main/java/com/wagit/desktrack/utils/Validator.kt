@@ -23,6 +23,10 @@ class Validator {
         fun isValidNIF(nif: String?): Boolean {
             return !nif.isNullOrBlank() && (nif.contains(Regex("^(\\d{7})\$")))
         }
+
+        fun isValidCCC(ccc: String?): Boolean {
+            return !ccc.isNullOrBlank() && (ccc.contains(Regex("^(\\d{6})\$")))
+        }
         /**
          * basic email validation
          */

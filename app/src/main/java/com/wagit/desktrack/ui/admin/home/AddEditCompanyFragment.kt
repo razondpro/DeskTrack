@@ -28,16 +28,24 @@ class AddEditCompanyFragment :
     BaseFragment<FragmentAddEditCompanyBinding>(R.layout.fragment_add_edit_company){
     private val shareViewModel: SharedViewModel by activityViewModels()
     var spinnerCompanies = mutableListOf<String>("")
+    var companiesNIF = mutableListOf<String>("")
     var spinnerCompId = mutableListOf<Int>()
     var compPosition = -1
 
     private val nifLD = MutableLiveData<String>()
+    private val cccLD = MutableLiveData<String>()
 
     private val isValidLD = MediatorLiveData<Boolean>().apply {
         this.value = false
 
         addSource(nifLD){ nif ->
-            this.value = validate(nif)
+            val ccc = cccLD.value
+            this.value = validate(nif,ccc)
+        }
+
+        addSource(cccLD){ ccc ->
+            val nif = nifLD.value
+            this.value = validate(nif,ccc)
         }
     }
 
@@ -66,13 +74,16 @@ class AddEditCompanyFragment :
         fragmentAddEditCompanyBinding.tvCompanyNIF.doOnTextChanged { text, _, _, _ ->
             nifLD.value = text?.toString()
         }
+        fragmentAddEditCompanyBinding.tvCompanyCCC.doOnTextChanged { text, _, _, _ ->
+            cccLD.value = text?.toString()
+        }
         isValidLD.observe(this){ isValid ->
             Log.v("EditIsValid", isValid.toString())
         }
     }
 
-    private fun validate(nif: String?): Boolean{
-        return Validator.isValidNIF(nif)
+    private fun validate(nif: String?, ccc: String?): Boolean{
+        return Validator.isValidNIF(nif) && Validator.isValidCCC(ccc)
     }
 
     private fun goBack(){
@@ -83,7 +94,42 @@ class AddEditCompanyFragment :
 
     private fun handleSaveClick(fragmentAddEditCompanyBinding: FragmentAddEditCompanyBinding){
         fragmentAddEditCompanyBinding.btnSaveCompany.setOnClickListener {
-            if (isValidLD.value as Boolean){
+            var compNif = mutableListOf<String>("")
+            if (companiesNIF.isNotEmpty()){
+                println("companiesNIF.size ------------------------------------------- ${companiesNIF.size}")
+                var fg=0
+                companiesNIF.forEach {
+                    println("Companies NIF: ${it} and index: $fg ---------------------------")
+                    //compNif.add(it)
+                    if (fg < companiesNIF.size){
+                        println("Companies NIF: companiesNIF.get(index) ---------- ${companiesNIF.get(fg)}")
+                    }
+                    fg+=1
+                }
+                //compNif = companiesNIF
+                compNif = copyMutableList(companiesNIF)
+            }
+            var isUniqueNIF = true
+            if (compNif.isNotEmpty()){
+                println("compNif.size ------------------------------------------- ${compNif.size}")
+
+                println("compPosition: $compPosition ----------------------------------------------")
+                println("compNif.get(compPosition) ---------- ${compNif.get(compPosition)}")
+                println("Removed: ${compNif.removeAt(compPosition)} ------------------------")
+                println("Company NIF TV: ${fragmentAddEditCompanyBinding.tvCompanyNIF.text.toString()}")
+                compNif.forEach{
+                    println("Company NIF (compNif): ${it} ---------------------------")
+                }
+                isUniqueNIF = isUniqueNIF(compNif,
+                    fragmentAddEditCompanyBinding.tvCompanyNIF.text.toString())
+                println("isUniqueNIF is $isUniqueNIF ---------")
+            }
+            if (companiesNIF.isNotEmpty()){
+                companiesNIF.forEach {
+                    println("Companies NIF after remove: ${it} ---------------------------")
+                }
+            }
+            if (isValidLD.value as Boolean and isUniqueNIF){
                 if (compPosition != -1){
                     shareViewModel.updateCompany(compPosition.toLong(),
                         fragmentAddEditCompanyBinding.tvCompanyNIF.text.toString(),
@@ -117,7 +163,9 @@ class AddEditCompanyFragment :
 
     private fun handleAddClick(fragmentAddEditCompanyBinding: FragmentAddEditCompanyBinding){
         fragmentAddEditCompanyBinding.btnSaveCompany.setOnClickListener {
-            if (isValidLD.value as Boolean){
+            if (isValidLD.value as Boolean &&
+                isUniqueNIF(companiesNIF,
+                    fragmentAddEditCompanyBinding.tvCompanyNIF.text.toString())){
                 GlobalScope.launch {
                     val instance = this@AddEditCompanyFragment.context?.
                     let { AppDatabase.getInstance(it) }
@@ -137,11 +185,15 @@ class AddEditCompanyFragment :
 
                 }
                 goBack()
+            }else{
+                Toast.makeText(it.context, "Please, insert valid data",
+                    Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun onCompanyDeleteAlertDialog(fragmentAddEditCompanyBinding: FragmentAddEditCompanyBinding) {
+    private fun onCompanyDeleteAlertDialog(fragmentAddEditCompanyBinding:
+                                           FragmentAddEditCompanyBinding) {
         //Instantiate builder variable
         val builder = AlertDialog.Builder(this@AddEditCompanyFragment.view?.context)
 
@@ -245,8 +297,22 @@ class AddEditCompanyFragment :
                                      FragmentAddEditCompanyBinding
     ){
         var companyAux = listOf<Company>()
+
         if (shareViewModel.companies.value != null){
             companyAux = shareViewModel.companies.value!!
+
+            companiesNIF = mutableListOf<String>("")
+
+            companyAux.forEach {
+                companiesNIF.add(it.nif)
+            }
+
+            if (companiesNIF.isNotEmpty()){
+                companiesNIF.forEach {
+                    println("Companies NIF in updateSnipperCompany: ${it} ---------------------------")
+                }
+            }
+
             println("Entra en updateSnipperCompany con ${shareViewModel.companies.value!!}")
         }
         setSnipperCompanies(companyAux, spin,fragmentAddEditCompanyBinding)
@@ -257,22 +323,31 @@ class AddEditCompanyFragment :
                                     FragmentAddEditCompanyBinding){
         spinnerCompanies = mutableListOf<String>("")
         spinnerCompId = mutableListOf<Int>()
+        companiesNIF = mutableListOf<String>("")
 
         // Spinner Drop down elements
         companies?.forEach {
             if (it.id.toInt() >= 1){
                 spinnerCompanies.add(it.name)
                 spinnerCompId.add(it.id.toInt())
+                companiesNIF.add(it.nif)
+            }
+        }
+        if (companiesNIF.isNotEmpty()){
+            companiesNIF.forEach {
+                println("Companies NIF in setSnipperCompanies: ${it} ---------------------------")
             }
         }
         setSnipperCompanyItemSelector(spin,fragmentAddEditCompanyBinding)
     }
 
-    private fun updateCompanyPosition(fragmentAddEditCompanyBinding: FragmentAddEditCompanyBinding){
+    private fun updateCompanyPosition(fragmentAddEditCompanyBinding:
+                                      FragmentAddEditCompanyBinding){
         var companyAux = listOf<Company>()
 
         if (shareViewModel.company.value != null){
             companyAux = shareViewModel.company.value!!
+
             println("Entra en updateCompanyPosition con ${shareViewModel.company.value!!} y " +
                     "position: ${compPosition}")
         }
@@ -283,7 +358,8 @@ class AddEditCompanyFragment :
         }
     }
 
-    private fun setCompaniesData(fragmentAddEditCompanyBinding: FragmentAddEditCompanyBinding, companyData: List<Company>){
+    private fun setCompaniesData(fragmentAddEditCompanyBinding: FragmentAddEditCompanyBinding,
+                                 companyData: List<Company>){
         companyData.forEach {
             fragmentAddEditCompanyBinding.tvCompanyCCC.setText("${it.ccc.toString()}")
             fragmentAddEditCompanyBinding.tvCompanyNIF.setText("${it.nif.toString()}")
@@ -303,6 +379,24 @@ class AddEditCompanyFragment :
         println("Entra en resetCompaniesData ------------------------------->" +
                 "compPosition: $compPosition")
     }
+
+    private fun isUniqueNIF(compNIF: List<String>,nif: String): Boolean{
+        var result=true
+
+        if (compNIF.isNotEmpty()){
+            if (compNIF.contains(nif)){
+                result=false
+            }
+        }
+        return result
+    }
+
+    private fun copyMutableList(source: MutableList<String>): MutableList<String>{
+        val mutableCopy = source.toMutableList()
+
+        return mutableCopy
+    }
+
 }
 
 
