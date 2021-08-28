@@ -27,6 +27,7 @@
         <entry key="app/src/main/res/layout/fragment_admin_home.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/fragment_admin_profile.xml" value="0.24909420289855072" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_export_data.xml" value="0.30842391304347827" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.359375" />
         <entry key="app/src/main/res/menu/admin_bottom_menu.xml" value="0.35572916666666665" />

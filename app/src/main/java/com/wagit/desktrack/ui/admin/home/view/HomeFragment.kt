@@ -9,6 +9,7 @@ import com.wagit.desktrack.databinding.FragmentAdminHomeBinding
 import com.wagit.desktrack.ui.BaseFragment
 import com.wagit.desktrack.ui.admin.home.AddEditCompanyFragment
 import com.wagit.desktrack.ui.admin.home.AddEditEmployeeFragment
+import com.wagit.desktrack.ui.admin.home.ExportDataFragment
 import com.wagit.desktrack.ui.admin.home.viewmodel.HomeViewModel
 import com.wagit.desktrack.ui.admin.viewmodel.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,8 +23,12 @@ class HomeFragment : BaseFragment<FragmentAdminHomeBinding>(R.layout.fragment_ad
         println("LLEGA!!!")
         val employeeFragment= AddEditEmployeeFragment()
         val companyFragment= AddEditCompanyFragment()
-        println("Llega al initialize del home fragment con $employeeFragment y $companyFragment")
-        Log.d("AdminFragment","Llega al initialize del home fragment con $employeeFragment y $companyFragment")
+        val exportDataFragment= ExportDataFragment()
+
+        println("Llega al initialize del home fragment con $employeeFragment, $companyFragment y " +
+                "$exportDataFragment")
+        Log.d("AdminFragment","Llega al initialize del home fragment con " +
+                "$employeeFragment, $companyFragment y $exportDataFragment")
 
         btnAddEditEmployee.setOnClickListener {
             val fragmentManager = (activity as FragmentActivity).supportFragmentManager
@@ -39,6 +44,15 @@ class HomeFragment : BaseFragment<FragmentAdminHomeBinding>(R.layout.fragment_ad
             fragmentManager.beginTransaction().apply {
                 replace(R.id.fragmentAdminContainerView,companyFragment)
                 addToBackStack("companyFragment")
+                commit()
+            }
+        }
+
+        btnExportData.setOnClickListener {
+            val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+            fragmentManager.beginTransaction().apply {
+                replace(R.id.fragmentAdminContainerView,exportDataFragment)
+                addToBackStack("exportDataFragment")
                 commit()
             }
         }

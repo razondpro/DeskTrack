@@ -44,7 +44,7 @@
             app:layout_constraintVertical_bias="0.36" />
 
         <Button
-            android:id="@+id/btnAddEditExpData"
+            android:id="@+id/btnExportData"
             android:layout_width="318dp"
             android:layout_height="75dp"
             android:drawableLeft="@drawable/ic_export"
