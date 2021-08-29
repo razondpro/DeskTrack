@@ -43,6 +43,16 @@ class SharedViewModel  @Inject constructor(
         return employees
     }
 
+    fun getEmployeesByComp(companyId: Long): LiveData<List<Employee>> {
+        viewModelScope.launch(Dispatchers.IO) {
+            _employees.postValue(employeeRepository.getEmployeesByComp(companyId))
+        }
+        Log.d("AdminHomeViewModel",
+            "Llega al viewmodel para getEmployeesByComp con ${employees.value?.first()}")
+        println("Llega al SHVM del getEmployeesByComp con ${employees.value?.first()}")
+        return employees
+    }
+
     fun getEmployee(employeeId: Int): LiveData<List<Employee>> {
         viewModelScope.launch(Dispatchers.IO) {
             _employee.postValue(employeeRepository.getEmployee(employeeId))
@@ -90,16 +100,16 @@ class SharedViewModel  @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _companies.postValue(companyRepository.getAllCompanies())
         }
-        Log.d("ProfileViewModel","Esto es el company ${companies.value?.first()?.name}")
+        Log.d("AdminHomeViewModel","Esto es el company ${companies.value?.first()?.name}")
         return companies
     }
 
     fun getCompany(companyId: Long): LiveData<List<Company>>{
-        Log.d("AdminHomeViewModel","Llega al viewmodel para getAllCompanies")
+        Log.d("AdminHomeViewModel","Llega al viewmodel para getCompany")
         viewModelScope.launch(Dispatchers.IO) {
             _company.postValue(companyRepository.getCompany(companyId))
         }
-        Log.d("ProfileViewModel","Esto es el company ${company.value?.first()?.name}")
+        Log.d("AdminHomeViewModel","Esto es el company ${company.value?.first()?.name}")
         return company
     }
 

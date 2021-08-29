@@ -29,4 +29,7 @@ abstract class EmployeeDao: BaseDao<Employee> {
 
     @Query("DELETE from employees WHERE id = :employeeId")
     abstract suspend fun deleteEmployee(employeeId: Long)
+
+    @Query("SELECT * FROM employees WHERE company_id = :companyId")
+    abstract suspend fun getEmployeesByComp(companyId: Long): List<Employee>
 }

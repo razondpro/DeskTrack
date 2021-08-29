@@ -42,6 +42,10 @@ class EmployeeRepository @Inject constructor(
         return employeeDao.getAllEmployees()
     }
 
+    suspend fun getEmployeesByComp(companyId: Long): List<Employee>{
+        return employeeDao.getEmployeesByComp(companyId)
+    }
+
     suspend fun getEmployee(employeeId: Int): List<Employee> {
         return employeeDao.getEmployee(employeeId)
     }
