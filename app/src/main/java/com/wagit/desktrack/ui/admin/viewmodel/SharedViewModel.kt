@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.wagit.desktrack.data.entities.Company
 import com.wagit.desktrack.data.entities.Employee
+import com.wagit.desktrack.data.entities.Registry
 import com.wagit.desktrack.data.repositories.CompanyRepository
 import com.wagit.desktrack.data.repositories.EmployeeRepository
+import com.wagit.desktrack.data.repositories.RegistryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,6 +18,7 @@ import javax.inject.Inject
 class SharedViewModel  @Inject constructor(
     private val employeeRepository: EmployeeRepository,
     private val companyRepository: CompanyRepository,
+    private val registryRepository: RegistryRepository,
 ) : ViewModel() {
 
     private var _user: MutableLiveData<Employee> = MutableLiveData()
@@ -32,6 +35,9 @@ class SharedViewModel  @Inject constructor(
 
     private val _employees: MutableLiveData<List<Employee>> = MutableLiveData()
     val employees: LiveData<List<Employee>> get() = _employees
+
+    private val _monthRegistry: MutableLiveData<List<Registry>> = MutableLiveData()
+    val monthRegistry: LiveData<List<Registry>> get() = _monthRegistry
 
     fun getAllEmployees(): LiveData<List<Employee>> {
         viewModelScope.launch(Dispatchers.IO) {
@@ -133,6 +139,17 @@ class SharedViewModel  @Inject constructor(
         }
         println("Llega al SHVM del deleteCompany con ${company.value}")
 
+    }
+
+    fun getRegistriesByEmployeeAndMonth(empId: Long, month: String): LiveData<List<Registry>>{
+        Log.d("AdminHomeViewModel",
+            "Llega al viewmodel para getRegistriesByEmployeeAndMonth")
+        viewModelScope.launch(Dispatchers.IO) {
+            _monthRegistry.postValue(
+                registryRepository.getRegistriesByEmployeeAndMonth(empId,month))
+        }
+        println("Llega al SHVM del getRegistriesByEmployeeAndMonth con ${monthRegistry.value}")
+        return monthRegistry
     }
 
 }

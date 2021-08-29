@@ -1,5 +1,6 @@
 package com.wagit.desktrack.ui.admin.home
 
+import android.content.Context
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -14,6 +15,9 @@ import com.wagit.desktrack.ui.BaseFragment
 import com.wagit.desktrack.ui.admin.viewmodel.SharedViewModel
 import androidx.lifecycle.Observer
 import com.wagit.desktrack.data.entities.Employee
+import com.wagit.desktrack.data.entities.Registry
+import java.time.Month
+import java.time.YearMonth
 
 class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragment_export_data){
     private val shareViewModel: SharedViewModel by activityViewModels()
@@ -26,6 +30,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
     var emplPosition = -1
 
     var spinnerMonths =  mutableListOf<String>()
+    var spinnerMonthsInNumber =  mutableListOf<String>()
     var spinnerMonthId = mutableListOf<Int>()
     var monthPosition = -1
 
@@ -37,18 +42,9 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
         var spinMonth = this.spinMonthExp
 
         var companies = shareViewModel.getAllCompanies().value
-        spinnerMonths.add("JANUARY")
-        spinnerMonths.add("FEBRUARY")
-        spinnerMonths.add("APRIL")
-        spinnerMonths.add("MAY")
-        spinnerMonths.add("JUNE")
-        spinnerMonths.add("JULY")
-        spinnerMonths.add("AGOST")
-        spinnerMonths.add("SEPTEMBER")
-        spinnerMonths.add("OCTOBER")
-        spinnerMonths.add("NOVEMBER")
-        spinnerMonths.add("DECEMBER")
 
+        setMonthsArray()
+        setMonthsInNumbersArray()
         updateSnipperMonth(spinMonth,this)
 
         shareViewModel.companies.observe(viewLifecycleOwner, Observer {
@@ -63,8 +59,16 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
             updateSnipperEmployee(spinEmployee,this)
         })
 
+        shareViewModel.monthRegistry.observe(viewLifecycleOwner, Observer {
+            updateRegistriesDocument(this)
+        })
+
         btnGoBackHome.setOnClickListener {
             goBack()
+        }
+
+        btnExport.setOnClickListener {
+            getRegistriesByEmployeeAndMonth(it.context)
         }
     }
 
@@ -72,6 +76,36 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
         fragmentManager.popBackStackImmediate()
         println("LLEGA AL GOBACK() !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    }
+
+    private fun setMonthsArray(){
+        spinnerMonths.add("JANUARY")
+        spinnerMonths.add("FEBRUARY")
+        spinnerMonths.add("MARCH")
+        spinnerMonths.add("APRIL")
+        spinnerMonths.add("MAY")
+        spinnerMonths.add("JUNE")
+        spinnerMonths.add("JULY")
+        spinnerMonths.add("AGOST")
+        spinnerMonths.add("SEPTEMBER")
+        spinnerMonths.add("OCTOBER")
+        spinnerMonths.add("NOVEMBER")
+        spinnerMonths.add("DECEMBER")
+    }
+
+    private fun setMonthsInNumbersArray(){
+        spinnerMonthsInNumber.add("01")
+        spinnerMonthsInNumber.add("02")
+        spinnerMonthsInNumber.add("03")
+        spinnerMonthsInNumber.add("04")
+        spinnerMonthsInNumber.add("05")
+        spinnerMonthsInNumber.add("06")
+        spinnerMonthsInNumber.add("07")
+        spinnerMonthsInNumber.add("08")
+        spinnerMonthsInNumber.add("09")
+        spinnerMonthsInNumber.add("10")
+        spinnerMonthsInNumber.add("11")
+        spinnerMonthsInNumber.add("12")
     }
 
     private fun updateSnipperCompany(spin: Spinner,
@@ -291,4 +325,43 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
             }
         }
     }
+
+    private fun getRegistriesByEmployeeAndMonth(context: Context){
+        if (complPosition != -1 && emplPosition != -1 && monthPosition != -1){
+            var registriesAux = listOf<Registry>()
+            var month = spinnerMonthsInNumber.get(monthPosition)
+            if (shareViewModel.getRegistriesByEmployeeAndMonth(complPosition.toLong(),
+                month) != null){
+                if (shareViewModel.monthRegistry.value != null)
+                    registriesAux = shareViewModel.monthRegistry.value!!
+                //println("Registry: $registriesAux ------------------------------------------")
+            }
+        }else{
+            Toast.makeText(context, "Please, choose all elements",
+                Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateRegistriesDocument(fragmentExportDataBinding:
+                                      FragmentExportDataBinding
+    ){
+        var registriesAux = listOf<Registry>()
+        if (shareViewModel.monthRegistry.value != null){
+            registriesAux = shareViewModel.monthRegistry.value!!
+
+            println("Entra en updateRegistriesDocument con " +
+                    "${shareViewModel.monthRegistry.value!!}")
+        }
+        setRegistriesDocument(registriesAux, fragmentExportDataBinding)
+    }
+
+    private fun setRegistriesDocument(registries: List<Registry>,
+                                    fragmentExportDataBinding:
+                                    FragmentExportDataBinding){
+        registries.forEach {
+            println("REGISTRY STARTED AT: ${it.startedAt}, " +
+                    "ENDED AT: ${it.endedAt} AND EMPLOYEE ID: ${it.employeeId}")
+        }
+    }
+
 }
