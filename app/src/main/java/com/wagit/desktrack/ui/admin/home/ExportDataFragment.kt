@@ -16,11 +16,23 @@ import com.wagit.desktrack.ui.admin.viewmodel.SharedViewModel
 import androidx.lifecycle.Observer
 import com.wagit.desktrack.data.entities.Employee
 import com.wagit.desktrack.data.entities.Registry
-import java.time.Month
-import java.time.YearMonth
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
+import androidx.core.content.ContextCompat
+import com.itextpdf.text.Document
+import com.itextpdf.text.Paragraph
+import com.itextpdf.text.pdf.PdfWriter
+import java.io.FileOutputStream
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragment_export_data){
     private val shareViewModel: SharedViewModel by activityViewModels()
+    private val STORAGE_CODE: Int = 100;
     var spinnerCompanies = mutableListOf<String>("")
     var spinnerComplId = mutableListOf<Int>()
     var complPosition = -1
@@ -33,6 +45,8 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
     var spinnerMonthsInNumber =  mutableListOf<String>()
     var spinnerMonthId = mutableListOf<Int>()
     var monthPosition = -1
+
+    var registries = listOf<Registry>()
 
     override fun FragmentExportDataBinding.initialize() {
         println("WELCOME TO THE EXPORT DATA FRAGMENT!!!!!!!!!")
@@ -68,8 +82,30 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
         }
 
         btnExport.setOnClickListener {
-            getRegistriesByEmployeeAndMonth(it.context)
+            //we need to handle runtime permission for devices with marshmallow and above
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+                //system OS >= Marshmallow(6.0), check permission is enabled or not
+                if (this@ExportDataFragment.context?.let { it1 ->
+                        ContextCompat.checkSelfPermission(
+                            it1,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    }
+                    == PackageManager.PERMISSION_DENIED){
+                    //permission was not granted, request it
+                    val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    requestPermissions(permissions, STORAGE_CODE)
+                }
+                else{
+                    //permission already granted, call savePdf() method
+                    getRegistriesByEmployeeAndMonth(it.context)
+                }
+            }
+            else{
+                //system OS < marshmallow, call savePdf() method
+                getRegistriesByEmployeeAndMonth(it.context)
+            }
         }
+
     }
 
     private fun goBack(){
@@ -337,7 +373,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
                 //println("Registry: $registriesAux ------------------------------------------")
             }
         }else{
-            Toast.makeText(context, "Please, choose all elements",
+            Toast.makeText(context, "Please, choose all three elements",
                 Toast.LENGTH_SHORT).show()
         }
     }
@@ -345,23 +381,92 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
     private fun updateRegistriesDocument(fragmentExportDataBinding:
                                       FragmentExportDataBinding
     ){
-        var registriesAux = listOf<Registry>()
+        //var registriesAux = listOf<Registry>()
+        registries = listOf<Registry>()
         if (shareViewModel.monthRegistry.value != null){
-            registriesAux = shareViewModel.monthRegistry.value!!
+            //registriesAux = shareViewModel.monthRegistry.value!!
+            registries = shareViewModel.monthRegistry.value!!
 
             println("Entra en updateRegistriesDocument con " +
                     "${shareViewModel.monthRegistry.value!!}")
         }
-        setRegistriesDocument(registriesAux, fragmentExportDataBinding)
+        setRegistriesDocument(fragmentExportDataBinding)
     }
 
-    private fun setRegistriesDocument(registries: List<Registry>,
-                                    fragmentExportDataBinding:
-                                    FragmentExportDataBinding){
+    private fun setRegistriesDocument(fragmentExportDataBinding: FragmentExportDataBinding){
         registries.forEach {
             println("REGISTRY STARTED AT: ${it.startedAt}, " +
                     "ENDED AT: ${it.endedAt} AND EMPLOYEE ID: ${it.employeeId}")
         }
+
+        savePdf()
     }
+
+    private fun savePdf() {
+        //create object of Document class
+        val mDoc = Document()
+        //pdf file name
+        val mFileName = SimpleDateFormat("yyyyMMdd_HHmmss",
+            Locale.getDefault()).format(System.currentTimeMillis())
+        //pdf file path
+        val mFilePath = this.context?.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).
+        toString() + "/" + mFileName +".pdf"
+        try {
+            //create instance of PdfWriter class
+            PdfWriter.getInstance(mDoc, FileOutputStream(mFilePath))
+
+            //open the document for writing
+            mDoc.open()
+
+            //get text from registries list
+            registries.forEach {
+                val mText = "REGISTRY STARTED AT: ${it.startedAt}, " +
+                        "ENDED AT: ${it.endedAt} AND EMPLOYEE ID: ${it.employeeId}"
+
+                //add paragraph to the document
+                mDoc.add(Paragraph(mText))
+            }
+
+            //add author of the document (metadata)
+            mDoc.addAuthor("Admin")
+
+            //close document
+            mDoc.close()
+
+            //show file saved message with file name and path
+            Toast.makeText(this.context, "$mFileName.pdf\nis saved to\n$mFilePath",
+                Toast.LENGTH_SHORT).show()
+
+            println("$mFileName.pdf\n" + "is saved to\n" + "$mFilePath")
+        }
+        catch (e: Exception){
+            //if anything goes wrong causing exception, get and show exception message
+            Toast.makeText(this.context, e.message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+                                            grantResults: IntArray) {
+        when(requestCode){
+            STORAGE_CODE -> {
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    //permission from popup was granted, call savePdf() method
+                    context?.let { getRegistriesByEmployeeAndMonth(it) }
+                    Toast.makeText(this.context,
+                        "Permission granted...!", Toast.LENGTH_SHORT).show()
+
+                }
+                else{
+                    //permission from popup was denied, show error message
+                    Toast.makeText(this.context,
+                        "Permission denied...!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+    
+
+
+
 
 }
