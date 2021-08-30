@@ -18,6 +18,7 @@ import com.wagit.desktrack.data.entities.Employee
 import com.wagit.desktrack.data.entities.Registry
 import android.Manifest
 import android.content.pm.PackageManager
+import android.icu.text.CaseMap
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -28,6 +29,7 @@ import com.itextpdf.text.pdf.PdfWriter
 import java.io.FileOutputStream
 import java.lang.Exception
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 
 class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragment_export_data){
@@ -47,6 +49,8 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
     var monthPosition = -1
 
     var registries = listOf<Registry>()
+    var employee = listOf<Employee>()
+    var company = listOf<Company>()
 
     override fun FragmentExportDataBinding.initialize() {
         println("WELCOME TO THE EXPORT DATA FRAGMENT!!!!!!!!!")
@@ -67,10 +71,15 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
 
         shareViewModel.company.observe(viewLifecycleOwner, Observer {
             getCompanysEmployees(this)
+            updateCompanyData()
         })
 
         shareViewModel.employees.observe(viewLifecycleOwner, Observer {
             updateSnipperEmployee(spinEmployee,this)
+        })
+
+        shareViewModel.employee.observe(viewLifecycleOwner, Observer {
+            updateEmployeeData()
         })
 
         shareViewModel.monthRegistry.observe(viewLifecycleOwner, Observer {
@@ -98,11 +107,13 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
                 else{
                     //permission already granted, call savePdf() method
                     getRegistriesByEmployeeAndMonth(it.context)
+                    this.initialize()
                 }
             }
             else{
                 //system OS < marshmallow, call savePdf() method
                 getRegistriesByEmployeeAndMonth(it.context)
+                this.initialize()
             }
         }
 
@@ -281,6 +292,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
                     //Set the employees data
                     emplPosition = spinnerEmplId.get(position-1)
                     println("Selected Employee's Id is: " + spinnerEmplId.get(position-1))
+                    getEmployeeData()
                 } else{
                     emplPosition = -1
                     //boton save (a delete) y añadirle el listener para que añada
@@ -370,11 +382,25 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
                 month) != null){
                 if (shareViewModel.monthRegistry.value != null)
                     registriesAux = shareViewModel.monthRegistry.value!!
-                //println("Registry: $registriesAux ------------------------------------------")
+                    //println("Registry: $registriesAux ------------------------------------------")
             }
         }else{
             Toast.makeText(context, "Please, choose all three elements",
                 Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateEmployeeData(){
+        employee = listOf<Employee>()
+        if (shareViewModel.employee.value != null){
+            employee = shareViewModel.employee.value!!
+        }
+    }
+
+    private fun updateCompanyData(){
+        company = listOf<Company>()
+        if (shareViewModel.company.value != null){
+            company = shareViewModel.company.value!!
         }
     }
 
@@ -391,6 +417,18 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
                     "${shareViewModel.monthRegistry.value!!}")
         }
         setRegistriesDocument(fragmentExportDataBinding)
+    }
+
+    private fun getEmployeeData(){
+        var employeeAux = listOf<Employee>()
+        if (emplPosition != -1){
+            if (shareViewModel.getEmployee(emplPosition).value != null){
+                if (shareViewModel.employees.value != null){
+                    employeeAux = shareViewModel.employees.value!!
+                    println("Employee's selected: ${employeeAux.first()}")
+                }
+            }
+        }
     }
 
     private fun setRegistriesDocument(fragmentExportDataBinding: FragmentExportDataBinding){
@@ -418,14 +456,14 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
             //open the document for writing
             mDoc.open()
 
-            //get text from registries list
-            registries.forEach {
-                val mText = "REGISTRY STARTED AT: ${it.startedAt}, " +
-                        "ENDED AT: ${it.endedAt} AND EMPLOYEE ID: ${it.employeeId}"
+            //get text from company list
+            setCompaniesDataOnPDF(mDoc)
 
-                //add paragraph to the document
-                mDoc.add(Paragraph(mText))
-            }
+            //get text from employee list
+            setEmployeesDataOnPDF(mDoc)
+
+            //get text from registries list
+            setRegistriesDataOnPDF(mDoc)
 
             //add author of the document (metadata)
             mDoc.addAuthor("Admin")
@@ -442,6 +480,68 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
         catch (e: Exception){
             //if anything goes wrong causing exception, get and show exception message
             Toast.makeText(this.context, e.message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setCompaniesDataOnPDF(mDoc: Document){
+        val mCompTitletext = "Workers' day registration"
+        //mDoc.add(Paragraph(mCompTitletext))
+        mDoc.addTitle(mCompTitletext)
+        mDoc.add(Paragraph(" "))
+
+        if (company.isNotEmpty()){
+            company.forEach {
+                val mCompanyNameText = "Business name: ${it.name}"
+                mDoc.add(Paragraph(mCompanyNameText))
+                val mCompanyText = "CIF: ${it.nif}                                " +
+                        "CCC: ${it.ccc}"
+                mDoc.add(Paragraph(mCompanyText))
+                mDoc.add(Paragraph(" "))
+            }
+        }
+    }
+
+    private fun setEmployeesDataOnPDF(mDoc: Document){
+        val mEmpTitletext = "Worker data"
+        mDoc.add(Paragraph(mEmpTitletext))
+
+        if (employee.isNotEmpty()){
+            employee.forEach {
+                var mEmpText="Name: ${it.firstName} ${it.lastName}"
+                mDoc.add(Paragraph(mEmpText))
+
+                mEmpText = "CIF: ${it.cif}                                " +
+                        "NSS: ${it.nss}"
+                mDoc.add(Paragraph(mEmpText))
+                mDoc.add(Paragraph(" "))
+            }
+        }
+
+    }
+
+    private fun setRegistriesDataOnPDF(mDoc: Document){
+
+        var mRegTitleText = "Date: ${LocalDateTime.now()}"
+        mDoc.add(Paragraph(mRegTitleText))
+
+        mRegTitleText = "Month:            Entry time:           Departure time:          "
+        mDoc.add(Paragraph(mRegTitleText))
+
+        registries.forEach {
+            /*
+            var mText = "REGISTRY STARTED AT: ${it.startedAt}, " +
+                    "ENDED AT: ${it.endedAt} AND EMPLOYEE ID: ${it.employeeId}"
+
+             */
+            var mText = "${it.startedAt.month}          ${it.startedAt.hour}:" +
+                    "${it.startedAt.minute}:${it.startedAt.second}                  " +
+                    "${it.endedAt?.hour}:" + "${it.endedAt?.minute}:${it.endedAt?.second}"
+
+            //add paragraph to the document
+            mDoc.add(Paragraph(mText))
+
+            mDoc.add(Paragraph(" "))
+            mDoc.add(Paragraph(" "))
         }
     }
 
