@@ -18,11 +18,11 @@ import com.wagit.desktrack.data.entities.Employee
 import com.wagit.desktrack.data.entities.Registry
 import android.Manifest
 import android.content.pm.PackageManager
-import android.icu.text.CaseMap
 import android.os.Build
-import android.os.Bundle
 import android.os.Environment
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.itextpdf.text.BaseColor
 import com.itextpdf.text.Document
 import com.itextpdf.text.Paragraph
 import com.itextpdf.text.pdf.PdfWriter
@@ -30,11 +30,12 @@ import java.io.FileOutputStream
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import com.itextpdf.text.FontFactory
 import java.util.*
 
 class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragment_export_data){
     private val shareViewModel: SharedViewModel by activityViewModels()
-    private val STORAGE_CODE: Int = 100;
+    private var STORAGE_CODE: Int = 100
     var spinnerCompanies = mutableListOf<String>("")
     var spinnerComplId = mutableListOf<Int>()
     var complPosition = -1
@@ -43,7 +44,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
     var spinnerEmplId = mutableListOf<Int>()
     var emplPosition = -1
 
-    var spinnerMonths =  mutableListOf<String>()
+    var spinnerMonths =  mutableListOf<String>("")
     var spinnerMonthsInNumber =  mutableListOf<String>()
     var spinnerMonthId = mutableListOf<Int>()
     var monthPosition = -1
@@ -59,11 +60,10 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
         var spinEmployee = this.spinEmployeeExp
         var spinMonth = this.spinMonthExp
 
-        var companies = shareViewModel.getAllCompanies().value
-
         setMonthsArray()
         setMonthsInNumbersArray()
-        updateSnipperMonth(spinMonth,this)
+        setMonthsIdArray()
+        setMonthSnipperItemSelector(spinMonth,this)
 
         shareViewModel.companies.observe(viewLifecycleOwner, Observer {
             updateSnipperCompany(spinCompany,this)
@@ -92,32 +92,72 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
 
         btnExport.setOnClickListener {
             //we need to handle runtime permission for devices with marshmallow and above
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
-                //system OS >= Marshmallow(6.0), check permission is enabled or not
-                if (this@ExportDataFragment.context?.let { it1 ->
-                        ContextCompat.checkSelfPermission(
-                            it1,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (complPosition != -1 && monthPosition != -1 && emplPosition != -1){
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+                    //system OS >= Marshmallow(6.0), check permission is enabled or not
+
+                    if (this@ExportDataFragment.context?.let { it1 ->
+                            ContextCompat.checkSelfPermission(
+                                it1,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        }
+                        == PackageManager.PERMISSION_DENIED){
+
+
+                     //if (!!hasWriteExternalStoragePermission()){
+                        //permission was not granted, request it
+                        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        requestPermissions(permissions, STORAGE_CODE)
+                        //requestPermissions()
                     }
-                    == PackageManager.PERMISSION_DENIED){
-                    //permission was not granted, request it
-                    val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    requestPermissions(permissions, STORAGE_CODE)
+                    else{
+                        //permission already granted, call savePdf() method
+                        println("Calling getRegistriesByEmployeeAndMonth " +
+                                "from initialize's first else  " +
+                                ".|..|..|..|..|..|..|..|..|..|..|..|..|..|..|..|..|..|..|..|.")
+
+                        getRegistriesByEmployeeAndMonth(it.context)
+                        //initiateData()
+                        //this.initialize()
+                        //goBack()
+                    }
                 }
                 else{
-                    //permission already granted, call savePdf() method
+                    println("Calling getRegistriesByEmployeeAndMonth " +
+                            "from initialize's second else  " +
+                            ".|..|..|..|..|..|..|..|..|..|..|..|..|..|..|..|..|..|..|..|.")
+
+                    //system OS < marshmallow, call savePdf() method
                     getRegistriesByEmployeeAndMonth(it.context)
-                    this.initialize()
+                    //initiateData()
+                    //this.initialize()
+                    //goBack()
                 }
-            }
-            else{
-                //system OS < marshmallow, call savePdf() method
-                getRegistriesByEmployeeAndMonth(it.context)
-                this.initialize()
+            }else{
+                Toast.makeText(context, "Please, choose all three elements",
+                    Toast.LENGTH_SHORT).show()
             }
         }
 
+        var companies = shareViewModel.getAllCompanies().value
+
     }
+
+    private fun requestPermissions(){
+        var permissionsToRequest = mutableListOf<String>()
+        if (!!hasWriteExternalStoragePermission()){
+            permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+        if (permissionsToRequest.isNotEmpty()){
+            ActivityCompat.requestPermissions(this.requireActivity(),
+                permissionsToRequest.toTypedArray(),STORAGE_CODE)
+        }
+    }
+
+    private fun hasWriteExternalStoragePermission() =
+        ActivityCompat.checkSelfPermission(this.requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+
 
     private fun goBack(){
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
@@ -153,6 +193,13 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
         spinnerMonthsInNumber.add("10")
         spinnerMonthsInNumber.add("11")
         spinnerMonthsInNumber.add("12")
+    }
+
+    private fun setMonthsIdArray(){
+        spinnerMonthId = mutableListOf<Int>()
+        for (i in 0..11){
+            spinnerMonthId.add(i)
+        }
     }
 
     private fun updateSnipperCompany(spin: Spinner,
@@ -312,7 +359,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
         var monthAux = listOf<String>()
         if (spinnerMonths.isNotEmpty()){
             monthAux = spinnerMonths
-            println("Entra en updateSnipperMonth con ${spinnerMonths.first()}")
+            println("Entra en updateSnipperMonth con el primer mes: ${spinnerMonths.first()}")
         }
         setSnipperMonths(monthAux, spin, fragmentExportDataBinding)
     }
@@ -320,7 +367,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
     private fun setSnipperMonths(months: List<String>, spin: Spinner,
                                     fragmentExportDataBinding:
                                     FragmentExportDataBinding){
-        spinnerMonths = mutableListOf<String>("")
+        spinnerMonths = mutableListOf<String>()
         spinnerMonthId = mutableListOf<Int>()
 
         // Spinner Drop down elements
@@ -328,7 +375,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
         i=0
         months?.forEach {
             if(it != " "){
-                spinnerMonths.add(it)
+                //spinnerMonths.add(it)
                 spinnerMonthId.add(i)
                 i+=1
             }
@@ -360,6 +407,8 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
                 ).show()
                 if (position != 0){
                     //Set the employees data
+                    //monthPosition = spinnerMonthId.get(position-1)
+                    //println("Selected Month's Id is: " + spinnerMonthId.get(position-1))
                     monthPosition = spinnerMonthId.get(position-1)
                     println("Selected Month's Id is: " + spinnerMonthId.get(position-1))
                 } else{
@@ -375,14 +424,18 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
     }
 
     private fun getRegistriesByEmployeeAndMonth(context: Context){
+        println("LLEGA AL getRegistriesByEmployeeAndMonth con cp: $complPosition, " +
+                "ep: $emplPosition y mp: $monthPosition")
         if (complPosition != -1 && emplPosition != -1 && monthPosition != -1){
             var registriesAux = listOf<Registry>()
             var month = spinnerMonthsInNumber.get(monthPosition)
+            println("Month: $month ------------------------------------------------------------")
             if (shareViewModel.getRegistriesByEmployeeAndMonth(complPosition.toLong(),
                 month) != null){
                 if (shareViewModel.monthRegistry.value != null)
                     registriesAux = shareViewModel.monthRegistry.value!!
-                    //println("Registry: $registriesAux ------------------------------------------")
+                    println("Registry at getRegistriesByEmployeeAndMonth" +
+                            ": $registriesAux ------------------------------------------")
             }
         }else{
             Toast.makeText(context, "Please, choose all three elements",
@@ -433,14 +486,20 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
 
     private fun setRegistriesDocument(fragmentExportDataBinding: FragmentExportDataBinding){
         registries.forEach {
-            println("REGISTRY STARTED AT: ${it.startedAt}, " +
+            println("setRegistriesDocument: REGISTRY STARTED AT: ${it.startedAt}, " +
                     "ENDED AT: ${it.endedAt} AND EMPLOYEE ID: ${it.employeeId}")
+            println("setRegistriesDocument:  con cp: $complPosition, " +
+                    "ep: $emplPosition y mp: $monthPosition")
+        }
+        if (complPosition != -1 && emplPosition != -1 && monthPosition != -1){
+            savePdf(fragmentExportDataBinding)
+            //fragmentExportDataBinding.initialize()
+            goBack()
         }
 
-        savePdf()
     }
 
-    private fun savePdf() {
+    private fun savePdf(fragmentExportDataBinding: FragmentExportDataBinding) {
         //create object of Document class
         val mDoc = Document()
         //pdf file name
@@ -471,11 +530,16 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
             //close document
             mDoc.close()
 
+            complPosition = -1
+            emplPosition = -1
+            monthPosition = -1
+
             //show file saved message with file name and path
             Toast.makeText(this.context, "$mFileName.pdf\nis saved to\n$mFilePath",
                 Toast.LENGTH_SHORT).show()
 
             println("$mFileName.pdf\n" + "is saved to\n" + "$mFilePath")
+
         }
         catch (e: Exception){
             //if anything goes wrong causing exception, get and show exception message
@@ -484,9 +548,9 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
     }
 
     private fun setCompaniesDataOnPDF(mDoc: Document){
+        val font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14f, BaseColor.BLACK);
         val mCompTitletext = "Workers' day registration"
-        //mDoc.add(Paragraph(mCompTitletext))
-        mDoc.addTitle(mCompTitletext)
+        mDoc.add(Paragraph(mCompTitletext,font))
         mDoc.add(Paragraph(" "))
 
         if (company.isNotEmpty()){
@@ -524,25 +588,39 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
         var mRegTitleText = "Date: ${LocalDateTime.now()}"
         mDoc.add(Paragraph(mRegTitleText))
 
-        mRegTitleText = "Month:            Entry time:           Departure time:          "
-        mDoc.add(Paragraph(mRegTitleText))
+        if (registries.isNotEmpty()){
+            mRegTitleText = "Month:                      Entry time:                 " +
+                    "Departure time:          "
+            mDoc.add(Paragraph(mRegTitleText))
+            registries.forEach {
+                /*
+                var mText = "REGISTRY STARTED AT: ${it.startedAt}, " +
+                        "ENDED AT: ${it.endedAt} AND EMPLOYEE ID: ${it.employeeId}"
 
-        registries.forEach {
-            /*
-            var mText = "REGISTRY STARTED AT: ${it.startedAt}, " +
-                    "ENDED AT: ${it.endedAt} AND EMPLOYEE ID: ${it.employeeId}"
+                 */
+                var mText = "${it.startedAt.month}               ${it.startedAt.hour}:" +
+                        "${it.startedAt.minute}:${it.startedAt.second}                    " +
+                        "     " +
+                        "${it.endedAt?.hour}:" + "${it.endedAt?.minute}:${it.endedAt?.second}"
 
-             */
-            var mText = "${it.startedAt.month}          ${it.startedAt.hour}:" +
-                    "${it.startedAt.minute}:${it.startedAt.second}                  " +
-                    "${it.endedAt?.hour}:" + "${it.endedAt?.minute}:${it.endedAt?.second}"
+                //add paragraph to the document
+                mDoc.add(Paragraph(mText))
 
-            //add paragraph to the document
-            mDoc.add(Paragraph(mText))
-
-            mDoc.add(Paragraph(" "))
-            mDoc.add(Paragraph(" "))
+                mDoc.add(Paragraph(" "))
+                mDoc.add(Paragraph(" "))
+            }
+        }else{
+            var mText = ""
+            if (monthPosition != -1){
+                println("Mnth position in setRegistriesDocument is ${monthPosition}")
+                //mText = "There is no register for ${spinnerMonths.get(monthPosition+1)}"
+                mText = "There is no register for ${spinnerMonths.get(monthPosition+1)}"
+                mDoc.add(Paragraph(mText))
+            }
+            Toast.makeText(this.context, "There is no registry to add",
+                Toast.LENGTH_SHORT).show()
         }
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
@@ -564,9 +642,5 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
             }
         }
     }
-    
-
-
-
 
 }

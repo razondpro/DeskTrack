@@ -51,8 +51,9 @@ class AddEditCompanyFragment :
 
     override fun FragmentAddEditCompanyBinding.initialize() {
         println("HELLO FROM AddEditCompanyFragment -----------------------------------------")
+        initiateData()
+
         var spin = this.spinnerCompany
-        var companies = shareViewModel.getAllCompanies().value
 
         updateSnipperCompany(spin,this)
 
@@ -67,7 +68,15 @@ class AddEditCompanyFragment :
         btnGoBackFromCompany.setOnClickListener {
             goBack()
         }
+        var companies = shareViewModel.getAllCompanies().value
 
+    }
+
+    private fun initiateData(){
+        spinnerCompanies = mutableListOf<String>("")
+        companiesNIF = mutableListOf<String>("")
+        spinnerCompId = mutableListOf<Int>()
+        compPosition = -1
     }
 
     private fun validateEditForm(fragmentAddEditCompanyBinding: FragmentAddEditCompanyBinding){
@@ -138,6 +147,7 @@ class AddEditCompanyFragment :
 
                     compPosition = -1
                     goBack()
+                    //fragmentAddEditCompanyBinding.initialize()
                 }
             }else {
                 Toast.makeText(it.context, "Please, insert valid data",
@@ -178,6 +188,7 @@ class AddEditCompanyFragment :
                     )
 
                     val compId = instance!!.companyDao().insert(company)
+
                     shareViewModel.getCompany(compId).value
                     if (shareViewModel.company.value != null){
                         println("shareViewModel.company.value es ${shareViewModel.company.value}")
@@ -185,6 +196,7 @@ class AddEditCompanyFragment :
 
                 }
                 goBack()
+                //fragmentAddEditCompanyBinding.initialize()
             }else{
                 Toast.makeText(it.context, "Please, insert valid data",
                     Toast.LENGTH_SHORT).show()
@@ -213,6 +225,7 @@ class AddEditCompanyFragment :
             shareViewModel.deleteCompany(compPosition.toLong())
             compPosition = -1
             goBack()
+            //fragmentAddEditCompanyBinding.initialize()
         }
 
         //set negative button

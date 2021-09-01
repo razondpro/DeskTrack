@@ -14,7 +14,9 @@ import android.widget.Spinner;
 import com.wagit.desktrack.data.entities.Employee
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -22,7 +24,9 @@ import com.wagit.desktrack.data.db.AppDatabase
 import com.wagit.desktrack.data.entities.Company
 import com.wagit.desktrack.utils.Validator
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class AddEditEmployeeFragment :
     BaseFragment<FragmentAddEditEmployeeBinding>(R.layout.fragment_add_edit_employee){
@@ -62,11 +66,11 @@ class AddEditEmployeeFragment :
     }
 
     override fun FragmentAddEditEmployeeBinding.initialize() {
+        println("WELCOME TO THE Employee FRAGMENT!!!!!!!!!")
+
+        initiate()
         var spin = this.spinnerEmployee
         var spinEmployeeCompany = this.spinEmployeeCompany
-
-        var companies = shareViewModel.getAllCompanies().value
-        var employees = shareViewModel.getAllEmployees().value
 
         updateSnipperCompany(spinEmployeeCompany,this)
         updateSnipperEmployee(spin,this)
@@ -91,6 +95,21 @@ class AddEditEmployeeFragment :
             goBack()
         }
 
+        var companies = shareViewModel.getAllCompanies().value
+        var employees = shareViewModel.getAllEmployees().value
+
+    }
+
+    private fun initiate(){
+        spinnerEmployees = mutableListOf<String>("")
+        spinnerEmplId = mutableListOf<Int>()
+        emplPosition = -1
+        employeesCIF = mutableListOf<String>("")
+        employeesNSS = mutableListOf<String>("")
+
+        spinnerCompanies = mutableListOf<String>("")
+        spinnerCompId = mutableListOf<Int>()
+        compPosition = -1
     }
 
     private fun validateEditForm(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
@@ -163,6 +182,7 @@ class AddEditEmployeeFragment :
 
                 println("emplPosition: " +
                         "$emplPosition ----------------------------------------------")
+
                 println("empCIF.get(emplPosition) ---------- ${empCIF.get(emplPosition)}")
                 println("Removed: ${empCIF.removeAt(emplPosition)} ------------------------")
                 println("Employee CIF TV: " +
@@ -219,7 +239,7 @@ class AddEditEmployeeFragment :
                     compPosition = -1
                     emplPosition = -1
                     goBack()
-
+                    //fragmentAddEditEmployeeBinding.initialize()
                 }
             }else {
                 Toast.makeText(it.context, "Please, insert valid data",
@@ -234,7 +254,6 @@ class AddEditEmployeeFragment :
                 Toast.makeText(this.context, "Wrong credentials", Toast.LENGTH_LONG).show()
             }
         })
-
     }
 
     private fun editViewInit(fragmentAddEditEmployeeBinding: FragmentAddEditEmployeeBinding){
@@ -271,6 +290,7 @@ class AddEditEmployeeFragment :
             compPosition = -1
             emplPosition = -1
             goBack()
+            //fragmentAddEditEmployeeBinding.initialize()
         }
 
         //set negative button
@@ -310,7 +330,7 @@ class AddEditEmployeeFragment :
                     println("Llega handleAddClick con emplPosition: $emplPosition " +
                             "y compPosition: $compPosition <----------------->")
 
-                    GlobalScope.launch {
+                    var job = GlobalScope.launch {
                         val instance = this@AddEditEmployeeFragment.context?.
                         let { AppDatabase.getInstance(it) }
 
@@ -331,6 +351,7 @@ class AddEditEmployeeFragment :
                         )
 
                         val empId = instance!!.employeeDao().insert(employee)
+
                         shareViewModel.getEmployee(empId.toInt()).value
                         if (shareViewModel.employee.value != null){
                             println("shareViewModel.employee.value es ${shareViewModel.employee
@@ -340,6 +361,28 @@ class AddEditEmployeeFragment :
                     //compPosition = -1
                     //emplPosition = -1
                     goBack()
+                    //fragmentAddEditEmployeeBinding.initialize()
+                    //job.cancel()
+                    //job.join()
+
+
+                    // Reload current fragment
+                    /*
+                    val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+                    var frg: Fragment? = null
+                    frg = fragmentManager.findFragmentByTag("employeeFragment")
+                    val ft: FragmentTransaction = fragmentManager.beginTransaction()
+                    if (frg != null) {
+                        ft.detach(frg)
+                    }
+                    if (frg != null) {
+                        ft.attach(frg)
+                    }
+                    ft.commit()
+
+                     */
+
+
 
                 }
             }else{
@@ -437,8 +480,10 @@ class AddEditEmployeeFragment :
                                        fragmentAddEditEmployeeBinding:
                                        FragmentAddEditEmployeeBinding){
         // Creating adapter for spinner
-        val adapter = ArrayAdapter<String>(spin.context,
-            R.layout.support_simple_spinner_dropdown_item,spinnerEmployees,)
+        val adapter = ArrayAdapter<String>(
+            spin.context,
+            R.layout.support_simple_spinner_dropdown_item, spinnerEmployees,
+        )
         spin.adapter = adapter
 
         //Setting the item selected listener
@@ -503,8 +548,10 @@ class AddEditEmployeeFragment :
                                        fragmentAddEditEmployeeBinding:
                                        FragmentAddEditEmployeeBinding){
         // Creating adapter for spinner
-        val adapter = ArrayAdapter<String>(spin.context,
-            R.layout.support_simple_spinner_dropdown_item,spinnerCompanies,)
+        val adapter = ArrayAdapter<String>(
+            spin.context,
+            R.layout.support_simple_spinner_dropdown_item, spinnerCompanies,
+        )
         spin.adapter = adapter
 
         //Setting the item selected listener

@@ -69,10 +69,13 @@ class Calendar () {
             if (day.date.month === it.startedAt.month &&
                 day.date.dayOfWeek === it.startedAt.dayOfWeek &&
                 day.date.dayOfYear === it.startedAt.dayOfYear){
-                if (it.endedAt!!.hour === 0){
-                    container.textView.setBackgroundColor(Color.YELLOW)
-                }else{
-                    container.textView.setBackgroundColor(Color.CYAN)
+                if (it.endedAt != null){
+                    if (it.endedAt!!.hour === 0){
+                        container.textView.setBackgroundColor(Color.YELLOW)
+                    }else{
+                        container.textView.setBackgroundColor(Color.CYAN)
+                    }
+
                 }
             }
         }
