@@ -292,7 +292,7 @@ class AddEditCompanyFragment :
                     handleDeleteClick(fragmentAddEditCompanyBinding)
                 }else{
                     compPosition = -1
-                    fragmentAddEditCompanyBinding.btnSaveCompany.setText("Add Employee")
+                    fragmentAddEditCompanyBinding.btnSaveCompany.setText("Add Company")
                     updateCompanyPosition(fragmentAddEditCompanyBinding)
                     addViewInit(fragmentAddEditCompanyBinding)
                 }
