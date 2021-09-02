@@ -34,7 +34,7 @@ class AdminFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin, container, false)
+        return inflater.inflate(R.layout.fragment_admin_home, container, false)
     }
 
     companion object {

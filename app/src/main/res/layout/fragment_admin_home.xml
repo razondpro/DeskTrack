@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sharedVM"
+            type="com.wagit.desktrack.ui.admin.viewmodel.SharedViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/adminFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/cardview_grey_color"
+        tools:context=".ui.admin.home.view.HomeFragment">
+
+        <Button
+            android:id="@+id/btnAddEditEmployee"
+            android:layout_width="307dp"
+            android:layout_height="79dp"
+            android:drawableLeft="@drawable/ic_add"
+            android:text="Add/Edit Employee"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.582"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.178" />
+
+        <Button
+            android:id="@+id/btnAddEditCompany"
+            android:layout_width="316dp"
+            android:layout_height="79dp"
+            android:drawableLeft="@drawable/ic_add"
+            android:text="Add/Edit Company"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.631"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.36" />
+
+        <Button
+            android:id="@+id/btnExportData"
+            android:layout_width="318dp"
+            android:layout_height="75dp"
+            android:drawableLeft="@drawable/ic_export"
+            android:text="Export Data"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.655"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.518" />
+        <!--
+        <Button
+            android:id="@+id/btnSyncGoogle"
+            android:layout_width="322dp"
+            android:layout_height="78dp"
+            android:drawableLeft="@drawable/ic_sync"
+            android:text="Sync. with Google"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.685"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.692" />
+        -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -81,7 +81,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     override fun FragmentHomeBinding.initialize() {
         println("HHOLA FROM HOME")
         this.sharedVM = sharedViewModel
-        val treg = homeViewModel.getTodaysRegistry(sharedViewModel.employee.value!!.id)
 
         //Set the user welcome message
         setUserWelcomeMessage(this.tvName)
@@ -147,6 +146,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
             }
         })
+
+        val treg = homeViewModel.getTodaysRegistry(sharedViewModel.employee.value!!.id)
 
     }
 

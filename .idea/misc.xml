@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/drawable/ic_comment.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable/ic_home.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable/ic_person.xml" value="0.371875" />
+        <entry key="app/src/main/res/drawable/ic_person_yellow.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/ic_question_answer.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable/ic_twitter.xml" value="0.371875" />
         <entry key="app/src/main/res/drawable/profile_bg.xml" value="0.371875" />
@@ -19,11 +20,15 @@
         <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.19895833333333332" />
         <entry key="app/src/main/res/layout/calendar_month_footer_layout.xml" value="0.17572463768115942" />
         <entry key="app/src/main/res/layout/calendar_registry_text.xml" value="0.19895833333333332" />
-        <entry key="app/src/main/res/layout/fragment_admin.xml" value="0.24909420289855072" />
+        <entry key="app/src/main/res/layout/fragment_add_edit_company.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_add_edit_employee.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_admin.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_admin_calendar.xml" value="0.24909420289855072" />
+        <entry key="app/src/main/res/layout/fragment_admin_home.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/fragment_admin_profile.xml" value="0.24909420289855072" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.17572463768115942" />
+        <entry key="app/src/main/res/layout/fragment_export_data.xml" value="0.30842391304347827" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.359375" />
         <entry key="app/src/main/res/menu/admin_bottom_menu.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.35572916666666665" />

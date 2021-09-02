@@ -111,4 +111,7 @@ dependencies {
     //Added CalendarView to our app build.gradle -> Added because of the calendar fragment
     implementation 'com.github.kizitonwose:CalendarView:1.0.4'
 
+    //write pdf library -> Added in order to export the pdf file with the registers
+    implementation 'com.itextpdf:itextg:5.5.10'
+
 }

@@ -19,4 +19,10 @@ abstract class CompanyDao: BaseDao<Company> {
     @Transaction
     @Query("SELECT * FROM companies WHERE id = :companyId")
     abstract suspend fun geEmployeesByCompanyId(companyId: Long): List<CompanyWithEmployees>
+
+    @Query("UPDATE companies SET nif = :nif, ccc = :ccc, name = :name WHERE id = :companyId")
+    abstract suspend fun updateCompany(companyId: Long, nif: String, ccc: Int, name: String)
+
+    @Query("DELETE FROM companies WHERE id = :companyId")
+    abstract suspend fun deleteCompany(companyId: Long)
 }

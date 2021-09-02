@@ -37,4 +37,36 @@ class EmployeeRepository @Inject constructor(
     suspend fun getUserByEmailAndPw(email: String, pw: String): List<Employee> {
         return employeeDao.getUserByEmailAndPw(email, pw)
     }
+
+    suspend fun getAllEmployees(): List<Employee> {
+        return employeeDao.getAllEmployees()
+    }
+
+    suspend fun getEmployeesByComp(companyId: Long): List<Employee>{
+        return employeeDao.getEmployeesByComp(companyId)
+    }
+
+    suspend fun getEmployee(employeeId: Int): List<Employee> {
+        return employeeDao.getEmployee(employeeId)
+    }
+
+    suspend fun updateEmployee(employeeId: Long, email: String, pw: String,
+                               firstName: String, lastName: String, companyId: Long,
+                               cif: String, nss: String) {
+        employeeDao.updateEmployee(employeeId, email, pw, firstName, lastName, companyId,
+            cif, nss)
+    }
+
+    suspend fun updateAdmin(employeeId: Long, email: String, pw: String,
+                               firstName: String, lastName: String, cif: String, nss: String) {
+        employeeDao.updateAdmin(employeeId, email, pw, firstName, lastName, cif, nss)
+    }
+
+    suspend fun updateEmployeesCompId(employeeId: Long, companyId: Long){
+        employeeDao.updateEmployeesCompId(employeeId,companyId)
+    }
+
+    suspend fun deleteEmployee(employeeId: Long) {
+        employeeDao.deleteEmployee(employeeId)
+    }
 }
