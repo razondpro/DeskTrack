@@ -57,6 +57,11 @@ class EmployeeRepository @Inject constructor(
             cif, nss)
     }
 
+    suspend fun updateAdmin(employeeId: Long, email: String, pw: String,
+                               firstName: String, lastName: String, cif: String, nss: String) {
+        employeeDao.updateAdmin(employeeId, email, pw, firstName, lastName, cif, nss)
+    }
+
     suspend fun updateEmployeesCompId(employeeId: Long, companyId: Long){
         employeeDao.updateEmployeesCompId(employeeId,companyId)
     }
