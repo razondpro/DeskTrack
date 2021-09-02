@@ -33,22 +33,28 @@ class ProfileFragment :
     private val cifLD = MutableLiveData<String>()
 
     private val isValidLAD = MediatorLiveData<Boolean>().apply {
-        this.value = false
+        this.value = true
 
         addSource(emailLD) { email ->
             val pw = pwLD.value
             val cif = cifLD.value
             this.value = validate(email, pw, cif)
+            println("addSource(emailLD) { email: $email -> pw: $pw; cif: $cif; this.value: " +
+                    "${this.value}")
         }
         addSource(pwLD){ pw ->
             val email = emailLD.value
             val cif = cifLD.value
             this.value = validate(email, pw, cif)
+            println("addSource(pwLD){ pw: $pw -> email: $email; cif: $cif; this.value: " +
+                    "${this.value}")
         }
         addSource(cifLD){ cif ->
             val email = emailLD.value
             val pw = pwLD.value
             this.value = validate(email, pw, cif)
+            println("addSource(cifLD){ cif: $cif -> email: $email; pw: $pw; this.value: " +
+                    "${this.value}")
         }
     }
 
@@ -63,7 +69,9 @@ class ProfileFragment :
         })
 
         var employees = shareViewModel.getAllEmployees().value
-
+        if (shareViewModel.user.value != null){
+            var admin = profileViewModel.getEmployee(shareViewModel.user.value!!.id.toInt()).value
+        }
     }
 
     private fun initiateAdminInfo(fragmentAdminProfileBinding: FragmentAdminProfileBinding){
@@ -107,6 +115,12 @@ class ProfileFragment :
         tvAdminProfession.setText("Admin")
     }
 
+    private fun initializeValidationData(fragmentAdminProfileBinding: FragmentAdminProfileBinding){
+        cifLD.value = fragmentAdminProfileBinding.tvAdminCIF.text.toString()
+        pwLD.value = fragmentAdminProfileBinding.tvAdminPassword.text.toString()
+        emailLD.value = fragmentAdminProfileBinding.tvAdminEmail.text.toString()
+    }
+
     private fun validateEditForm(fragmentAdminProfileBinding: FragmentAdminProfileBinding){
         fragmentAdminProfileBinding.tvAdminCIF.doOnTextChanged { text, _, _, _ ->
             cifLD.value = text?.toString()
@@ -118,7 +132,7 @@ class ProfileFragment :
             emailLD.value = text?.toString()
         }
         isValidLAD.observe(this){ isValid ->
-            Log.v("EditIsValid", isValid.toString())
+            Log.v("EditIsValidAdmin", isValid.toString())
         }
     }
 
@@ -228,6 +242,7 @@ class ProfileFragment :
                 println("Todo correcto!!!")
                 Toast.makeText(it.context,
                     "Data updated", Toast.LENGTH_SHORT).show()
+                //Hacer un getEmployee
             }else {
                 Toast.makeText(it.context,
                     "Please, insert valid data", Toast.LENGTH_SHORT).show()
@@ -239,13 +254,15 @@ class ProfileFragment :
         profileViewModel.admin.observe(this,{
             if(it.isEmpty()){
                 Toast.makeText(this.context, "Wrong credentials", Toast.LENGTH_LONG).show()
-            }else{
+            }
+            else{
                 updateAdminInfo(fragmentAdminProfileBinding)
             }
         })
     }
 
     private fun editViewInit(fragmentAdminProfileBinding: FragmentAdminProfileBinding){
+        initializeValidationData(fragmentAdminProfileBinding)
         validateEditForm(fragmentAdminProfileBinding)
         handleSaveClick(fragmentAdminProfileBinding)
         attemptEditAdmin(fragmentAdminProfileBinding)

@@ -33,4 +33,14 @@ class ProfileViewModel @Inject constructor(
         println("Llega al SHVM del updateAdmin con ${admin.value}")
     }
 
+    fun getEmployee(employeeId: Int): LiveData<List<Employee>> {
+        viewModelScope.launch(Dispatchers.IO) {
+            _admin.postValue(adminRepository.getEmployee(employeeId))
+        }
+        Log.d("ProfileViewModel","Llega al viewmodel para getEmployee con " +
+                "${admin.value}")
+        println("Llega al SHVM del get con ${admin.value}")
+        return admin
+    }
+
 }
