@@ -18,17 +18,46 @@
         android:orientation="vertical"
         tools:context=".ui.admin.calendar.view.CalendarFragment">
 
+        <com.kizitonwose.calendarview.CalendarView
+            android:id="@+id/adminCalendarView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cv_dayViewResource="@layout/calendar_day_layout"
+            app:cv_monthHeaderResource="@layout/calendar_month_header_layout"
+            app:cv_orientation="horizontal"
+            app:cv_outDateStyle="endOfRow"
+            app:cv_inDateStyle="allMonths"
+            app:cv_scrollMode="paged" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="230dp"
-            android:layout_height="273dp"
-            android:text="Welcome to the admin's calendar"
+
+        <EditText
+            android:id="@+id/tvEditDayRegistries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Text For the registries"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.902" />
+
+        <Button
+            android:id="@+id/btnPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Previous"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

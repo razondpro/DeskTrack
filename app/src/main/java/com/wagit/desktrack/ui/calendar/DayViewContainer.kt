@@ -26,7 +26,7 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
         view.setOnClickListener {
             Toast.makeText(view.context, "${day.date} selected", Toast.LENGTH_SHORT).show()
             //Set the selected day's background to green
-            it.setBackgroundColor(Color.GREEN)
+            //it.setBackgroundColor(Color.GREEN)
             // Check the day owner as we do not want to select in or out dates.
             if (day.owner == DayOwner.THIS_MONTH) {
                 // Keep a reference to any previous selection
