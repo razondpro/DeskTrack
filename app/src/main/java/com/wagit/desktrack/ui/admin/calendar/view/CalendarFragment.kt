@@ -15,6 +15,7 @@ import com.wagit.desktrack.ui.admin.viewmodel.SharedViewModel
 import com.wagit.desktrack.ui.calendar.Calendar
 import java.time.YearMonth
 import java.time.temporal.WeekFields
+import androidx.lifecycle.Observer
 import java.util.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,27 +28,42 @@ class CalendarFragment : BaseFragment<FragmentAdminCalendarBinding>(R.layout.fra
     override fun FragmentAdminCalendarBinding.initialize() {
         println("LLega al calendar!!!")
         this.sharedCalendarVM = sharedCalendarVM
+        val monthString: String = convertIntToTwoDigitString(YearMonth.now().monthValue).toString()
+        val mreg = calendarViewModel.getAllRegistriesByMonthAndYear(monthString,
+            YearMonth.now().year.toString())
+        println("MONTHREGISTRY ANTES En El init." +
+                "${monthString} ${calendarViewModel.allMonthRegistry.value}")
 
         val calendar = Calendar()
+        this.tvEditDayRegistries.setText(" ")
         dayMonthBinder(adminCalendarView,calendar,this.tvEditDayRegistries)
         //calendar.monthFooterBinder(calendarView)
         setCurrentMonth(adminCalendarView)
 
+        calendarViewModel.allMonthRegistry.observe(viewLifecycleOwner, Observer {
+            println("Llega al Observer para el livedata allMonthRegistry")
+            println("allMonthRegistry: ${calendarViewModel.allMonthRegistry.value}")
+            this.tvEditDayRegistries.setText(" ")
+            dayMonthBinder(adminCalendarView,calendar,this.tvEditDayRegistries)
+            //calendar.monthFooterBinder(calendarView)
+            udpateCalendar(adminCalendarView)
+
+        })
+
         this.btnNext.setOnClickListener {
             setNextMonth(adminCalendarView, calendarViewModel)
             val monthString: String = convertIntToTwoDigitString(cMonth!!.monthValue)
-            dayMonthBinder(adminCalendarView,calendar,this.tvEditDayRegistries)
-            //calendar.monthFooterBinder(calendarView)
-            udpateCalendar(adminCalendarView)
 
+            val mreg = calendarViewModel.getAllRegistriesByMonthAndYear(monthString,
+                cMonth!!.year.toString())
         }
 
         this.btnPrevious.setOnClickListener {
-            setPreviousMonth(adminCalendarView,calendarViewModel)
+            setPreviousMonth(adminCalendarView, calendarViewModel)
             val monthString: String = convertIntToTwoDigitString(cMonth!!.monthValue)
-            dayMonthBinder(adminCalendarView,calendar,this.tvEditDayRegistries)
-            //calendar.monthFooterBinder(calendarView)
-            udpateCalendar(adminCalendarView)
+            
+            val mreg = calendarViewModel.getAllRegistriesByMonthAndYear(monthString,
+                cMonth!!.year.toString())
         }
 
     }
