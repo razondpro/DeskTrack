@@ -6,10 +6,8 @@ import android.widget.TextView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
-import com.wagit.desktrack.R
 import com.wagit.desktrack.data.entities.Registry
 import java.time.DayOfWeek
 import java.time.LocalDate

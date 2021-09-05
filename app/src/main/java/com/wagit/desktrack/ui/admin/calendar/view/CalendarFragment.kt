@@ -37,7 +37,6 @@ class CalendarFragment : BaseFragment<FragmentAdminCalendarBinding>(R.layout.fra
         val calendar = Calendar()
         this.tvEditDayRegistries.setText(" ")
         dayMonthBinder(adminCalendarView,calendar,this.tvEditDayRegistries)
-        //calendar.monthFooterBinder(calendarView)
         setCurrentMonth(adminCalendarView)
 
         calendarViewModel.allMonthRegistry.observe(viewLifecycleOwner, Observer {
@@ -45,7 +44,6 @@ class CalendarFragment : BaseFragment<FragmentAdminCalendarBinding>(R.layout.fra
             println("allMonthRegistry: ${calendarViewModel.allMonthRegistry.value}")
             this.tvEditDayRegistries.setText(" ")
             dayMonthBinder(adminCalendarView,calendar,this.tvEditDayRegistries)
-            //calendar.monthFooterBinder(calendarView)
             udpateCalendar(adminCalendarView)
 
         })
@@ -61,7 +59,7 @@ class CalendarFragment : BaseFragment<FragmentAdminCalendarBinding>(R.layout.fra
         this.btnPrevious.setOnClickListener {
             setPreviousMonth(adminCalendarView, calendarViewModel)
             val monthString: String = convertIntToTwoDigitString(cMonth!!.monthValue)
-            
+
             val mreg = calendarViewModel.getAllRegistriesByMonthAndYear(monthString,
                 cMonth!!.year.toString())
         }

@@ -61,7 +61,10 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
 
     private fun setSelectedDayReg(mreg: List<Registry>){
         if (mreg.isNotEmpty()){
+            var containsSelectedDay = false
             mreg.forEach {
+                println("Day date: ${day.date} ----------------------------------------------------------------------")
+                println("it.startedAt: ${it.startedAt} ----------------------------------------------------------------------")
                 if (day.date.month === it.startedAt.month &&
                     day.date.dayOfWeek === it.startedAt.dayOfWeek &&
                     day.date.dayOfYear === it.startedAt.dayOfYear){
@@ -69,9 +72,11 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
                             "${it.startedAt.hour}:${it.startedAt.minute}:${it.startedAt.second}, " +
                             "and finished working at ${it.endedAt!!.hour.toString()}:" +
                             "${it.endedAt!!.minute.toString()}:${it.endedAt!!.second.toString()}"
-                }else{
-                    textViewRegistry.setText(" ")
+                    containsSelectedDay = true
                 }
+            }
+            if (containsSelectedDay == false){
+                textViewRegistry.setText(" ")
             }
         }
     }
