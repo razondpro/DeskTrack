@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_admin_home" />
     <fragment
         android:id="@+id/adminCalendarFragment"
-        android:name="com.wagit.desktrack.ui.admin.calendar.view.CalendarFragment"
+        android:name="com.wagit.desktrack.ui.admin.calendar.CalendarMenuFragment"
         android:label="Calendar"
-        tools:layout="@layout/fragment_admin_calendar" />
+        tools:layout="@layout/fragment_admin_calendar_menu" />
     <fragment
         android:id="@+id/adminProfileFragment"
         android:name="com.wagit.desktrack.ui.admin.profile.view.ProfileFragment"

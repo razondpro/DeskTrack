@@ -120,7 +120,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(R.layout.fragment
             println("ENTRA ${calendarViewModel.monthRegistry.value!!}")
         }
 
-        calendar.dayBinder(calendarView,aux,textViewDayRegistry)
+        calendar.dayBinder(calendarView,aux,textViewDayRegistry,sharedViewModel)
         calendar.monthHeaderBinder(calendarView)
 
     }

@@ -2,23 +2,21 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
-
         <variable
             name="sharedVM"
             type="com.wagit.desktrack.ui.admin.viewmodel.SharedViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/exportData"
+        android:id="@+id/addRegistry"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/cardview_grey_color"
-        tools:context=".ui.admin.home.ExportDataFragment">
+        tools:context=".ui.admin.calendar.AddRegistryFragment">
 
         <Spinner
-            android:id="@+id/spinCompanyExp"
+            android:id="@+id/spinEmployeeToRegister"
             android:layout_width="208dp"
             android:layout_height="57dp"
             android:textColor="@android:color/black"
@@ -32,10 +30,10 @@
             app:layout_constraintVertical_bias="0.161" />
 
         <TextView
-            android:id="@+id/tv1"
+            android:id="@+id/textView9999"
             android:layout_width="164dp"
             android:layout_height="40dp"
-            android:text="Select Company"
+            android:text="Select Employee"
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textSize="18sp"
@@ -47,81 +45,72 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.182" />
 
-        <TextView
-            android:id="@+id/tv2"
-            android:layout_width="165dp"
-            android:layout_height="38dp"
-            android:text="Select Employee:"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.056"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.399" />
-
-        <TextView
-            android:id="@+id/tv3"
-            android:layout_width="165dp"
-            android:layout_height="38dp"
-            android:text="Select Month:"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.065"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.627" />
-
-        <Spinner
-            android:id="@+id/spinEmployeeExp"
-            android:layout_width="202dp"
-            android:layout_height="59dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.923"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.38" />
-
-        <Spinner
-            android:id="@+id/spinMonthExp"
-            android:layout_width="202dp"
-            android:layout_height="59dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.928"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.616" />
-
         <Button
-            android:id="@+id/btnExport"
+            android:id="@+id/btnPickInTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_export"
-            android:text="Export"
+            android:layout_centerInParent="true"
+            android:drawableLeft="@drawable/ic_dateselector"
+            android:text="Pick Date and Time For Check In"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.879" />
+            app:layout_constraintVertical_bias="0.379" />
 
         <Button
-            android:id="@+id/btnGoBackHome"
+            android:id="@+id/btnPickOutTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableLeft="@drawable/ic_dateselector"
+            android:text="Pick Date and Time For Check In"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.653" />
+
+        <TextView
+            android:id="@+id/tvSelectedInTime"
+            android:layout_width="336dp"
+            android:layout_height="78dp"
+            android:layout_below="@id/btnPickInTime"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.508" />
+
+        <TextView
+            android:id="@+id/tvSelectedOutTime"
+            android:layout_width="336dp"
+            android:layout_height="78dp"
+            android:layout_below="@id/btnPickOutTime"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.794" />
+
+        <Button
+            android:id="@+id/btnGoBackFromAddReg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_back"
@@ -132,5 +121,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.023" />
+
+        <Button
+            android:id="@+id/btnAddRegistry"
+            android:layout_width="195dp"
+            android:layout_height="59dp"
+            android:drawableLeft="@drawable/ic_save"
+            android:text="Add Registry"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.95" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 </layout>

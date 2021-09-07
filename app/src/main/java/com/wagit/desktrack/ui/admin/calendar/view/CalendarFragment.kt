@@ -1,6 +1,7 @@
 package com.wagit.desktrack.ui.admin.calendar.view
 
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.kizitonwose.calendarview.CalendarView
@@ -12,22 +13,28 @@ import com.wagit.desktrack.databinding.FragmentAdminCalendarBinding
 import com.wagit.desktrack.ui.BaseFragment
 import com.wagit.desktrack.ui.admin.calendar.viewmodel.CalendarViewModel
 import com.wagit.desktrack.ui.admin.viewmodel.SharedViewModel
+import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
 import com.wagit.desktrack.ui.calendar.Calendar
 import java.time.YearMonth
 import java.time.temporal.WeekFields
 import androidx.lifecycle.Observer
+import com.wagit.desktrack.ui.admin.calendar.AddRegistryFragment
 import java.util.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CalendarFragment : BaseFragment<FragmentAdminCalendarBinding>(R.layout.fragment_admin_calendar)  {
+class CalendarFragment :
+    BaseFragment<FragmentAdminCalendarBinding>(R.layout.fragment_admin_calendar)  {
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val sharedHomeViewModel: SharedHomeViewModel by activityViewModels()
     private val calendarViewModel: CalendarViewModel by viewModels()
     private var cMonth: YearMonth? = null
 
     override fun FragmentAdminCalendarBinding.initialize() {
         println("LLega al calendar!!!")
         this.sharedCalendarVM = sharedCalendarVM
+        val addRegistryFragment = AddRegistryFragment()
+
         val monthString: String = convertIntToTwoDigitString(YearMonth.now().monthValue).toString()
         val mreg = calendarViewModel.getAllRegistriesByMonthAndYear(monthString,
             YearMonth.now().year.toString())
@@ -64,6 +71,16 @@ class CalendarFragment : BaseFragment<FragmentAdminCalendarBinding>(R.layout.fra
                 cMonth!!.year.toString())
         }
 
+        this.btnGoBackFromCalendar.setOnClickListener {
+            goBack()
+        }
+
+    }
+
+    private fun goBack(){
+        val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+        fragmentManager.popBackStackImmediate()
+        println("LLEGA AL GOBACK() DEL Calendar !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     }
 
     private fun setCurrentMonth(calendarView: CalendarView) {
@@ -113,7 +130,7 @@ class CalendarFragment : BaseFragment<FragmentAdminCalendarBinding>(R.layout.fra
             println("ENTRA ${calendarViewModel.allMonthRegistry.value!!}")
         }
 
-        calendar.dayBinder(calendarView,aux,textViewDayRegistry)
+        calendar.dayBinder(calendarView,aux,textViewDayRegistry,sharedHomeViewModel)
         calendar.monthHeaderBinder(calendarView)
 
     }

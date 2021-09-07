@@ -1,6 +1,5 @@
 package com.wagit.desktrack.ui.calendar
 
-import android.graphics.Color
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
@@ -11,18 +10,22 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.CalendarView
 import com.wagit.desktrack.R
 import com.wagit.desktrack.data.entities.Registry
+import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
 import java.time.LocalDate
 
 //Provided a DayBinder for the CalendarView using our DayViewContainer type.
 class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Registry>,
+                       sharedHomeViewModel: SharedHomeViewModel,
                        textViewDayRegistry: TextView) : ViewContainer(view) {
     var textView = view.findViewById<TextView>(R.id.calendarDayText)
     var textViewRegistry = textViewDayRegistry
     var selectedDate: LocalDate? = null
     // Will be set when this container is bound
     lateinit var day: CalendarDay
+
     init {
         disableScrollOnCalendar(calendarView)
+
         view.setOnClickListener {
             Toast.makeText(view.context, "${day.date} selected", Toast.LENGTH_SHORT).show()
             //Set the selected day's background to green
@@ -32,7 +35,14 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
                 // Keep a reference to any previous selection
                 // in case we overwrite it and need to reload it.
                 setSelectedDay(calendarView)
-                setSelectedDayReg(mreg)
+                if (sharedHomeViewModel.employee.value != null){
+                    println("USER IS ADMIN?: ${sharedHomeViewModel.employee.value!!.isAdmin} +++++++++++++++++++++++++++++++++++++++++++++++++++¡¡¡¡¡¡¡¡¡¡")
+                    setSelectedDayReg(mreg)
+                }else{
+                    //User is admin
+                    setAdminSelectedDayReg(mreg)
+                }
+
                 println("${textViewRegistry.text} ªªªªªªªªªªªªªªªªªªªªªªªªªªªªªªªªªª")
             }
         }
@@ -63,12 +73,31 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
         if (mreg.isNotEmpty()){
             var containsSelectedDay = false
             mreg.forEach {
-                println("Day date: ${day.date} ----------------------------------------------------------------------")
-                println("it.startedAt: ${it.startedAt} ----------------------------------------------------------------------")
                 if (day.date.month === it.startedAt.month &&
                     day.date.dayOfWeek === it.startedAt.dayOfWeek &&
                     day.date.dayOfYear === it.startedAt.dayOfYear){
                     textViewRegistry.text="Day ${day!!.date}, started working at: " +
+                            "${it.startedAt.hour}:${it.startedAt.minute}:${it.startedAt.second}, " +
+                            "and finished working at ${it.endedAt!!.hour.toString()}:" +
+                            "${it.endedAt!!.minute.toString()}:${it.endedAt!!.second.toString()}"
+                    containsSelectedDay = true
+                }
+            }
+            if (containsSelectedDay == false){
+                textViewRegistry.setText(" ")
+            }
+        }
+    }
+
+    private fun setAdminSelectedDayReg(mreg: List<Registry>){
+        if (mreg.isNotEmpty()){
+            var containsSelectedDay = false
+            mreg.forEach {
+                if (day.date.month === it.startedAt.month &&
+                    day.date.dayOfWeek === it.startedAt.dayOfWeek &&
+                    day.date.dayOfYear === it.startedAt.dayOfYear){
+                    textViewRegistry.text="Employee: ${it.employeeId}" +
+                            ", Day ${day!!.date}, started working at: " +
                             "${it.startedAt.hour}:${it.startedAt.minute}:${it.startedAt.second}, " +
                             "and finished working at ${it.endedAt!!.hour.toString()}:" +
                             "${it.endedAt!!.minute.toString()}:${it.endedAt!!.second.toString()}"
