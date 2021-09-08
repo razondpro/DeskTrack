@@ -65,18 +65,18 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:drawableLeft="@drawable/ic_dateselector"
-            android:text="Pick Date and Time For Check In"
+            android:text="Pick Date and Time For Check Out"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintHorizontal_bias="0.565"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.653" />
+            app:layout_constraintVertical_bias="0.677" />
 
         <TextView
             android:id="@+id/tvSelectedInTime"
-            android:layout_width="336dp"
-            android:layout_height="78dp"
+            android:layout_width="355dp"
+            android:layout_height="96dp"
             android:layout_below="@id/btnPickInTime"
             android:layout_centerInParent="true"
             android:layout_marginTop="10dp"
@@ -93,8 +93,8 @@
 
         <TextView
             android:id="@+id/tvSelectedOutTime"
-            android:layout_width="336dp"
-            android:layout_height="78dp"
+            android:layout_width="347dp"
+            android:layout_height="93dp"
             android:layout_below="@id/btnPickOutTime"
             android:layout_centerInParent="true"
             android:layout_marginTop="10dp"
@@ -104,10 +104,10 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.794" />
+            app:layout_constraintVertical_bias="0.838" />
 
         <Button
             android:id="@+id/btnGoBackFromAddReg"
@@ -132,7 +132,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.95" />
+            app:layout_constraintVertical_bias="0.976" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

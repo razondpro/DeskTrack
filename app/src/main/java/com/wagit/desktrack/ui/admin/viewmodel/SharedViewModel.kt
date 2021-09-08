@@ -39,6 +39,11 @@ class SharedViewModel  @Inject constructor(
     private val _monthRegistry: MutableLiveData<List<Registry>> = MutableLiveData()
     val monthRegistry: LiveData<List<Registry>> get() = _monthRegistry
 
+    private val _registry: MutableLiveData<List<Registry>> = MutableLiveData()
+    val registry: LiveData<List<Registry>> get() = _registry
+    //TODO: hacer funcion create registry
+
+
     fun getAllEmployees(): LiveData<List<Employee>> {
         viewModelScope.launch(Dispatchers.IO) {
             _employees.postValue(employeeRepository.getAllEmployees())
@@ -150,6 +155,18 @@ class SharedViewModel  @Inject constructor(
         }
         println("Llega al SHVM del getRegistriesByEmployeeAndMonth con ${monthRegistry.value}")
         return monthRegistry
+    }
+
+    /**
+     * Creates a registry in db,then set new value to today's registry
+     */
+    fun insertRegistry(registry: Registry) {
+        viewModelScope.launch(Dispatchers.IO) {
+            registryRepository.insert(registry)
+            _registry.postValue(registryRepository.
+            getAllRegistriesByEmployeeAndMonthAndYear(registry.employeeId,
+                registry.startedAt.monthValue.toString(),registry.startedAt.year.toString()))
+        }
     }
 
 }

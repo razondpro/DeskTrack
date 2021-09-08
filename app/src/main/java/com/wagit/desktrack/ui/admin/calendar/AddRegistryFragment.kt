@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.widget.Button
@@ -22,8 +23,13 @@ import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.wagit.desktrack.data.entities.Employee
+import com.wagit.desktrack.data.entities.Registry
+import com.wagit.desktrack.ui.admin.calendar.viewmodel.CalendarViewModel
+import java.time.LocalDateTime
+import java.time.Month
 import java.util.*
 
 class AddRegistryFragment:
@@ -43,33 +49,31 @@ class AddRegistryFragment:
     var myYear: Int = 0
     var myHour: Int = 0
     var myMinute: Int = 0
-    var IdBtnInTime = 0
-    var IdBtnOutTime = 0
     var selectedTime = -1
     var spinnerEmployees = mutableListOf<String>("")
     var spinnerEmplId = mutableListOf<Int>()
     var emplPosition = -1
+    var dayCheckIn: Int = -1
+    var monthCheckIn: Int = -1
+    var yearCheckIn: Int = -1
+    var hourCheckIn: Int = -1
+    var minuteCheckIn: Int = -1
+
+    var dayCheckOut: Int = -1
+    var monthCheckOut: Int = -1
+    var yearCheckOut: Int = -1
+    var hourCheckOut: Int = -1
+    var minuteCheckOut: Int = -1
 
     private val shareViewModel: SharedViewModel by activityViewModels()
 
     override fun FragmentAddRegistryBinding.initialize(){
-        println("Welcome to AddRegistryFragment!!!!")
+        println("Welcome to AddRegistryFragment!!!!: ${LocalDateTime.now()}")
+
         this.btnGoBackFromAddReg.setOnClickListener {
             goBack()
         }
-        /*
-        var myDayIn = 0
-        var myMonthIn: Int = 0
-        var myYearIn: Int = 0
-        var myHourIn: Int = 0
-        var myMinuteIn: Int = 0
 
-        var myDayOut = 0
-        var myMonthOut: Int = 0
-        var myYearOut: Int = 0
-        var myHourOut: Int = 0
-        var myMinuteOut: Int = 0
-         */
         var spin = this.spinEmployeeToRegister
         updateSnipperEmployee(spin,this)
 
@@ -77,7 +81,11 @@ class AddRegistryFragment:
             updateSnipperEmployee(spin,this)
         })
 
-        selectedTime = -1
+        shareViewModel.registry.observe(viewLifecycleOwner, Observer {
+            //Llamar a update data
+        })
+
+        initiateInputData()
         textViewInTime = this.tvSelectedInTime
         button = this.btnPickInTime
         button.setOnClickListener {
@@ -104,6 +112,11 @@ class AddRegistryFragment:
             datePickerDialog.show()
         }
 
+        this.btnAddRegistry.setOnClickListener {
+            //Validate Input && Insert new register
+            validateInputData(it.context)
+        }
+
         var employees = shareViewModel.getAllEmployees().value
     }
 
@@ -114,9 +127,9 @@ class AddRegistryFragment:
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        myDay = day
+        myDay = dayOfMonth
         myYear = year
-        myMonth = month
+        myMonth = month+1
         val calendar: Calendar = Calendar.getInstance()
         hour = calendar.get(Calendar.HOUR)
         minute = calendar.get(Calendar.MINUTE)
@@ -130,12 +143,33 @@ class AddRegistryFragment:
         myMinute = minute
 
         if (selectedTime == 1){
-            textViewInTime.text = "Year: " + myYear + "\n" + "Month: " + myMonth +
+            //val dateTime = LocalDateTime.of(myYear, myMonth, myDay, myHour, myMinute,0,0)
+            val dateTime = LocalDateTime.of(myYear, myMonth, myDay, myHour, myMinute,
+                0,0)
+            println("Check in: " + dateTime)
+            dayCheckIn = myDay
+            monthCheckIn = myMonth
+            yearCheckIn = myYear
+            hourCheckIn = myHour
+            minuteCheckIn = myMinute
+            println("monthCheckIn: $monthCheckIn ++++++++++++++++++++++++++++")
+            textViewInTime.text = "Check in: " +
+                    "\n" + "Year: " + myYear + "\n" + "Month: " + myMonth +
                     "\n" + "Day: " + myDay +
                     "\n" + "Hour: " + myHour + "\n" + "Minute: " + myMinute
         }
         if (selectedTime == 2){
-            textViewOutTime.text = "Year: " + myYear + "\n" + "Month: " + myMonth +
+            val dateTime = LocalDateTime.of(myYear, myMonth, myDay, myHour, myMinute,
+                0,0)
+            println("Check out: " + dateTime)
+            dayCheckOut = myDay
+            monthCheckOut = myMonth
+            yearCheckOut = myYear
+            hourCheckOut = myHour
+            minuteCheckOut = myMinute
+            println("monthCheckOut: $monthCheckOut ++++++++++++++++++++++++++++")
+            textViewOutTime.text = "Check out: " +
+                    "\n" + "Year: " + myYear + "\n" + "Month: " + myMonth +
                     "\n" + "Day: " + myDay +
                     "\n" + "Hour: " + myHour + "\n" + "Minute: " + myMinute
         }
@@ -194,7 +228,6 @@ class AddRegistryFragment:
                     //Set the employees data
                     emplPosition = spinnerEmplId.get(position-1)
                     println("Selected Employees Id is: " + spinnerEmplId.get(position-1))
-                    //Todo: Got the employee's Id
                 } else{
                     emplPosition = -1
                 }
@@ -207,5 +240,82 @@ class AddRegistryFragment:
 
     }
 
+    private fun validateInputData(context: Context){
+        if(emplPosition != -1 && hasInputCheckInData() && hasInputCheckOutData()){
+            insertRegistry(context)
+        }else{
+            Toast.makeText(
+                context,
+                "Please select every field",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun insertRegistry(context: Context){
+        val checkInDateTime = LocalDateTime.of(yearCheckIn, monthCheckIn, dayCheckIn, hourCheckIn,
+            minuteCheckIn,0, 0)
+        println("Check in on insertRegistry: " + checkInDateTime)
+
+        val checkOutDateTime = LocalDateTime.of(yearCheckOut, monthCheckOut, dayCheckOut,
+            hourCheckOut, minuteCheckOut,0, 0)
+        println("Check out on insertRegistry: " + checkOutDateTime)
+
+        if (checkInDateTime != null && checkOutDateTime != null && emplPosition != -1){
+            //Create a new registry for today calling the checkIn method
+            val reg= Registry(employeeId = emplPosition.toLong(),
+                startedAt = checkInDateTime, endedAt = checkOutDateTime)
+            shareViewModel.insertRegistry(reg)
+            goBack()
+        }else{
+            Toast.makeText(
+                context,
+                "Please select every field",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun convertIntToTwoDigitString(value: Int) :String{
+        var result: String=value.toString()
+        if (value < 10){
+            result="0${result}"
+        }
+        return result
+    }
+
+    private fun hasInputCheckInData(): Boolean{
+        var result = false
+        if (dayCheckIn != -1 && monthCheckIn != -1 && yearCheckIn != -1 && hourCheckIn != -1 &&
+            minuteCheckIn != -1){
+            result = true
+        }
+        return result
+    }
+
+    private fun hasInputCheckOutData(): Boolean{
+        var result = false
+        if (dayCheckOut != -1 && monthCheckOut != -1 && yearCheckOut != -1 && hourCheckOut != -1 &&
+            minuteCheckOut != -1){
+            result = true
+        }
+        return result
+    }
+
+    private fun initiateInputData(){
+        selectedTime = -1
+
+        dayCheckIn = -1
+        monthCheckIn = -1
+        yearCheckIn = -1
+        hourCheckIn = -1
+        minuteCheckIn = -1
+
+        dayCheckOut = -1
+        monthCheckOut = -1
+        yearCheckOut = -1
+        hourCheckOut = -1
+        minuteCheckOut = -1
+    }
 
 }
