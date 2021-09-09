@@ -1,5 +1,6 @@
 package com.wagit.desktrack.ui.calendar
 
+import android.icu.util.Calendar.HOUR_OF_DAY
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
@@ -10,13 +11,19 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.CalendarView
 import com.wagit.desktrack.R
 import com.wagit.desktrack.data.entities.Registry
+import com.wagit.desktrack.ui.helpers.TimePickerHelper
 import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
 import java.time.LocalDate
+import java.util.Calendar.HOUR_OF_DAY
+import java.util.Calendar.MINUTE
 
 //Provided a DayBinder for the CalendarView using our DayViewContainer type.
 class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Registry>,
                        sharedHomeViewModel: SharedHomeViewModel,
                        textViewDayRegistry: TextView) : ViewContainer(view) {
+
+    lateinit var timePicker: TimePickerHelper
+
     var textView = view.findViewById<TextView>(R.id.calendarDayText)
     var textViewRegistry = textViewDayRegistry
     var selectedDate: LocalDate? = null
@@ -31,6 +38,8 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
             //Set the selected day's background to green
             //it.setBackgroundColor(Color.GREEN)
             // Check the day owner as we do not want to select in or out dates.
+
+            timePicker = TimePickerHelper(it.context, false, false)
             if (day.owner == DayOwner.THIS_MONTH) {
                 // Keep a reference to any previous selection
                 // in case we overwrite it and need to reload it.
@@ -102,6 +111,7 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
                             "and finished working at ${it.endedAt!!.hour.toString()}:" +
                             "${it.endedAt!!.minute.toString()}:${it.endedAt!!.second.toString()}"
                     containsSelectedDay = true
+                    showTimePickerDialog()
                 }
             }
             if (containsSelectedDay == false){
@@ -115,6 +125,21 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
         calendarView.setOnTouchListener { _, event ->
             event.action == MotionEvent.ACTION_MOVE
         }
+    }
+
+    private fun showTimePickerDialog() {
+        val cal: java.util.Calendar = java.util.Calendar.getInstance()
+        val h = cal.get(java.util.Calendar.HOUR)
+        val m = cal.get(java.util.Calendar.MINUTE)
+
+        timePicker.showDialog(h, m, object : TimePickerHelper.Callback {
+            override fun onTimeSelected(hourOfDay: Int, minute: Int) {
+                val hourStr = if (hourOfDay < 10) "0${hourOfDay}" else "${hourOfDay}"
+                val minuteStr = if (minute < 10) "0${minute}" else "${minute}"
+                val text = "${hourOfDay}:${minuteStr}"
+                println("TEXTO: $text ´´´´´´´´´´´´´´´´´´´´´´´´´´´")
+           }
+        })
     }
 }
 

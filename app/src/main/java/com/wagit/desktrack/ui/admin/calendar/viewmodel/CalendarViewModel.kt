@@ -32,5 +32,15 @@ class CalendarViewModel  @Inject constructor(
         return allMonthRegistry
     }
 
-
+    fun getAllRegistriesByEmployeeAndMonthAndYear(empId: Long, month: String,
+                                                  year: String): LiveData<List<Registry>> {
+        println("PARAMETROS ******************** ${empId} y ${month} y ${year} ")
+        viewModelScope.launch(Dispatchers.Main) {
+            _allMonthRegistry.postValue(
+                registryRepository.getAllRegistriesByEmployeeAndMonthAndYear(empId,month,year))
+            //Log.d("HomeViewModel","Esto es el employer ID, startedAt y endedAt despues del postValue ${_tRegistry.value?.first()?.employeeId} ${_tRegistry.value?.first()?.startedAt} ${_tRegistry.value?.first()?.endedAt}")
+        }
+        println("RESULTADO -------------------- ${allMonthRegistry.value}")
+        return allMonthRegistry
+    }
 }

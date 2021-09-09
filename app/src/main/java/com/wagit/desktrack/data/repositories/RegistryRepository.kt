@@ -37,6 +37,9 @@ class RegistryRepository @Inject constructor(
         return registryDao.getTodaysRegByEmployee(empId)
     }
 
+    suspend fun getRegByIdAndEmployee(regId: Long, empId: Long): List<Registry> {
+        return registryDao.getRegByIdAndEmployee(regId,empId)
+    }
 
     //Esta función obtiene todos los registros del mes actual dado el usuario
     suspend fun getAllRegistriesByEmployeeAndCurrentMonth(empId: Long): List<Registry> {
@@ -52,6 +55,19 @@ class RegistryRepository @Inject constructor(
 
         val aux: List<Registry> = registryDao.getAllRegistriesByEmployeeAndMonthAndYear(empId,
             month, year)
+        println("REGISTRY REPO.: $aux")
+        return aux
+    }
+
+    suspend fun getRegistryByEmployeeAndMonthAndYearAndHourAndMinute(empId: Long,
+                                                                     month: String,
+                                                                     year: String,
+                                                                     hour: String,
+                                                                     minute: String):
+            List<Registry> {
+
+        val aux: List<Registry> = registryDao.getRegistryByEmployeeAndMonthAndYearAndHourAndMinute(
+            empId, month, year, hour, minute)
         println("REGISTRY REPO.: $aux")
         return aux
     }

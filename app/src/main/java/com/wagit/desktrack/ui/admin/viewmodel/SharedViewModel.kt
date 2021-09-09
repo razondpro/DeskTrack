@@ -41,7 +41,9 @@ class SharedViewModel  @Inject constructor(
 
     private val _registry: MutableLiveData<List<Registry>> = MutableLiveData()
     val registry: LiveData<List<Registry>> get() = _registry
-    //TODO: hacer funcion create registry
+
+    private val _deleteRegistry: MutableLiveData<List<Registry>> = MutableLiveData()
+    val deleteRegistry: LiveData<List<Registry>> get() = _deleteRegistry
 
 
     fun getAllEmployees(): LiveData<List<Employee>> {
@@ -157,8 +159,37 @@ class SharedViewModel  @Inject constructor(
         return monthRegistry
     }
 
+    fun getRegByIdAndEmployee(regId: Long, empId: Long): LiveData<List<Registry>>{
+        Log.d("AdminHomeViewModel",
+            "Llega al viewmodel para getRegByIdAndEmployee")
+        viewModelScope.launch(Dispatchers.IO) {
+            _deleteRegistry.postValue(
+                registryRepository.getRegByIdAndEmployee(regId,empId))
+        }
+        println("Llega al SHVM del getRegByIdAndEmployee con ${deleteRegistry.value}")
+        return deleteRegistry
+    }
+
+    fun getRegistryByEmployeeAndMonthAndYearAndHourAndMinute(empId: Long,
+                                                             month: String,
+                                                             year: String,
+                                                             hour: String,
+                                                             minute: String):
+            LiveData<List<Registry>>{
+        Log.d("AdminHomeViewModel",
+            "Llega al viewmodel para getRegistryByEmployeeAndMonthAndYearAndHourAndMinute")
+        viewModelScope.launch(Dispatchers.IO) {
+            _monthRegistry.postValue(
+                registryRepository.getRegistryByEmployeeAndMonthAndYearAndHourAndMinute(
+                    empId,month,year,hour,minute))
+        }
+        println("Llega al SHVM del getRegistryByEmployeeAndMonthAndYearAndHourAndMinute" +
+                " con ${monthRegistry.value}")
+        return monthRegistry
+    }
+
     /**
-     * Creates a registry in db,then set new value to today's registry
+     * Creates a registry in db
      */
     fun insertRegistry(registry: Registry) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -166,6 +197,22 @@ class SharedViewModel  @Inject constructor(
             _registry.postValue(registryRepository.
             getAllRegistriesByEmployeeAndMonthAndYear(registry.employeeId,
                 registry.startedAt.monthValue.toString(),registry.startedAt.year.toString()))
+        }
+    }
+    /**
+     * Updates a registry in db
+     */
+    fun updateRegistry(registry: Registry) {
+        viewModelScope.launch(Dispatchers.IO) {
+            registryRepository.update(registry)
+            _registry.postValue(registryRepository.getRegByIdAndEmployee(registry.id,
+                registry.employeeId))
+        }
+    }
+
+    fun deleteRegistry(registry: Registry){
+        viewModelScope.launch(Dispatchers.IO) {
+            registryRepository.delete(registry)
         }
     }
 

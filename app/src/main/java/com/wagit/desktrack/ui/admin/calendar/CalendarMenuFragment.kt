@@ -21,14 +21,14 @@ class CalendarMenuFragment:
 
     override fun FragmentAdminCalendarMenuBinding.initialize() {
         println("Welcome to Calendar's Menu")
-        val calendarFragment = CalendarFragment()
+        val selectEmployeeCalendar = SelectEmployeeCalendar()
         val addRegistryFragment = AddRegistryFragment()
 
         btnCalendarFragment.setOnClickListener {
             val fragmentManager = (activity as FragmentActivity).supportFragmentManager
             fragmentManager.beginTransaction().apply {
-                replace(R.id.fragmentAdminContainerView,calendarFragment)
-                addToBackStack("calendarFragment")
+                replace(R.id.fragmentAdminContainerView,selectEmployeeCalendar)
+                addToBackStack("selectEmployeeCalendar")
                 commit()
             }
         }

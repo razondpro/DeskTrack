@@ -33,11 +33,19 @@ class CalendarFragment :
     override fun FragmentAdminCalendarBinding.initialize() {
         println("LLega al calendar!!!")
         this.sharedCalendarVM = sharedCalendarVM
-        val addRegistryFragment = AddRegistryFragment()
+        if (sharedViewModel.employee.value != null){
+            println("ID: ---------------------------------------------------------------->" +
+                    "${sharedViewModel.employee.value!!.first().id}")
+        }
 
         val monthString: String = convertIntToTwoDigitString(YearMonth.now().monthValue).toString()
-        val mreg = calendarViewModel.getAllRegistriesByMonthAndYear(monthString,
-            YearMonth.now().year.toString())
+        //val mreg = calendarViewModel.getAllRegistriesByMonthAndYear(monthString,
+        //    YearMonth.now().year.toString())
+
+        val mreg = calendarViewModel.getAllRegistriesByEmployeeAndMonthAndYear(
+            sharedViewModel.employee.value!!.first().id,
+            monthString,YearMonth.now().year.toString())
+
         println("MONTHREGISTRY ANTES En El init." +
                 "${monthString} ${calendarViewModel.allMonthRegistry.value}")
 
@@ -59,16 +67,24 @@ class CalendarFragment :
             setNextMonth(adminCalendarView, calendarViewModel)
             val monthString: String = convertIntToTwoDigitString(cMonth!!.monthValue)
 
-            val mreg = calendarViewModel.getAllRegistriesByMonthAndYear(monthString,
-                cMonth!!.year.toString())
+            //val mreg = calendarViewModel.getAllRegistriesByMonthAndYear(monthString,
+            //    cMonth!!.year.toString())
+
+            val mreg = calendarViewModel.getAllRegistriesByEmployeeAndMonthAndYear(
+                sharedViewModel.employee.value!!.first().id,
+                monthString,cMonth!!.year.toString())
         }
 
         this.btnPrevious.setOnClickListener {
             setPreviousMonth(adminCalendarView, calendarViewModel)
             val monthString: String = convertIntToTwoDigitString(cMonth!!.monthValue)
 
-            val mreg = calendarViewModel.getAllRegistriesByMonthAndYear(monthString,
-                cMonth!!.year.toString())
+            //val mreg = calendarViewModel.getAllRegistriesByMonthAndYear(monthString,
+            //    cMonth!!.year.toString())
+
+            val mreg = calendarViewModel.getAllRegistriesByEmployeeAndMonthAndYear(
+                sharedViewModel.employee.value!!.first().id,
+                monthString,cMonth!!.year.toString())
         }
 
         this.btnGoBackFromCalendar.setOnClickListener {
