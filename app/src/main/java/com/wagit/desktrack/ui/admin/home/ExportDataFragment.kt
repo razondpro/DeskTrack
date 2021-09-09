@@ -22,15 +22,25 @@ import android.os.Build
 import android.os.Environment
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.itextpdf.text.BaseColor
-import com.itextpdf.text.Document
-import com.itextpdf.text.Paragraph
-import com.itextpdf.text.pdf.PdfWriter
+import com.itextpdf.kernel.geom.PageSize
+import com.itextpdf.kernel.pdf.PdfDocument
+import com.itextpdf.kernel.pdf.PdfWriter
+import com.itextpdf.layout.element.Table
+import com.itextpdf.layout.property.TextAlignment
+//import com.itextpdf.text.BaseColor
+//import com.itextpdf.text.Document
+//import com.itextpdf.text.Paragraph
+//import com.itextpdf.text.pdf.PdfWriter
+import com.itextpdf.layout.Document
+import com.itextpdf.layout.element.Cell
+import com.itextpdf.layout.element.Paragraph
+import com.itextpdf.layout.property.UnitValue
+
 import java.io.FileOutputStream
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import com.itextpdf.text.FontFactory
+//import com.itextpdf.text.FontFactory
 import java.util.*
 
 class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragment_export_data){
@@ -233,8 +243,10 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
                                            fragmentExportDataBinding:
                                            FragmentExportDataBinding){
         // Creating adapter for spinner
-        val adapter = ArrayAdapter<String>(spin.context,
-            R.layout.support_simple_spinner_dropdown_item,spinnerCompanies,)
+        val adapter = ArrayAdapter<String>(
+            spin.context,
+            R.layout.support_simple_spinner_dropdown_item, spinnerCompanies,
+        )
         spin.adapter = adapter
 
         //Setting the item selected listener
@@ -318,8 +330,10 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
                                            fragmentExportDataBinding:
                                            FragmentExportDataBinding){
         // Creating adapter for spinner
-        val adapter = ArrayAdapter<String>(spin.context,
-            R.layout.support_simple_spinner_dropdown_item,spinnerEmployees,)
+        val adapter = ArrayAdapter<String>(
+            spin.context,
+            R.layout.support_simple_spinner_dropdown_item, spinnerEmployees,
+        )
         spin.adapter = adapter
 
         //Setting the item selected listener
@@ -388,8 +402,10 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
                                           fragmentExportDataBinding:
                                           FragmentExportDataBinding){
         // Creating adapter for spinner
-        val adapter = ArrayAdapter<String>(spin.context,
-            R.layout.support_simple_spinner_dropdown_item,spinnerMonths,)
+        val adapter = ArrayAdapter<String>(
+            spin.context,
+            R.layout.support_simple_spinner_dropdown_item, spinnerMonths,
+        )
         spin.adapter = adapter
 
         //Setting the item selected listener
@@ -430,7 +446,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
             var registriesAux = listOf<Registry>()
             var month = spinnerMonthsInNumber.get(monthPosition)
             println("Month: $month ------------------------------------------------------------")
-            if (shareViewModel.getRegistriesByEmployeeAndMonth(complPosition.toLong(),
+            if (shareViewModel.getRegistriesByEmployeeAndMonth(emplPosition.toLong(),
                 month) != null){
                 if (shareViewModel.monthRegistry.value != null)
                     registriesAux = shareViewModel.monthRegistry.value!!
@@ -501,19 +517,21 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
 
     private fun savePdf(fragmentExportDataBinding: FragmentExportDataBinding) {
         //create object of Document class
-        val mDoc = Document()
+
         //pdf file name
         val mFileName = SimpleDateFormat("yyyyMMdd_HHmmss",
             Locale.getDefault()).format(System.currentTimeMillis())
         //pdf file path
         val mFilePath = this.context?.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).
         toString() + "/" + mFileName +".pdf"
+        val pdfDocument = PdfDocument(PdfWriter("$mFilePath"))
+        val mDoc = Document(pdfDocument)
         try {
             //create instance of PdfWriter class
-            PdfWriter.getInstance(mDoc, FileOutputStream(mFilePath))
+            //PdfWriter.getInstance(mDoc, FileOutputStream(mFilePath))
 
             //open the document for writing
-            mDoc.open()
+            //mDoc.open()
 
             //get text from company list
             setCompaniesDataOnPDF(mDoc)
@@ -525,7 +543,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
             setRegistriesDataOnPDF(mDoc)
 
             //add author of the document (metadata)
-            mDoc.addAuthor("Admin")
+            //mDoc.addAuthor("Admin")
 
             //close document
             mDoc.close()
@@ -548,15 +566,15 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
     }
 
     private fun setCompaniesDataOnPDF(mDoc: Document){
-        val font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14f, BaseColor.BLACK);
+        //val font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14f, BaseColor.BLACK);
         val mCompTitletext = "Workers' day registration"
-        mDoc.add(Paragraph(mCompTitletext,font))
+        mDoc.add(Paragraph(mCompTitletext).setBold())
         mDoc.add(Paragraph(" "))
 
         if (company.isNotEmpty()){
             company.forEach {
                 val mCompanyNameText = "Business name: ${it.name}"
-                mDoc.add(Paragraph(mCompanyNameText))
+                mDoc.add(Paragraph(mCompanyNameText).setUnderline())
                 val mCompanyText = "CIF: ${it.nif}                                " +
                         "CCC: ${it.ccc}"
                 mDoc.add(Paragraph(mCompanyText))
@@ -567,7 +585,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
 
     private fun setEmployeesDataOnPDF(mDoc: Document){
         val mEmpTitletext = "Worker data"
-        mDoc.add(Paragraph(mEmpTitletext))
+        mDoc.add(Paragraph(mEmpTitletext).setUnderline())
 
         if (employee.isNotEmpty()){
             employee.forEach {
@@ -587,28 +605,45 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
 
         var mRegTitleText = "Date: ${LocalDateTime.now()}"
         mDoc.add(Paragraph(mRegTitleText))
+        mDoc.add(Paragraph(" "))
 
         if (registries.isNotEmpty()){
-            mRegTitleText = "Month:                      Entry time:                 " +
-                    "Departure time:          "
-            mDoc.add(Paragraph(mRegTitleText))
+            // Creating a table
+            val table = Table(UnitValue.createPercentArray(4)).useAllAvailableWidth()
+
+            table.addHeaderCell(Cell().add(
+                Paragraph("Month").setTextAlignment(TextAlignment.CENTER)))
+
+            table.addHeaderCell(Cell().add(
+                Paragraph("Entry time").setTextAlignment(TextAlignment.CENTER)))
+
+            table.addHeaderCell(Cell().add(
+                Paragraph("Departure time").setTextAlignment(TextAlignment.CENTER)))
+
+            table.addHeaderCell(Cell().add(
+                Paragraph("Year").setTextAlignment(TextAlignment.CENTER)))
+
             registries.forEach {
-                /*
-                var mText = "REGISTRY STARTED AT: ${it.startedAt}, " +
-                        "ENDED AT: ${it.endedAt} AND EMPLOYEE ID: ${it.employeeId}"
+                println("REG: ${it.startedAt.month}")
+                var entryTime =
+                    "${it.startedAt.hour}:${it.startedAt.minute}:${it.startedAt.second}"
+                var departureTime =
+                    "${it.endedAt?.hour}:${it.endedAt?.minute}:${it.endedAt?.second}"
 
-                 */
-                var mText = "${it.startedAt.month}               ${it.startedAt.hour}:" +
-                        "${it.startedAt.minute}:${it.startedAt.second}                    " +
-                        "     " +
-                        "${it.endedAt?.hour}:" + "${it.endedAt?.minute}:${it.endedAt?.second}"
+                table.addCell(Cell().add(Paragraph(it.startedAt.month.toString()).
+                setTextAlignment(TextAlignment.CENTER)))
 
-                //add paragraph to the document
-                mDoc.add(Paragraph(mText))
+                table.addCell(Cell().add(Paragraph(entryTime).
+                setTextAlignment(TextAlignment.CENTER)))
 
-                mDoc.add(Paragraph(" "))
-                mDoc.add(Paragraph(" "))
+                table.addCell(Cell().add(Paragraph(departureTime).
+                setTextAlignment(TextAlignment.CENTER)))
+
+                table.addCell(Cell().add(Paragraph(it.startedAt.year.toString()).
+                setTextAlignment(TextAlignment.CENTER)))
             }
+
+            mDoc.add(table)
         }else{
             var mText = ""
             if (monthPosition != -1){
