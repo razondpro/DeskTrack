@@ -2,6 +2,7 @@ package com.wagit.desktrack.ui.user.calendar.view
 
 import android.view.View
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.kizitonwose.calendarview.CalendarView
@@ -15,6 +16,7 @@ import java.util.*
 import com.wagit.desktrack.ui.calendar.Calendar
 import com.wagit.desktrack.ui.user.home.viewmodel.CalendarViewModel
 import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
+import com.wagit.desktrack.ui.admin.viewmodel.SharedViewModel
 import androidx.lifecycle.Observer
 import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.previous
@@ -23,6 +25,8 @@ import com.wagit.desktrack.data.entities.Registry
 @AndroidEntryPoint
 class CalendarFragment : BaseFragment<FragmentCalendarBinding>(R.layout.fragment_calendar){
     private val sharedViewModel: SharedHomeViewModel by activityViewModels()
+    private val shareAdminViewModel: SharedViewModel by activityViewModels()
+
     private val calendarViewModel: CalendarViewModel by viewModels()
     private var cMonth: YearMonth? = null
 
@@ -119,8 +123,10 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(R.layout.fragment
             aux=calendarViewModel.monthRegistry.value!!
             println("ENTRA ${calendarViewModel.monthRegistry.value!!}")
         }
+        val fragmentManager = (activity as FragmentActivity).supportFragmentManager
 
-        calendar.dayBinder(calendarView,aux,textViewDayRegistry,sharedViewModel)
+        calendar.dayBinder(calendarView,aux,textViewDayRegistry,sharedViewModel,
+            shareAdminViewModel,fragmentManager)
         calendar.monthHeaderBinder(calendarView)
 
     }

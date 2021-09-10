@@ -1,26 +1,33 @@
 package com.wagit.desktrack.ui.calendar
 
+import android.app.AlertDialog
 import android.icu.util.Calendar.HOUR_OF_DAY
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.CalendarView
 import com.wagit.desktrack.R
 import com.wagit.desktrack.data.entities.Registry
+import com.wagit.desktrack.ui.admin.calendar.view.CalendarFragment
 import com.wagit.desktrack.ui.helpers.TimePickerHelper
 import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
+import com.wagit.desktrack.ui.admin.viewmodel.SharedViewModel
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.Calendar.HOUR_OF_DAY
 import java.util.Calendar.MINUTE
 
 //Provided a DayBinder for the CalendarView using our DayViewContainer type.
 class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Registry>,
-                       sharedHomeViewModel: SharedHomeViewModel,
-                       textViewDayRegistry: TextView) : ViewContainer(view) {
+                       sharedHomeViewModel: SharedHomeViewModel,sharedViewModel: SharedViewModel,
+                       textViewDayRegistry: TextView,
+                       fragmentManager: FragmentManager) : ViewContainer(view) {
 
     lateinit var timePicker: TimePickerHelper
 
@@ -45,11 +52,15 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
                 // in case we overwrite it and need to reload it.
                 setSelectedDay(calendarView)
                 if (sharedHomeViewModel.employee.value != null){
-                    println("USER IS ADMIN?: ${sharedHomeViewModel.employee.value!!.isAdmin} +++++++++++++++++++++++++++++++++++++++++++++++++++¡¡¡¡¡¡¡¡¡¡")
+                    println("USER IS ADMIN?: ${sharedHomeViewModel.employee.value!!.isAdmin} " +
+                            "+++++++++++++++++++++++++++++++++++++++++++++++++++¡¡¡¡¡¡¡¡¡¡")
                     setSelectedDayReg(mreg)
                 }else{
                     //User is admin
-                    setAdminSelectedDayReg(mreg)
+                    if (sharedViewModel.user.value != null &&
+                        sharedViewModel.user.value!!.isAdmin == true){
+                        setAdminSelectedDayReg(mreg,sharedViewModel,fragmentManager)
+                    }
                 }
 
                 println("${textViewRegistry.text} ªªªªªªªªªªªªªªªªªªªªªªªªªªªªªªªªªª")
@@ -98,7 +109,8 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
         }
     }
 
-    private fun setAdminSelectedDayReg(mreg: List<Registry>){
+    private fun setAdminSelectedDayReg(mreg: List<Registry>, sharedViewModel: SharedViewModel,
+                                       fragmentManager: FragmentManager){
         if (mreg.isNotEmpty()){
             var containsSelectedDay = false
             mreg.forEach {
@@ -111,7 +123,9 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
                             "and finished working at ${it.endedAt!!.hour.toString()}:" +
                             "${it.endedAt!!.minute.toString()}:${it.endedAt!!.second.toString()}"
                     containsSelectedDay = true
-                    showTimePickerDialog()
+                    onRegistryEditDialogAlert(it.employeeId,it.id, it, sharedViewModel,
+                        fragmentManager)
+                    //showTimePickerDialog()
                 }
             }
             if (containsSelectedDay == false){
@@ -127,7 +141,10 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
         }
     }
 
-    private fun showTimePickerDialog() {
+    private fun showTimePickerDialog(emplId: Long, regId: Long, startingTime: Boolean,
+                                                                            registry: Registry,
+                                     sharedViewModel: SharedViewModel,
+                                     fragmentManager: FragmentManager) {
         val cal: java.util.Calendar = java.util.Calendar.getInstance()
         val h = cal.get(java.util.Calendar.HOUR)
         val m = cal.get(java.util.Calendar.MINUTE)
@@ -137,9 +154,92 @@ class DayViewContainer(view: View, calendarView: CalendarView, mreg: List<Regist
                 val hourStr = if (hourOfDay < 10) "0${hourOfDay}" else "${hourOfDay}"
                 val minuteStr = if (minute < 10) "0${minute}" else "${minute}"
                 val text = "${hourOfDay}:${minuteStr}"
-                println("TEXTO: $text ´´´´´´´´´´´´´´´´´´´´´´´´´´´")
+                if (startingTime){
+                    println("Time selected: $text ´´´´´´´´´´´´´´´´´´´´´´´´´´´" +
+                            " emplId: $emplId, regId: $regId and startingTime: " +
+                            "$startingTime")
+                    if (registry.endedAt != null && registry.startedAt != null){
+                        val checkInDateTime = LocalDateTime.of(registry.startedAt.year,
+                            registry.startedAt.month, registry.startedAt.dayOfMonth,
+                            hourOfDay, minute,0, 0)
+
+                        val reg= Registry(id = regId, employeeId = emplId,
+                            startedAt = checkInDateTime, endedAt = registry.endedAt)
+
+                        sharedViewModel.updateRegistry(reg)
+                        goBack(fragmentManager)
+                    }
+
+                }else{
+                    println("Time selected: $text ´´´´´´´´´´´´´´´´´´´´´´´´´´´" +
+                            " emplId: $emplId, regId: $regId and startingTime: " +
+                            "$startingTime")
+                    if (registry.endedAt != null && registry.startedAt != null){
+                        val checkOutDateTime = LocalDateTime.of(registry.endedAt!!.year,
+                            registry.endedAt!!.month, registry.endedAt!!.dayOfMonth,
+                            hourOfDay, minute,0, 0)
+
+                        val reg= Registry(id = regId, employeeId = emplId,
+                            startedAt = registry.startedAt, endedAt = checkOutDateTime)
+
+                        sharedViewModel.updateRegistry(reg)
+                        goBack(fragmentManager)
+                    }
+                }
+
            }
         })
+    }
+
+    private fun onRegistryEditDialogAlert(emplId: Long, regId: Long, registry: Registry,
+                                          sharedViewModel: SharedViewModel,
+                                          fragmentManager: FragmentManager){
+        //Instantiate builder variable
+        val builder = AlertDialog.Builder(view.context)
+
+        // set title
+        builder.setTitle("Edit Registry")
+
+        //set content area
+        builder.setMessage("Do you want to edit the selected registry?")
+
+        var startingTime = false
+        //set positive button
+        builder.setPositiveButton(
+            "Edit the starting time") { dialog, id ->
+            // User clicked Update Now button
+            Toast.makeText(view.context, "Editing the starting time",
+                Toast.LENGTH_SHORT).show()
+            startingTime = true
+            showTimePickerDialog(emplId, regId, startingTime, registry, sharedViewModel,
+                fragmentManager)
+        }
+
+        //set negative button
+
+        builder.setNegativeButton(
+            "Edit the departing time") { dialog, id ->
+            // User cancelled the dialog
+            Toast.makeText(view.context, "Editing the departing time",
+                Toast.LENGTH_SHORT).show()
+            startingTime = false
+            showTimePickerDialog(emplId, regId, startingTime, registry, sharedViewModel,
+                fragmentManager)
+        }
+
+        //set neutral button
+
+        builder.setNeutralButton("Reminder me later") {dialog, id->
+            // User Click on reminder me latter
+        }
+
+        builder.show()
+
+    }
+
+    private fun goBack(fragmentManager: FragmentManager){
+        fragmentManager.popBackStackImmediate()
+        fragmentManager.popBackStackImmediate()
     }
 }
 

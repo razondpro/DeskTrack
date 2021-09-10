@@ -96,6 +96,7 @@ class CalendarFragment :
     private fun goBack(){
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
         fragmentManager.popBackStackImmediate()
+        fragmentManager.popBackStackImmediate()
         println("LLEGA AL GOBACK() DEL Calendar !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     }
 
@@ -145,8 +146,9 @@ class CalendarFragment :
             aux=calendarViewModel.allMonthRegistry.value!!
             println("ENTRA ${calendarViewModel.allMonthRegistry.value!!}")
         }
-
-        calendar.dayBinder(calendarView,aux,textViewDayRegistry,sharedHomeViewModel)
+        val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+        calendar.dayBinder(calendarView,aux,textViewDayRegistry,sharedHomeViewModel,
+            sharedViewModel,fragmentManager)
         calendar.monthHeaderBinder(calendarView)
 
     }

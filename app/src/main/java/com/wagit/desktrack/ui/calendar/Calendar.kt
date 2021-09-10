@@ -9,21 +9,24 @@ import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.wagit.desktrack.data.entities.Registry
+import androidx.fragment.app.FragmentManager
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.*
 import com.wagit.desktrack.ui.user.viewmodel.SharedHomeViewModel
+import com.wagit.desktrack.ui.admin.viewmodel.SharedViewModel
 
 class Calendar () {
     //En esta variable nos guardamos el día actual para los botones de detras y delante
     public var dayViewContainer: DayViewContainer?=null
     fun dayBinder(calendarView: CalendarView, mreg: List<Registry>,
-                  textViewDayRegistry: TextView, sharedHomeViewModel: SharedHomeViewModel){
+                  textViewDayRegistry: TextView, sharedHomeViewModel: SharedHomeViewModel,
+                  sharedViewModel: SharedViewModel, fragmentManager: FragmentManager){
         val selectedDate: LocalDate? = null
         calendarView.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view, calendarView,
-                mreg,sharedHomeViewModel,textViewDayRegistry)
+                mreg,sharedHomeViewModel,sharedViewModel,textViewDayRegistry,fragmentManager)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 dayViewContainer=container
                 container.day = day
