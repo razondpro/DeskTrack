@@ -23,6 +23,7 @@ class CalendarMenuFragment:
         println("Welcome to Calendar's Menu")
         val selectEmployeeCalendar = SelectEmployeeCalendar()
         val addRegistryFragment = AddRegistryFragment()
+        val deleteRegistryFragment = DeleteRegistryFragment()
 
         btnCalendarFragment.setOnClickListener {
             val fragmentManager = (activity as FragmentActivity).supportFragmentManager
@@ -38,6 +39,15 @@ class CalendarMenuFragment:
             fragmentManager.beginTransaction().apply {
                 replace(R.id.fragmentAdminContainerView,addRegistryFragment)
                 addToBackStack("addRegistryFragment")
+                commit()
+            }
+        }
+
+        btnDeleteRegistryFragment.setOnClickListener {
+            val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+            fragmentManager.beginTransaction().apply {
+                replace(R.id.fragmentAdminContainerView,deleteRegistryFragment)
+                addToBackStack("deleteRegistryFragment")
                 commit()
             }
         }

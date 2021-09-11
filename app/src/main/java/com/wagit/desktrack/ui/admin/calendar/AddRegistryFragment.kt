@@ -1,6 +1,5 @@
 package com.wagit.desktrack.ui.admin.calendar
 
-import android.util.Log
 import android.view.View
 import com.wagit.desktrack.R
 import com.wagit.desktrack.databinding.FragmentAddRegistryBinding
@@ -10,28 +9,21 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.os.Bundle
 import android.text.format.DateFormat
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.TimePicker
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.wagit.desktrack.data.entities.Company
 import com.wagit.desktrack.data.entities.Employee
 import com.wagit.desktrack.data.entities.Registry
-import com.wagit.desktrack.databinding.FragmentExportDataBinding
-import com.wagit.desktrack.ui.admin.calendar.viewmodel.CalendarViewModel
 import java.time.LocalDateTime
-import java.time.Month
 import java.util.*
 
 class AddRegistryFragment:
