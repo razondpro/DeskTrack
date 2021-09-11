@@ -39,6 +39,13 @@ class SharedViewModel  @Inject constructor(
     private val _monthRegistry: MutableLiveData<List<Registry>> = MutableLiveData()
     val monthRegistry: LiveData<List<Registry>> get() = _monthRegistry
 
+    private val _registry: MutableLiveData<List<Registry>> = MutableLiveData()
+    val registry: LiveData<List<Registry>> get() = _registry
+
+    private val _deleteRegistry: MutableLiveData<List<Registry>> = MutableLiveData()
+    val deleteRegistry: LiveData<List<Registry>> get() = _deleteRegistry
+
+
     fun getAllEmployees(): LiveData<List<Employee>> {
         viewModelScope.launch(Dispatchers.IO) {
             _employees.postValue(employeeRepository.getAllEmployees())
@@ -141,15 +148,74 @@ class SharedViewModel  @Inject constructor(
 
     }
 
-    fun getRegistriesByEmployeeAndMonth(empId: Long, month: String): LiveData<List<Registry>>{
+    fun getAllRegistriesByEmployeeAndMonthAndYear(empId: Long, month: String,
+                                                  year: String): LiveData<List<Registry>>{
         Log.d("AdminHomeViewModel",
-            "Llega al viewmodel para getRegistriesByEmployeeAndMonth")
+            "Llega al viewmodel para getAllRegistriesByEmployeeAndMonthAndYear")
         viewModelScope.launch(Dispatchers.IO) {
             _monthRegistry.postValue(
-                registryRepository.getRegistriesByEmployeeAndMonth(empId,month))
+                registryRepository.getAllRegistriesByEmployeeAndMonthAndYear(empId,month,year))
         }
-        println("Llega al SHVM del getRegistriesByEmployeeAndMonth con ${monthRegistry.value}")
+        println("Llega al SHVM del getAllRegistriesByEmployeeAndMonthAndYear con " +
+                "${monthRegistry.value}")
         return monthRegistry
+    }
+
+    fun getRegByIdAndEmployee(regId: Long, empId: Long): LiveData<List<Registry>>{
+        Log.d("AdminHomeViewModel",
+            "Llega al viewmodel para getRegByIdAndEmployee")
+        viewModelScope.launch(Dispatchers.IO) {
+            _deleteRegistry.postValue(
+                registryRepository.getRegByIdAndEmployee(regId,empId))
+        }
+        println("Llega al SHVM del getRegByIdAndEmployee con ${deleteRegistry.value}")
+        return deleteRegistry
+    }
+
+    fun getRegistryByEmployeeAndMonthAndYearAndHourAndMinute(empId: Long,
+                                                             month: String,
+                                                             year: String,
+                                                             hour: String,
+                                                             minute: String):
+            LiveData<List<Registry>>{
+        Log.d("AdminHomeViewModel",
+            "Llega al viewmodel para getRegistryByEmployeeAndMonthAndYearAndHourAndMinute")
+        viewModelScope.launch(Dispatchers.IO) {
+            _monthRegistry.postValue(
+                registryRepository.getRegistryByEmployeeAndMonthAndYearAndHourAndMinute(
+                    empId,month,year,hour,minute))
+        }
+        println("Llega al SHVM del getRegistryByEmployeeAndMonthAndYearAndHourAndMinute" +
+                " con ${monthRegistry.value}")
+        return monthRegistry
+    }
+
+    /**
+     * Creates a registry in db
+     */
+    fun insertRegistry(registry: Registry) {
+        viewModelScope.launch(Dispatchers.IO) {
+            registryRepository.insert(registry)
+            _registry.postValue(registryRepository.
+            getAllRegistriesByEmployeeAndMonthAndYear(registry.employeeId,
+                registry.startedAt.monthValue.toString(),registry.startedAt.year.toString()))
+        }
+    }
+    /**
+     * Updates a registry in db
+     */
+    fun updateRegistry(registry: Registry) {
+        viewModelScope.launch(Dispatchers.IO) {
+            registryRepository.update(registry)
+            _registry.postValue(registryRepository.getRegByIdAndEmployee(registry.id,
+                registry.employeeId))
+        }
+    }
+
+    fun deleteRegistry(registry: Registry){
+        viewModelScope.launch(Dispatchers.IO) {
+            registryRepository.delete(registry)
+        }
     }
 
 }

@@ -11,14 +11,14 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/exportData"
+        android:id="@+id/loadEmployeeCalendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/cardview_grey_color"
         tools:context=".ui.admin.home.ExportDataFragment">
 
         <Spinner
-            android:id="@+id/spinCompanyExp"
+            android:id="@+id/spinCompanyCal"
             android:layout_width="208dp"
             android:layout_height="57dp"
             android:textColor="@android:color/black"
@@ -64,7 +64,7 @@
             app:layout_constraintVertical_bias="0.399" />
 
         <Spinner
-            android:id="@+id/spinEmployeeExp"
+            android:id="@+id/spinEmployeeCal"
             android:layout_width="202dp"
             android:layout_height="59dp"
             android:textColor="@android:color/black"
@@ -78,11 +78,11 @@
             app:layout_constraintVertical_bias="0.38" />
 
         <Button
-            android:id="@+id/btnExport"
+            android:id="@+id/btnLoadCalendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_export"
-            android:text="Export"
+            android:drawableLeft="@drawable/ic_calendar"
+            android:text="Load calendar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.529"
@@ -91,7 +91,7 @@
             app:layout_constraintVertical_bias="0.879" />
 
         <Button
-            android:id="@+id/btnGoBackHome"
+            android:id="@+id/btnGoBackHomeFromSelEmplCal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_back"
@@ -102,28 +102,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.023" />
-
-        <Button
-            android:id="@+id/btnSelectMonthAndYear"
-            android:layout_width="289dp"
-            android:layout_height="72dp"
-            android:text="Select Month And Year"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.597" />
-
-        <TextView
-            android:id="@+id/tvSelectedMonthYear"
-            android:layout_width="330dp"
-            android:layout_height="74dp"
-            android:text=""
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.493"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.748" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

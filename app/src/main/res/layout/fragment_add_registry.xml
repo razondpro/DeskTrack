@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
         <variable
             name="sharedVM"
@@ -10,14 +9,42 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/addEditCompany"
+        android:id="@+id/addRegistry"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/cardview_grey_color"
-        tools:context=".ui.admin.home.AddEditCompanyFragment">
+        tools:context=".ui.admin.calendar.AddRegistryFragment">
 
         <Spinner
-            android:id="@+id/spinnerCompany"
+            android:id="@+id/spinCompanyToRegister"
+            android:layout_width="208dp"
+            android:layout_height="57dp"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.886"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.145" />
+
+        <TextView
+            android:id="@+id/textView08004"
+            android:layout_width="164dp"
+            android:layout_height="40dp"
+            android:text="Select Company"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.166" />
+
+        <Spinner
+            android:id="@+id/spinEmployeeToRegister"
             android:layout_width="208dp"
             android:layout_height="57dp"
             android:textColor="@android:color/black"
@@ -28,142 +55,88 @@
             app:layout_constraintHorizontal_bias="0.921"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.161" />
+            app:layout_constraintVertical_bias="0.246" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/textView9999"
             android:layout_width="164dp"
             android:layout_height="40dp"
-            android:text="Select Company"
+            android:text="Select Employee"
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.06"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.182" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="66dp"
-            android:layout_height="40dp"
-            android:text="NIF:"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.13"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.325" />
-
-        <EditText
-            android:id="@+id/tvCompanyNIF"
-            android:layout_width="262dp"
-            android:layout_height="54dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.892"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.311" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="95dp"
-            android:layout_height="40dp"
-            android:text="Name:"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.499" />
-
-        <EditText
-            android:id="@+id/tvCompanyName"
-            android:layout_width="262dp"
-            android:layout_height="54dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.892"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.487" />
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="95dp"
-            android:layout_height="40dp"
-            android:text="CCC:"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.672" />
-
-        <EditText
-            android:id="@+id/tvCompanyCCC"
-            android:layout_width="262dp"
-            android:layout_height="54dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.892"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.666" />
+            app:layout_constraintVertical_bias="0.264" />
 
         <Button
-            android:id="@+id/btnDeleteCompany"
+            android:id="@+id/btnPickInTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_delete"
-            android:text="Delete"
+            android:layout_centerInParent="true"
+            android:drawableLeft="@drawable/ic_dateselector"
+            android:text="Pick Date and Time For Check In"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.151"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.976" />
+            app:layout_constraintVertical_bias="0.379" />
 
         <Button
-            android:id="@+id/btnSaveCompany"
+            android:id="@+id/btnPickOutTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_save"
-            android:text="Save"
+            android:layout_centerInParent="true"
+            android:drawableLeft="@drawable/ic_dateselector"
+            android:text="Pick Date and Time For Check Out"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.885"
+            app:layout_constraintHorizontal_bias="0.565"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.976" />
+            app:layout_constraintVertical_bias="0.677" />
+
+        <TextView
+            android:id="@+id/tvSelectedInTime"
+            android:layout_width="355dp"
+            android:layout_height="96dp"
+            android:layout_below="@id/btnPickInTime"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.508" />
+
+        <TextView
+            android:id="@+id/tvSelectedOutTime"
+            android:layout_width="347dp"
+            android:layout_height="93dp"
+            android:layout_below="@id/btnPickOutTime"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.533"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.838" />
 
         <Button
-            android:id="@+id/btnGoBackFromCompany"
+            android:id="@+id/btnGoBackFromAddReg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_back"
@@ -175,5 +148,20 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.023" />
 
+        <Button
+            android:id="@+id/btnAddRegistry"
+            android:layout_width="195dp"
+            android:layout_height="59dp"
+            android:drawableLeft="@drawable/ic_save"
+            android:text="Add Registry"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.976" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 </layout>
