@@ -161,6 +161,19 @@ class SharedViewModel  @Inject constructor(
         return monthRegistry
     }
 
+    fun getRegByEmployeeMonthYearAndDay(empId: Long,year: String,month: String,
+                                        day: String): LiveData<List<Registry>>{
+        Log.d("AdminHomeViewModel",
+            "Llega al viewmodel para getRegByEmployeeMonthYearAndDay")
+        viewModelScope.launch(Dispatchers.IO) {
+            _registry.postValue(
+                registryRepository.getRegByEmployeeMonthYearAndDay(empId,year, month, day))
+        }
+        println("Llega al SHVM del getRegByEmployeeMonthYearAndDay con " +
+                "${registry.value}")
+        return registry
+    }
+
     fun getRegByIdAndEmployee(regId: Long, empId: Long): LiveData<List<Registry>>{
         Log.d("AdminHomeViewModel",
             "Llega al viewmodel para getRegByIdAndEmployee")
