@@ -113,7 +113,12 @@ class SharedViewModel  @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _companies.postValue(companyRepository.getAllCompanies())
         }
-        Log.d("AdminHomeViewModel","Esto es el company ${companies.value?.first()?.name}")
+        if(!companies.value.isNullOrEmpty()){
+            if(companies.value != null && companies.value!!.first() != null){
+                Log.d("AdminHomeViewModel","Esto es el " +
+                    "company ${companies.value?.first()?.name}")
+            }
+        }
         return companies
     }
 
@@ -122,7 +127,12 @@ class SharedViewModel  @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _company.postValue(companyRepository.getCompany(companyId))
         }
-        Log.d("AdminHomeViewModel","Esto es el company ${company.value?.first()?.name}")
+        if (!company.value.isNullOrEmpty()){
+            if (company.value != null && company.value!!.first() != null){
+                Log.d("AdminHomeViewModel","Esto es el " +
+                    "company ${company.value?.first()?.name}")
+            }
+        }
         return company
     }
 
