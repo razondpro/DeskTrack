@@ -25,8 +25,10 @@ import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.wagit.desktrack.data.entities.Company
 import com.wagit.desktrack.data.entities.Employee
 import com.wagit.desktrack.data.entities.Registry
+import com.wagit.desktrack.databinding.FragmentExportDataBinding
 import com.wagit.desktrack.ui.admin.calendar.viewmodel.CalendarViewModel
 import java.time.LocalDateTime
 import java.time.Month
@@ -44,15 +46,22 @@ class AddRegistryFragment:
     var year: Int = 0
     var hour: Int = 0
     var minute: Int = 0
+
     var myDay = 0
     var myMonth: Int = 0
     var myYear: Int = 0
     var myHour: Int = 0
     var myMinute: Int = 0
     var selectedTime = -1
+
+    var spinnerCompanies = mutableListOf<String>("")
+    var spinnerComplId = mutableListOf<Int>()
+    var complPosition = -1
+
     var spinnerEmployees = mutableListOf<String>("")
     var spinnerEmplId = mutableListOf<Int>()
     var emplPosition = -1
+
     var dayCheckIn: Int = -1
     var monthCheckIn: Int = -1
     var yearCheckIn: Int = -1
@@ -65,6 +74,9 @@ class AddRegistryFragment:
     var hourCheckOut: Int = -1
     var minuteCheckOut: Int = -1
 
+    var employee = listOf<Employee>()
+    var company = listOf<Company>()
+
     private val shareViewModel: SharedViewModel by activityViewModels()
 
     override fun FragmentAddRegistryBinding.initialize(){
@@ -75,7 +87,22 @@ class AddRegistryFragment:
         }
 
         var spin = this.spinEmployeeToRegister
+        var spinCompany = this.spinCompanyToRegister
+
         updateSnipperEmployee(spin,this)
+
+        shareViewModel.companies.observe(viewLifecycleOwner, Observer {
+            updateSnipperCompany(spinCompany,this)
+        })
+
+        shareViewModel.company.observe(viewLifecycleOwner, Observer {
+            getCompanysEmployees(this)
+            updateCompanyData()
+        })
+
+        shareViewModel.employee.observe(viewLifecycleOwner, Observer {
+            updateEmployeeData()
+        })
 
         shareViewModel.employees.observe(viewLifecycleOwner, Observer {
             updateSnipperEmployee(spin,this)
@@ -117,13 +144,110 @@ class AddRegistryFragment:
             validateInputData(it.context)
         }
 
-        var employees = shareViewModel.getAllEmployees().value
+        var companies = shareViewModel.getAllCompanies().value
     }
 
     private fun goBack(){
         val fragmentManager = (activity as FragmentActivity).supportFragmentManager
         fragmentManager.popBackStackImmediate()
         println("LLEGA AL GOBACK() DEL COMPANY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    }
+
+    private fun updateSnipperCompany(spin: Spinner, fragmentAddRegistryBinding:
+    FragmentAddRegistryBinding){
+        var companiesAux = listOf<Company>()
+        if (shareViewModel.companies.value != null){
+            companiesAux = shareViewModel.companies.value!!
+
+            println("Entra en updateSnipperCompany con ${shareViewModel.companies.value!!}")
+        }
+        setSnipperCompanies(companiesAux, spin,fragmentAddRegistryBinding)
+    }
+
+    private fun setSnipperCompanies(companies: List<Company>, spin: Spinner,
+                                    fragmentAddRegistryBinding: FragmentAddRegistryBinding){
+
+        spinnerCompanies = mutableListOf<String>("")
+        spinnerComplId = mutableListOf<Int>()
+
+        // Spinner Drop down elements
+        companies?.forEach {
+            spinnerCompanies.add(it.name)
+            spinnerComplId.add(it.id.toInt())
+        }
+        setCompSnipperItemSelector(spin,fragmentAddRegistryBinding)
+    }
+
+    private fun setCompSnipperItemSelector(spin: Spinner, fragmentAddRegistryBinding:
+    FragmentAddRegistryBinding){
+        // Creating adapter for spinner
+        val adapter = ArrayAdapter<String>(
+            spin.context,
+            R.layout.support_simple_spinner_dropdown_item, spinnerCompanies,
+        )
+        spin.adapter = adapter
+
+        //Setting the item selected listener
+        spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                Toast.makeText(
+                    spin?.context,
+                    "Selected Company: " + spinnerCompanies.get(position),
+                    Toast.LENGTH_SHORT
+                ).show()
+                if (position != 0){
+                    //Set the employees data
+                    complPosition = spinnerComplId.get(position-1)
+                    println("Selected Company's Id is: " + spinnerComplId.get(position-1))
+                    var companyAux = listOf<Company>()
+                    if (shareViewModel.getCompany(complPosition.toLong()).value != null){
+                        companyAux = shareViewModel.company.value!!
+                        println("Company: $companyAux ------------------------------------------")
+                    }
+                } else{
+                    complPosition = -1
+                    var employeesAux = listOf<Employee>()
+                    setSnipperEmployees(employeesAux,
+                        fragmentAddRegistryBinding.spinEmployeeToRegister,
+                        fragmentAddRegistryBinding)
+                }
+            }
+
+            override fun onNothingSelected(arg0: AdapterView<*>?) {
+                // TODO - Custom Code
+            }
+        }
+
+    }
+
+    private fun getCompanysEmployees(fragmentAddRegistryBinding: FragmentAddRegistryBinding){
+        var employeesAux = listOf<Employee>()
+        if (complPosition != -1){
+            if (shareViewModel.getEmployeesByComp(complPosition.toLong()).value != null){
+                employeesAux = shareViewModel.employees.value!!
+                println("getCompanysEmployees ------------------------ " +
+                        "${employeesAux.first().firstName}")
+            }
+        }
+    }
+
+    private fun updateEmployeeData(){
+        employee = listOf<Employee>()
+        if (shareViewModel.employee.value != null){
+            employee = shareViewModel.employee.value!!
+        }
+    }
+
+    private fun updateCompanyData(){
+        company = listOf<Company>()
+        if (shareViewModel.company.value != null){
+            company = shareViewModel.company.value!!
+        }
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {

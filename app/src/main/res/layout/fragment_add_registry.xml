@@ -16,6 +16,34 @@
         tools:context=".ui.admin.calendar.AddRegistryFragment">
 
         <Spinner
+            android:id="@+id/spinCompanyToRegister"
+            android:layout_width="208dp"
+            android:layout_height="57dp"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.886"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.145" />
+
+        <TextView
+            android:id="@+id/textView08004"
+            android:layout_width="164dp"
+            android:layout_height="40dp"
+            android:text="Select Company"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.166" />
+
+        <Spinner
             android:id="@+id/spinEmployeeToRegister"
             android:layout_width="208dp"
             android:layout_height="57dp"
@@ -27,7 +55,7 @@
             app:layout_constraintHorizontal_bias="0.921"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.161" />
+            app:layout_constraintVertical_bias="0.246" />
 
         <TextView
             android:id="@+id/textView9999"
@@ -39,11 +67,9 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.06"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.182" />
+            app:layout_constraintVertical_bias="0.264" />
 
         <Button
             android:id="@+id/btnPickInTime"

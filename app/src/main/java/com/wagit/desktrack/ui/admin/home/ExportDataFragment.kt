@@ -457,13 +457,13 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
 
     private fun setCompaniesDataOnPDF(mDoc: Document){
         //val font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14f, BaseColor.BLACK);
-        val mCompTitletext = "Workers' day registration"
+        val mCompTitletext = "Registro de jornada -> Trabajadores"
         mDoc.add(Paragraph(mCompTitletext).setBold())
         mDoc.add(Paragraph(" "))
 
         if (company.isNotEmpty()){
             company.forEach {
-                val mCompanyNameText = "Business name: ${it.name}"
+                val mCompanyNameText = "Razón social: ${it.name}"
                 mDoc.add(Paragraph(mCompanyNameText).setUnderline())
                 val mCompanyText = "CIF: ${it.nif}                                " +
                         "CCC: ${it.ccc}"
@@ -474,12 +474,12 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
     }
 
     private fun setEmployeesDataOnPDF(mDoc: Document){
-        val mEmpTitletext = "Worker data"
+        val mEmpTitletext = "Datos del trabajador"
         mDoc.add(Paragraph(mEmpTitletext).setUnderline())
 
         if (employee.isNotEmpty()){
             employee.forEach {
-                var mEmpText="Name: ${it.firstName} ${it.lastName}"
+                var mEmpText="Nombre y apellidos: ${it.firstName} ${it.lastName}"
                 mDoc.add(Paragraph(mEmpText))
 
                 mEmpText = "CIF: ${it.cif}                                " +
@@ -493,7 +493,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
 
     private fun setRegistriesDataOnPDF(mDoc: Document){
 
-        var mRegTitleText = "Date: ${LocalDateTime.now()}"
+        var mRegTitleText = "Fecha: ${LocalDateTime.now()}"
         mDoc.add(Paragraph(mRegTitleText))
         mDoc.add(Paragraph(" "))
 
@@ -501,19 +501,19 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
             // Creating a table
             val table = Table(UnitValue.createPercentArray(5)).useAllAvailableWidth()
             table.addHeaderCell(Cell().add(
-                Paragraph("Day").setTextAlignment(TextAlignment.CENTER)))
+                Paragraph("Día del mes").setTextAlignment(TextAlignment.CENTER)))
 
             table.addHeaderCell(Cell().add(
-                Paragraph("Month").setTextAlignment(TextAlignment.CENTER)))
+                Paragraph("Mes").setTextAlignment(TextAlignment.CENTER)))
 
             table.addHeaderCell(Cell().add(
-                Paragraph("Entry time").setTextAlignment(TextAlignment.CENTER)))
+                Paragraph("Hora de entrada").setTextAlignment(TextAlignment.CENTER)))
 
             table.addHeaderCell(Cell().add(
-                Paragraph("Departure time").setTextAlignment(TextAlignment.CENTER)))
+                Paragraph("Hora de salida").setTextAlignment(TextAlignment.CENTER)))
 
             table.addHeaderCell(Cell().add(
-                Paragraph("Year").setTextAlignment(TextAlignment.CENTER)))
+                Paragraph("Año").setTextAlignment(TextAlignment.CENTER)))
 
             registries.forEach {
                 println("REG: ${it.startedAt.month}")
@@ -543,7 +543,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
             if (myMonth != -1){
                 println("Mnth position in setRegistriesDocument is ${myMonth}")
                 //mText = "There is no register for ${spinnerMonths.get(monthPosition+1)}"
-                mText = "There is no register for MONTH $myMonth of YEAR $myYear"
+                mText = "No hay registros para el mes $myMonth del año $myYear"
                 mDoc.add(Paragraph(mText))
             }
             Toast.makeText(this.context, "There is no registry to add",
