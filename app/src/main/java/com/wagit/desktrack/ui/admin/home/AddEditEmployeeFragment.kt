@@ -494,16 +494,10 @@ class AddEditEmployeeFragment :
                 position: Int,
                 id: Long
             ) {
-                Toast.makeText(
-                    spin?.context,
-                    "Selected Employee: " + spinnerEmployees.get(position),
-                    Toast.LENGTH_SHORT
-                ).show()
                 if (position != 0){
                     fragmentAddEditEmployeeBinding.btnSave.setText("Save")
                     //Set the employees data
                     emplPosition = spinnerEmplId.get(position-1)
-                    println("Selected Employees Id is: " + spinnerEmplId.get(position-1))
                     getEmployeesCompany(fragmentAddEditEmployeeBinding)
                     editViewInit(fragmentAddEditEmployeeBinding)
                     handleDeleteClick(fragmentAddEditEmployeeBinding)
@@ -562,17 +556,7 @@ class AddEditEmployeeFragment :
                 position: Int,
                 id: Long
             ) {
-                /*
-                Toast.makeText(
-                    spin?.context,
-                    "Selected Company: " + spinnerCompanies.get(position),
-                    Toast.LENGTH_SHORT
-                ).show()
-                 */
                 if (position != 0){
-                    //Set the employees data
-                    println("Selected Companie's Id is: " + spinnerCompId.get(position-1) +
-                            " and emplPosition: $emplPosition")
                     compPosition = spinnerCompId.get(position-1)
                     if (emplPosition != -1){
                         shareViewModel.updateEmployeesCompId(emplPosition.toLong(),
@@ -585,7 +569,6 @@ class AddEditEmployeeFragment :
                     updateEmployeeCompanyPosition(fragmentAddEditEmployeeBinding)
 
                 }
-                println("ARRAY FOR SELECTED SIZE: "+ spinnerCompanies.size)
             }
 
             override fun onNothingSelected(arg0: AdapterView<*>?) {

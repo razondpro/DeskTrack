@@ -187,11 +187,6 @@ class AddRegistryFragment:
                 position: Int,
                 id: Long
             ) {
-                Toast.makeText(
-                    spin?.context,
-                    "Selected Company: " + spinnerCompanies.get(position),
-                    Toast.LENGTH_SHORT
-                ).show()
                 if (position != 0){
                     //Set the employees data
                     complPosition = spinnerComplId.get(position-1)
@@ -335,15 +330,9 @@ class AddRegistryFragment:
                 position: Int,
                 id: Long
             ) {
-                Toast.makeText(
-                    spin?.context,
-                    "Selected Employee: " + spinnerEmployees.get(position),
-                    Toast.LENGTH_SHORT
-                ).show()
                 if (position != 0){
                     //Set the employees data
                     emplPosition = spinnerEmplId.get(position-1)
-                    println("Selected Employees Id is: " + spinnerEmplId.get(position-1))
                 } else{
                     emplPosition = -1
                 }

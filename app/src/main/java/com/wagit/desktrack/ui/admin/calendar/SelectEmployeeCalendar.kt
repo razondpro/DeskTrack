@@ -122,19 +122,12 @@ class SelectEmployeeCalendar: BaseFragment<FragmentAdminSelectEmployeeCalendarBi
                 position: Int,
                 id: Long
             ) {
-                Toast.makeText(
-                    spin?.context,
-                    "Selected Company: " + spinnerCompanies.get(position),
-                    Toast.LENGTH_SHORT
-                ).show()
                 if (position != 0){
                     //Set the employees data
                     complPosition = spinnerComplId.get(position-1)
-                    println("Selected Company's Id is: " + spinnerComplId.get(position-1))
                     var companyAux = listOf<Company>()
                     if (shareViewModel.getCompany(complPosition.toLong()).value != null){
                         companyAux = shareViewModel.company.value!!
-                        println("Company: $companyAux ------------------------------------------")
                     }
                 } else{
                     complPosition = -1
@@ -211,15 +204,9 @@ class SelectEmployeeCalendar: BaseFragment<FragmentAdminSelectEmployeeCalendarBi
                 position: Int,
                 id: Long
             ) {
-                Toast.makeText(
-                    spin?.context,
-                    "Selected Employee: " + spinnerEmployees.get(position),
-                    Toast.LENGTH_SHORT
-                ).show()
                 if (position != 0){
                     //Set the employees data
                     emplPosition = spinnerEmplId.get(position-1)
-                    println("Selected Employee's Id is: " + spinnerEmplId.get(position-1))
                     getEmployeeData()
                 } else{
                     emplPosition = -1
@@ -239,7 +226,6 @@ class SelectEmployeeCalendar: BaseFragment<FragmentAdminSelectEmployeeCalendarBi
             if (shareViewModel.getEmployee(emplPosition).value != null){
                 if (shareViewModel.employees.value != null){
                     employeeAux = shareViewModel.employees.value!!
-                    println("Employee's selected: ${employeeAux.first()}")
                 }
             }
         }
