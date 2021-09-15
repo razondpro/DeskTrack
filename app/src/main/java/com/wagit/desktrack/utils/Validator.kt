@@ -7,6 +7,10 @@ class Validator {
         // a simple validation
         //TODO implement a strong validation
 
+        fun isValidNSS(nss: String?): Boolean {
+            return !nss.isNullOrBlank() && (nss.contains(Regex("^(\\d{12})\$")))
+        }
+
         fun isValidCIF(cif: String?): Boolean {
             return !cif.isNullOrBlank()
                     && (cif.contains(Regex("^(\\d{8})([A-Za-z])\$"))
@@ -25,7 +29,7 @@ class Validator {
         }
 
         fun isValidCCC(ccc: String?): Boolean {
-            return !ccc.isNullOrBlank() && (ccc.contains(Regex("^(\\d{6})\$")))
+            return !ccc.isNullOrBlank() && (ccc.contains(Regex("^(\\d{11})\$")))
         }
         /**
          * basic email validation

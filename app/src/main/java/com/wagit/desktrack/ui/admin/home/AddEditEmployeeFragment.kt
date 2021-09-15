@@ -44,6 +44,7 @@ class AddEditEmployeeFragment :
     private val emailLD = MutableLiveData<String>()
     private val pwLD = MutableLiveData<String>()
     private val cifLD = MutableLiveData<String>()
+    private val nssLD = MutableLiveData<String>()
 
     private val isValidLD = MediatorLiveData<Boolean>().apply {
         this.value = false
@@ -51,17 +52,26 @@ class AddEditEmployeeFragment :
         addSource(emailLD) { email ->
             val pw = pwLD.value
             val cif = cifLD.value
-            this.value = validate(email, pw, cif)
+            val nss = nssLD.value
+            this.value = validate(email, pw, cif, nss)
         }
         addSource(pwLD){ pw ->
             val email = emailLD.value
             val cif = cifLD.value
-            this.value = validate(email, pw, cif)
+            val nss = nssLD.value
+            this.value = validate(email, pw, cif, nss)
         }
         addSource(cifLD){ cif ->
             val email = emailLD.value
             val pw = pwLD.value
-            this.value = validate(email, pw, cif)
+            val nss = nssLD.value
+            this.value = validate(email, pw, cif, nss)
+        }
+        addSource(nssLD){ nss ->
+            val email = emailLD.value
+            val pw = pwLD.value
+            val cif = cifLD.value
+            this.value = validate(email, pw, cif, nss)
         }
     }
 
@@ -122,14 +132,17 @@ class AddEditEmployeeFragment :
         fragmentAddEditEmployeeBinding.tvEmployeeEmail.doOnTextChanged { text, _, _, _ ->
             emailLD.value = text?.toString()
         }
+        fragmentAddEditEmployeeBinding.tvEmployeeNss.doOnTextChanged { text, _, _, _ ->
+            nssLD.value = text?.toString()
+        }
         isValidLD.observe(this){ isValid ->
             Log.v("EditIsValid", isValid.toString())
         }
     }
 
-    private fun validate(email: String?, pw: String?, cif: String?): Boolean{
+    private fun validate(email: String?, pw: String?, cif: String?, nss: String?): Boolean{
         return Validator.isValidEmail(email) && !pw.isNullOrBlank() && pw.length >=6 &&
-                Validator.isValidCIF(cif)
+                Validator.isValidCIF(cif) && Validator.isValidNSS(nss)
     }
 
     private fun goBack(){

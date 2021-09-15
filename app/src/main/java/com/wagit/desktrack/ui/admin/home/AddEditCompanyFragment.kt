@@ -92,7 +92,7 @@ class AddEditCompanyFragment :
     }
 
     private fun validate(nif: String?, ccc: String?): Boolean{
-        return Validator.isValidNIF(nif) && Validator.isValidCCC(ccc)
+        return Validator.isValidCIF(nif) && Validator.isValidCCC(ccc)
     }
 
     private fun goBack(){
