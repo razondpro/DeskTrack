@@ -39,7 +39,7 @@ class CompanyRepository @Inject constructor(
         return companyDao.getAllCompanies()
     }
 
-    suspend fun updateCompany(companyId: Long, nif: String, ccc: Int, name: String){
+    suspend fun updateCompany(companyId: Long, nif: String, ccc: String, name: String){
         companyDao.updateCompany(companyId,nif,ccc,name)
     }
 

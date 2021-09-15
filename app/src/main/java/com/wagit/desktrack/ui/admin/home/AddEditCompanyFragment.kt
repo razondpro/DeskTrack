@@ -142,7 +142,7 @@ class AddEditCompanyFragment :
                 if (compPosition != -1){
                     shareViewModel.updateCompany(compPosition.toLong(),
                         fragmentAddEditCompanyBinding.tvCompanyNIF.text.toString(),
-                        fragmentAddEditCompanyBinding.tvCompanyCCC.text.toString().toInt(),
+                        fragmentAddEditCompanyBinding.tvCompanyCCC.text.toString(),
                         fragmentAddEditCompanyBinding.tvCompanyName.text.toString())
 
                     compPosition = -1
@@ -183,7 +183,7 @@ class AddEditCompanyFragment :
                     val company = Company(
                         name = fragmentAddEditCompanyBinding.tvCompanyName.text.toString(),
                         nif = fragmentAddEditCompanyBinding.tvCompanyNIF.text.toString(),
-                        ccc = fragmentAddEditCompanyBinding.tvCompanyCCC.text.toString().toInt(),
+                        ccc = fragmentAddEditCompanyBinding.tvCompanyCCC.text.toString(),
                         isDeleted = false,
                     )
 

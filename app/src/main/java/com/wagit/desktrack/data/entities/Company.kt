@@ -16,6 +16,6 @@ data class Company(
     ) val id: Long = 0L,
     val name: String,
     val nif: String,
-    val ccc: Int,
+    val ccc: String,
     @ColumnInfo(name = "is_deleted") val isDeleted: Boolean
 )

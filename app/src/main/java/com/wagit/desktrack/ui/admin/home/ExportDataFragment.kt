@@ -429,7 +429,7 @@ class ExportDataFragment: BaseFragment<FragmentExportDataBinding>(R.layout.fragm
 
             //show file saved message with file name and path
             Toast.makeText(this.context, "$mFileName.pdf\nis saved to\n$mFilePath",
-                Toast.LENGTH_SHORT).show()
+                Toast.LENGTH_LONG).show()
 
             println("$mFileName.pdf\n" + "is saved to\n" + "$mFilePath")
 

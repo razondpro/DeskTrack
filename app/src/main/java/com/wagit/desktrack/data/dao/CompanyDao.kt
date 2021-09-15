@@ -21,7 +21,7 @@ abstract class CompanyDao: BaseDao<Company> {
     abstract suspend fun geEmployeesByCompanyId(companyId: Long): List<CompanyWithEmployees>
 
     @Query("UPDATE companies SET nif = :nif, ccc = :ccc, name = :name WHERE id = :companyId")
-    abstract suspend fun updateCompany(companyId: Long, nif: String, ccc: Int, name: String)
+    abstract suspend fun updateCompany(companyId: Long, nif: String, ccc: String, name: String)
 
     @Query("DELETE FROM companies WHERE id = :companyId")
     abstract suspend fun deleteCompany(companyId: Long)

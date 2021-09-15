@@ -140,7 +140,7 @@ class SharedViewModel  @Inject constructor(
         _user.value = user
     }
 
-    fun updateCompany(companyId: Long, nif: String, ccc: Int, name: String){
+    fun updateCompany(companyId: Long, nif: String, ccc: String, name: String){
         Log.d("AdminHomeViewModel","Llega al viewmodel para updateCompany")
         viewModelScope.launch(Dispatchers.IO) {
             companyRepository.updateCompany(companyId,nif,ccc,name)
