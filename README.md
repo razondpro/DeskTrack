@@ -56,3 +56,13 @@ Our ViewModel delegates the data-fetching process to a new module, a *repository
 An abstract design that represents the storage of our data in the database. 
 ![database schema](https://user-images.githubusercontent.com/26594010/123917937-a3fad500-d983-11eb-8dc2-0b6fd78726e0.png)
 
+## Screenshots
+- **Admin** panel
+    - Home page
+        - ![Selection_002](https://user-images.githubusercontent.com/29677743/133680101-7fc6576d-636f-4ab0-bbd6-32cf2d5c565a.png) ![image](https://user-images.githubusercontent.com/29677743/133683465-85639ff0-7807-40c5-b76f-0413a5de5025.png) ![image](https://user-images.githubusercontent.com/29677743/133683540-0814d98c-c94d-4d80-8129-e2d46157f7bb.png) ![image](https://user-images.githubusercontent.com/29677743/133683812-b3694ce5-740c-4796-9e8d-7616e4811262.png)
+    - Calendar View Page
+        - ![Selection_003](https://user-images.githubusercontent.com/29677743/133680415-2472b3d6-0247-4430-976e-1b647729776c.png) ![image](https://user-images.githubusercontent.com/29677743/133684116-401d9a1b-d9a5-4492-b538-eda733555893.png) ![image](https://user-images.githubusercontent.com/29677743/133684181-b040a868-6faf-446a-a735-372b49acb157.png) ![image](https://user-images.githubusercontent.com/29677743/133684261-e48bef08-9cda-4e02-9a37-5f0ce0f1dfe6.png) ![image](https://user-images.githubusercontent.com/29677743/133684322-b953a28b-2e11-4ca8-adbb-ee296cf89e82.png)
+    - Profile Editor Page
+        - ![image](https://user-images.githubusercontent.com/29677743/133680536-1933d64b-2bc7-4141-a543-9ec3e0a51624.png)
+
+
