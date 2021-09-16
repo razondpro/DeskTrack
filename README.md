@@ -63,6 +63,17 @@ An abstract design that represents the storage of our data in the database.
     - Calendar View Page
         - ![Selection_003](https://user-images.githubusercontent.com/29677743/133680415-2472b3d6-0247-4430-976e-1b647729776c.png) ![image](https://user-images.githubusercontent.com/29677743/133684116-401d9a1b-d9a5-4492-b538-eda733555893.png) ![image](https://user-images.githubusercontent.com/29677743/133684181-b040a868-6faf-446a-a735-372b49acb157.png) ![image](https://user-images.githubusercontent.com/29677743/133684261-e48bef08-9cda-4e02-9a37-5f0ce0f1dfe6.png) ![image](https://user-images.githubusercontent.com/29677743/133684322-b953a28b-2e11-4ca8-adbb-ee296cf89e82.png)
     - Profile Editor Page
-        - ![image](https://user-images.githubusercontent.com/29677743/133680536-1933d64b-2bc7-4141-a543-9ec3e0a51624.png)
+        - ![image](https://user-images.githubusercontent.com/29677743/133680536-1933d64b-2bc7-4141-a543-9ec3e0a51624.png) 
+
+- **Normal User** panel
+    - Home page
+        - ![image](https://user-images.githubusercontent.com/29677743/133686470-593db388-e250-4d2b-83af-c420c7e38e0a.png) ![image](https://user-images.githubusercontent.com/29677743/133686538-2968e4f5-ff14-46f0-a3b2-da523ddf1927.png) ![image](https://user-images.githubusercontent.com/29677743/133686587-ce8dc609-1e49-44c4-b950-82061daeb261.png)
+
+    - Calendar View Page
+        - ![image](https://user-images.githubusercontent.com/29677743/133686688-e9157317-6253-405b-bc2b-a28f9584dc42.png)
+
+    - Profile Editor Page
+        - ![image](https://user-images.githubusercontent.com/29677743/133686754-94265aab-9a29-4ad8-8484-e9b2c6e4e9fc.png)
+
 
 
